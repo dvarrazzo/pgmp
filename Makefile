@@ -27,7 +27,7 @@ OBJS = pgmp.o pmpz_io.o
 
 DATA_built = pgmp.sql
 DATA = uninstall_pgmp.sql
-REGRESS = pgmp
+REGRESS = mpz
 
 PG_CONFIG = pg_config
 PGXS := $(shell $(PG_CONFIG) --pgxs)
