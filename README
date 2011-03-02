@@ -1,0 +1,21 @@
+PostgreSQL Multiple Precision Arithmetic extension
+==================================================
+
+This extension adds support in PostgreSQL for the data types and
+function avaliable in the GMP library for arbitrary precision
+arithmetic.
+
+The GMP data types are available as PostgreSQL data types and all the
+functions exposed in the library are available from SQL.
+
+How people could have possibly lived without having general precision
+floating point and rational numbers into their databases is something I
+really can't understand.
+
+
+Status
+------
+
+The library version is 0.0: there is no single line written and
+everything is just a dream.
+
