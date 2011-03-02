@@ -1,4 +1,4 @@
-/* pgmp_io -- Input/Output functions
+/* pmpz_io -- mpz Input/Output functions
  *
  * Copyright (C) 2011 Daniele Varrazzo
  *
@@ -19,7 +19,7 @@
  * http://www.gnu.org/licenses/.
  */
 
-#include "pgmp.h"
+#include "pmpz.h"
 
 #include "fmgr.h"
 
@@ -53,40 +53,19 @@ pmpz_in(PG_FUNCTION_ARGS)
                         str)));
     }
 
-    /* TODO: make reusable - mpz_to_pmpz */
-    {
-        size_t  sres;
-        size_t  nlimbs;
-        size_t  alimbs;
-
-        nlimbs = NLIMBS(z);
-        alimbs = nlimbs > 0 ? nlimbs : 1;
-
-        sres = PMPZ_HDRSIZE + alimbs * sizeof(mp_limb_t);
-        res = (pmpz *)palloc(sres);
-        SET_VARSIZE(res, sres);
-        res->size = SIZ(z);
-        memcpy(&(res->data), LIMBS(z), alimbs * sizeof(mp_limb_t));
-    }
-
+    res = pmpz_from_mpz(z);
     PG_RETURN_POINTER(res);
 }
 
 Datum
 pmpz_out(PG_FUNCTION_ARGS)
 {
-    pmpz    *pz;
-    mpz_t   z;
-    char    *res;
+    const pmpz      *pz;
+    const mpz_t     z;
+    char            *res;
 
     pz = PG_GETARG_PMPZ(0);
-
-    /* TODO: make reusable - pmpz_to_mpz */
-    {
-        ALLOC(z) = pz->size ? ABS(pz->size) : 1;
-        SIZ(z) = pz->size;
-        LIMBS(z) = pz->data;
-    }
+    mpz_from_pmpz(z, pz);
 
     /* TODO: make base variable */
     res = (char *)palloc(mpz_sizeinbase(z, 10) + 2);    /* add sign and 0 */

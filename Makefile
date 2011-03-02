@@ -23,7 +23,7 @@ USE_PGXS=1
 SHLIB_LINK=-lgmp
 
 MODULE_big = pgmp
-OBJS = pgmp.o pmpz_io.o
+OBJS = pgmp.o pmpz.o pmpz_io.o
 
 DATA_built = pgmp.sql
 DATA = uninstall_pgmp.sql

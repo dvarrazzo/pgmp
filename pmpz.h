@@ -1,4 +1,4 @@
-/* pgmp -- PostgreSQL GMP module
+/* pmpz -- PostgreSQL data type for GMP mpz
  *
  * Copyright (C) 2011 Daniele Varrazzo
  *
@@ -19,8 +19,8 @@
  * http://www.gnu.org/licenses/.
  */
 
-#ifndef __PGMP_H__
-#define __PGMP_H__
+#ifndef __PMPZ_H__
+#define __PMPZ_H__
 
 #include <gmp.h>
 #include "postgres.h"
@@ -36,6 +36,9 @@ typedef struct
 #define PMPZ_HDRSIZE   MAXALIGN(offsetof(pmpz,data))
 #define PG_GETARG_PMPZ(x)   ((pmpz*)DatumGetPointer(PG_DETOAST_DATUM(PG_GETARG_DATUM(x))))
 
+pmpz * pmpz_from_mpz(mpz_srcptr z);
+void mpz_from_pmpz(mpz_srcptr z, const pmpz *pz);
+
 
 /*
  * Macros equivalent to the ones defimed in gmp-impl.h
@@ -47,4 +50,5 @@ typedef struct
 #define LIMBS(z)    ((z)->_mp_d)
 #define ALLOC(v)    ((v)->_mp_alloc)
 
-#endif  /* __PGMP_H__ */
+#endif  /* __PMPZ_H__ */
+
