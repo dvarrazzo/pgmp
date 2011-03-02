@@ -30,20 +30,29 @@
 pmpz *
 pmpz_from_mpz(mpz_srcptr z)
 {
-    size_t  sres;
-    size_t  nlimbs;
-    size_t  alimbs;
     pmpz *res;
+    int size = SIZ(z);
 
-    nlimbs = NLIMBS(z);
-    alimbs = nlimbs > 0 ? nlimbs : 1;
+    if (0 != size)
+    {
+        size_t slimbs;
+        if (size > 0) {
+            slimbs = size * sizeof(mp_limb_t);
+        }
+        else {
+            slimbs = -size * sizeof(mp_limb_t);
+        }
 
-    sres = PMPZ_HDRSIZE + alimbs * sizeof(mp_limb_t);
-
-    res = (pmpz *)palloc(sres);
-    SET_VARSIZE(res, sres);
-    res->size = SIZ(z);
-    memcpy(&(res->data), LIMBS(z), alimbs * sizeof(mp_limb_t));
+        res = (pmpz *)palloc(PMPZ_HDRSIZE + slimbs);
+        SET_VARSIZE(res, PMPZ_HDRSIZE + slimbs);
+        res->size = size;
+        memcpy(&(res->data), LIMBS(z), slimbs);
+    }
+    else
+    {
+        res = (pmpz *)palloc0(sizeof(pmpz));
+        SET_VARSIZE(res, sizeof(pmpz));
+    }
 
     return res;
 }
