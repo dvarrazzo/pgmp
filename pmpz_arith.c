@@ -1,4 +1,4 @@
-/* pgmp -- Module installation SQL script
+/* pmpz_arith -- mpz arithmetic functions
  *
  * Copyright (C) 2011 Daniele Varrazzo
  *
@@ -19,46 +19,30 @@
  * http://www.gnu.org/licenses/.
  */
 
+#include "pmpz.h"
 
--- Adjust this setting to control where the objects get created.
-SET search_path = public;
-
-
---
--- mpz user-defined type
---
-
-CREATE OR REPLACE FUNCTION pmpz_in(cstring)
-RETURNS mpz
-AS 'MODULE_PATHNAME'
-LANGUAGE C IMMUTABLE STRICT;
-
-CREATE OR REPLACE FUNCTION pmpz_out(mpz)
-RETURNS cstring
-AS 'MODULE_PATHNAME'
-LANGUAGE C IMMUTABLE STRICT;
-
-CREATE TYPE mpz (
-      INPUT = pmpz_in
-    , OUTPUT = pmpz_out
-    , INTERNALLENGTH = VARIABLE
-    , CATEGORY = 'N'
-);
+#include "fmgr.h"
 
 
---
--- mpz operators
---
+PG_FUNCTION_INFO_V1(pmpz_add);
 
-CREATE OR REPLACE FUNCTION pmpz_add(mpz, mpz)
-RETURNS mpz
-AS 'MODULE_PATHNAME'
-LANGUAGE C STRICT IMMUTABLE;
+Datum       pmpz_add(PG_FUNCTION_ARGS);
 
-CREATE OPERATOR + (
-	LEFTARG = mpz,
-	RIGHTARG = mpz,
-	COMMUTATOR = +,
-	PROCEDURE = pmpz_add
-);
 
+Datum
+pmpz_add(PG_FUNCTION_ARGS)
+{
+    const mpz_t     z1;
+    const mpz_t     z2;
+    mpz_t           zf;
+    pmpz            *res;
+
+    mpz_from_pmpz(z1, PG_GETARG_PMPZ(0));
+    mpz_from_pmpz(z2, PG_GETARG_PMPZ(1));
+
+    mpz_init(zf);
+    mpz_add(zf, z1, z2);
+
+    res = pmpz_from_mpz(zf);
+    PG_RETURN_POINTER(res);
+}

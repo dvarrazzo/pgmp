@@ -43,3 +43,14 @@ SELECT '-18446744073709551618'::mpz;
 
 SELECT '12345678901234567890123456789012345678901234567890123456789012345678901234567890'::mpz;
 
+
+--
+-- mpz arithmetic
+--
+
+SELECT '1'::text::mpz + '2'::text::mpz;
+SELECT '2'::mpz + '-4'::mpz;
+SELECT regexp_matches((
+        ('1' || repeat('0', 1000))::mpz +
+        ('2' || repeat('0', 1000))::mpz)::text,
+    '^3(0000000000){100}$') IS NOT NULL;
