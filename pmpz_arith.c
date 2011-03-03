@@ -24,10 +24,56 @@
 #include "fmgr.h"
 
 
+PG_FUNCTION_INFO_V1(pmpz_uminus);
+PG_FUNCTION_INFO_V1(pmpz_uplus);
+
 PG_FUNCTION_INFO_V1(pmpz_add);
+
+
+Datum       pmpz_uminus(PG_FUNCTION_ARGS);
+Datum       pmpz_uplus(PG_FUNCTION_ARGS);
 
 Datum       pmpz_add(PG_FUNCTION_ARGS);
 
+
+/*
+ * Unary minus, plus
+ */
+
+Datum
+pmpz_uminus(PG_FUNCTION_ARGS)
+{
+    const mpz_t     z1;
+    mpz_t           zf;
+    pmpz            *res;
+
+    mpz_from_pmpz(z1, PG_GETARG_PMPZ(0));
+
+    mpz_init_set(zf, z1);
+    mpz_neg(zf, zf);
+
+    res = pmpz_from_mpz(zf);
+    PG_RETURN_POINTER(res);
+}
+
+Datum
+pmpz_uplus(PG_FUNCTION_ARGS)
+{
+    const pmpz      *pz1;
+    pmpz            *res;
+
+    pz1 = PG_GETARG_PMPZ(0);
+
+	res = (pmpz *)palloc(VARSIZE(pz1));
+	memcpy(res, pz1, VARSIZE(pz1));
+
+    PG_RETURN_POINTER(res);
+}
+
+
+/*
+ * Binary operators
+ */
 
 Datum
 pmpz_add(PG_FUNCTION_ARGS)

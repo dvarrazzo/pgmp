@@ -48,6 +48,9 @@ SELECT '123456789012345678901234567890123456789012345678901234567890123456789012
 -- mpz arithmetic
 --
 
+SELECT -('0'::mpz), +('0'::mpz), -('1'::mpz), +('1'::mpz);
+SELECT -('12345678901234567890'::mpz), +('12345678901234567890'::mpz);
+
 SELECT '1'::text::mpz + '2'::text::mpz;
 SELECT '2'::mpz + '-4'::mpz;
 SELECT regexp_matches((
