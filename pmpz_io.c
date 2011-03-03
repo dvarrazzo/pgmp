@@ -77,7 +77,7 @@ pmpz_out(PG_FUNCTION_ARGS)
 
     /* TODO: make base variable */
     res = (char *)palloc(mpz_sizeinbase(z, 10) + 2);    /* add sign and 0 */
-    gmp_sprintf(res, "%Zd", z);
+    mpz_get_str(res, 10, z);
 
     PG_RETURN_CSTRING(res);
 }
