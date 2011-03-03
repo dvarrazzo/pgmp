@@ -2,3 +2,5 @@ sandbox/hello/hello
 pgmp.so
 pgmp.sql
 results/*.out
+regression.diffs
+regression.out
