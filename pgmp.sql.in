@@ -124,3 +124,46 @@ CREATE OPERATOR + (
 	PROCEDURE = pmpz_add
 );
 
+
+--
+-- Aggregation functions
+--
+
+CREATE OR REPLACE FUNCTION pmpza_in(cstring)
+RETURNS _mpza
+AS 'MODULE_PATHNAME'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OR REPLACE FUNCTION pmpza_out(_mpza)
+RETURNS cstring
+AS 'MODULE_PATHNAME'
+LANGUAGE C IMMUTABLE STRICT;
+
+-- TODO: this type should be marked as "non-storable"
+CREATE TYPE _mpza (
+      INPUT = pmpza_in
+    , OUTPUT = pmpza_out
+    -- 12 is ok on 32 bit, but probably uninfluent anyway
+    -- as we never store this type
+    , INTERNALLENGTH = 16
+);
+
+
+CREATE OR REPLACE FUNCTION pmpz_sum_s(_mpza, mpz)
+RETURNS _mpza
+AS 'MODULE_PATHNAME'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION pmpz_sum_f(_mpza)
+RETURNS mpz
+AS 'MODULE_PATHNAME'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE AGGREGATE sum (mpz)
+(
+      SFUNC = pmpz_sum_s
+    , STYPE = _mpza
+    , FINALFUNC = pmpz_sum_f
+    , INITCOND = ''
+);
+

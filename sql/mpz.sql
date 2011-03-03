@@ -82,3 +82,18 @@ SELECT regexp_matches((
         ('1' || repeat('0', 1000))::mpz +
         ('2' || repeat('0', 1000))::mpz)::text,
     '^3(0000000000){100}$') IS NOT NULL;
+
+
+--
+-- mpz aggregation
+--
+
+CREATE TABLE mpzagg(z mpz);
+
+SELECT sum(z) FROM mpzagg;      -- NULL sum
+
+INSERT INTO mpzagg SELECT generate_series(1, 100);
+INSERT INTO mpzagg VALUES (NULL);
+
+SELECT sum(z) FROM mpzagg;
+
