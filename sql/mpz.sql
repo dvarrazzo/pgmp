@@ -45,6 +45,31 @@ SELECT '123456789012345678901234567890123456789012345678901234567890123456789012
 
 
 --
+-- mpz cast
+--
+
+SELECT 0::smallint::mpz, (-32768)::smallint::mpz, 32767::smallint::mpz;
+SELECT 0::integer::mpz, (-2147483648)::integer::mpz, 2147483647::integer::mpz;
+-- TODO: known broken - should be 0|-9223372036854775808|9223372036854775807
+SELECT 0::bigint::mpz, (-9223372036854775808)::bigint::mpz, 9223372036854775807::bigint::mpz;
+SELECT 0::numeric::mpz, (-12345678901234567890)::numeric::mpz, 12345678901234567890::numeric::mpz;
+
+SELECT 0::mpz, 1::mpz, (-1)::mpz;       -- automatic casts
+SELECT 1000000::mpz, (-1000000)::mpz;
+SELECT 1000000000::mpz, (-1000000000)::mpz;
+-- TODO: - known broken - should be 0|-1000000000000000|1000000000000000
+SELECT 1000000000000000::mpz, (-1000000000000000)::mpz;
+SELECT 1000000000000000000000000000000::mpz, (-1000000000000000000000000000000)::mpz;
+
+SELECT -1::mpz;       -- these take the unary minus to work
+SELECT -1000000::mpz;
+SELECT -1000000000::mpz;
+-- TODO: known broken - should be -1000000000000000 
+SELECT -1000000000000000::mpz;
+SELECT -1000000000000000000000000000000::mpz;
+
+
+--
 -- mpz arithmetic
 --
 

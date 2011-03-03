@@ -27,8 +27,16 @@
 PG_FUNCTION_INFO_V1(pmpz_in);
 PG_FUNCTION_INFO_V1(pmpz_out);
 
+PG_FUNCTION_INFO_V1(pmpz_from_smallint);
+PG_FUNCTION_INFO_V1(pmpz_from_integer);
+PG_FUNCTION_INFO_V1(pmpz_from_bigint);
+
 Datum       pmpz_in(PG_FUNCTION_ARGS);
 Datum       pmpz_out(PG_FUNCTION_ARGS);
+
+Datum       pmpz_from_smallint(PG_FUNCTION_ARGS);
+Datum       pmpz_from_integer(PG_FUNCTION_ARGS);
+Datum       pmpz_from_bigint(PG_FUNCTION_ARGS);
 
 
 /*
@@ -74,4 +82,45 @@ pmpz_out(PG_FUNCTION_ARGS)
     PG_RETURN_CSTRING(res);
 }
 
+
+/*
+ * Cast functions
+ */
+
+static Datum _pmpz_from_long(int64 in);
+
+Datum
+pmpz_from_smallint(PG_FUNCTION_ARGS)
+{
+    int16 in = PG_GETARG_INT16(0);
+    return _pmpz_from_long(in);
+}
+
+Datum
+pmpz_from_integer(PG_FUNCTION_ARGS)
+{
+    int32 in = PG_GETARG_INT32(0);
+    return _pmpz_from_long(in);
+}
+
+Datum
+pmpz_from_bigint(PG_FUNCTION_ARGS)
+{
+    /* TODO: this function doesn't work - see regression tests. */
+    int64 in = PG_GETARG_INT64(0);
+    elog(INFO, "%ld", in);
+    return _pmpz_from_long(in);
+}
+
+static Datum
+_pmpz_from_long(int64 in)
+{
+    mpz_t   z;
+    pmpz    *res;
+
+    mpz_init_set_si(z, in);
+
+    res = pmpz_from_mpz(z);
+    PG_RETURN_POINTER(res);
+}
 

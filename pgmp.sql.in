@@ -47,6 +47,46 @@ CREATE TYPE mpz (
 
 
 --
+-- mpz cast
+--
+
+CREATE OR REPLACE FUNCTION pmpz_from_smallint(smallint)
+RETURNS mpz
+AS 'MODULE_PATHNAME'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE CAST (smallint AS mpz)
+WITH FUNCTION pmpz_from_smallint(smallint)
+AS IMPLICIT;
+
+
+CREATE OR REPLACE FUNCTION pmpz_from_integer(integer)
+RETURNS mpz
+AS 'MODULE_PATHNAME'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE CAST (integer AS mpz)
+WITH FUNCTION pmpz_from_integer(integer)
+AS IMPLICIT;
+
+
+CREATE OR REPLACE FUNCTION pmpz_from_bigint(bigint)
+RETURNS mpz
+AS 'MODULE_PATHNAME'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE CAST (bigint AS mpz)
+WITH FUNCTION pmpz_from_bigint(bigint)
+AS IMPLICIT;
+
+
+-- TODO: stub - only good for ints
+CREATE CAST (numeric AS mpz)
+WITH INOUT
+AS IMPLICIT;
+
+
+--
 -- mpz operators
 --
 
