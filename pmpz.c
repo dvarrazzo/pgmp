@@ -20,6 +20,7 @@
  */
 
 #include "pmpz.h"
+#include "pgmp-impl.h"
 
 #include "fmgr.h"
 

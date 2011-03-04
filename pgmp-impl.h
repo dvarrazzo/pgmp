@@ -1,4 +1,4 @@
-/* pmpz -- PostgreSQL data type for GMP mpz
+/* pgmp-impl -- Implementation details
  *
  * Copyright (C) 2011 Daniele Varrazzo
  *
@@ -19,25 +19,30 @@
  * http://www.gnu.org/licenses/.
  */
 
-#ifndef __PMPZ_H__
-#define __PMPZ_H__
+#ifndef __PGMP_IMPL_H__
+#define __PGMP_IMPL_H__
 
-#include <gmp.h>
-#include "postgres.h"
+/*
+ * Macros equivalent to the ones defimed in gmp-impl.h
+ */
 
-typedef struct
-{
-    char        vl_len_[4];     /* varlena header */
-    int         size;           /* number of limbs */
-    mp_limb_t   data[1];        /* limbs */
+#define ABS(x)      ((x) >= 0 ? (x) : -(x))
+#define SIZ(z)      ((z)->_mp_size)
+#define NLIMBS(z)   ABS((z)->_mp_size)
+#define LIMBS(z)    ((z)->_mp_d)
+#define ALLOC(v)    ((v)->_mp_alloc)
 
-} pmpz;
 
-#define PMPZ_HDRSIZE   MAXALIGN(offsetof(pmpz,data))
-#define PG_GETARG_PMPZ(x)   ((pmpz*)DatumGetPointer(PG_DETOAST_DATUM(PG_GETARG_DATUM(x))))
+/* __builtin_expect is in gcc 3.0, and not in 2.95. */
+#if __GNUC__ >= 3
+#define LIKELY(cond)    __builtin_expect ((cond) != 0, 1)
+#define UNLIKELY(cond)  __builtin_expect ((cond) != 0, 0)
+#else
+#define LIKELY(cond)    (cond)
+#define UNLIKELY(cond)  (cond)
+#endif
 
-pmpz * pmpz_from_mpz(mpz_srcptr z);
-void mpz_from_pmpz(mpz_srcptr z, const pmpz *pz);
 
-#endif  /* __PMPZ_H__ */
+#endif  /* __PGMP_IMPL_H__ */
+
 

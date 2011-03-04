@@ -20,6 +20,7 @@
  */
 
 #include "pmpz.h"
+#include "pgmp-impl.h"
 
 #include "fmgr.h"
 
@@ -100,11 +101,8 @@ pmpz_sum_s(PG_FUNCTION_ARGS)
     const mpz_t     z;
 
     /* TODO: make compatible with PG < 9 */
-    if (AggCheckCallContext(fcinfo, NULL)) {
-        a = (mpz_t *)PG_GETARG_POINTER(0);
-        mpz_from_pmpz(z, PG_GETARG_PMPZ(1));
-    }
-    else {
+    if (UNLIKELY(!AggCheckCallContext(fcinfo, NULL)))
+    {
         ereport(ERROR,
             (errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
             errmsg("pmpz_sum_s can only be called in accumulation")));
@@ -112,7 +110,10 @@ pmpz_sum_s(PG_FUNCTION_ARGS)
         PG_RETURN_NULL();       /* unused, to avoid a warning */
     }
 
-    if (LIMBS(*a)) {
+    a = (mpz_t *)PG_GETARG_POINTER(0);
+    mpz_from_pmpz(z, PG_GETARG_PMPZ(1));
+
+    if (LIKELY(LIMBS(*a))) {
         mpz_add(*a, *a, z);
     }
     else {                      /* uninitialized */
@@ -130,7 +131,7 @@ pmpz_sum_f(PG_FUNCTION_ARGS)
 
     a = (mpz_t *)PG_GETARG_POINTER(0);
 
-    if (LIMBS(*a)) {
+    if (LIKELY(LIMBS(*a))) {
         res = pmpz_from_mpz(*a);
         PG_RETURN_POINTER(res);
     }
