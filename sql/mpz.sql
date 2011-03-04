@@ -97,3 +97,10 @@ INSERT INTO mpzagg VALUES (NULL);
 
 SELECT sum(z) FROM mpzagg;
 
+
+--
+-- test functions
+--
+
+SELECT mpz_test_dataset(5, 20);
+SELECT numeric_test_dataset(5, '123456'::numeric);
