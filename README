@@ -16,6 +16,9 @@ really can't understand.
 Status
 ------
 
-The library version is 0.0: there is no single line written and
-everything is just a dream.
+I have implemented an mpz data type, the + operator and the sum() aggregation
+function. Result are interesting: size on disk for mpz is comparable to
+numeric, slightly better for bigger numbers. Performance on sum() is always
+better for mpz than for numeric, increasing with the numbers size. See
+``sandbox/bench`` for tests and results.
 
