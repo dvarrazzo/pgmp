@@ -42,6 +42,7 @@ CREATE TYPE mpz (
       INPUT = pmpz_in
     , OUTPUT = pmpz_out
     , INTERNALLENGTH = VARIABLE
+    , STORAGE = EXTENDED
     , CATEGORY = 'N'
 );
 
