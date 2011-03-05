@@ -24,7 +24,8 @@ SHLIB_LINK=-lgmp
 REGRESS_OPTS=--user postgres
 
 MODULE_big = pgmp
-OBJS = pgmp.o pmpz.o pmpz_io.o pmpz_arith.o pmpza.o pgmp_test.o
+OBJS = src/pgmp.o src/pgmp_test.o \
+	src/pmpz.o src/pmpza.o src/pmpz_io.o src/pmpz_arith.o
 
 DATA_built = pgmp.sql
 DATA = uninstall_pgmp.sql
