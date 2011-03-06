@@ -27,13 +27,9 @@
 PG_FUNCTION_INFO_V1(pmpz_uminus);
 PG_FUNCTION_INFO_V1(pmpz_uplus);
 
-PG_FUNCTION_INFO_V1(pmpz_add);
-
 
 Datum       pmpz_uminus(PG_FUNCTION_ARGS);
 Datum       pmpz_uplus(PG_FUNCTION_ARGS);
-
-Datum       pmpz_add(PG_FUNCTION_ARGS);
 
 
 /*
@@ -75,20 +71,28 @@ pmpz_uplus(PG_FUNCTION_ARGS)
  * Binary operators
  */
 
-Datum
-pmpz_add(PG_FUNCTION_ARGS)
-{
-    const mpz_t     z1;
-    const mpz_t     z2;
-    mpz_t           zf;
-    pmpz            *res;
-
-    mpz_from_pmpz(z1, PG_GETARG_PMPZ(0));
-    mpz_from_pmpz(z2, PG_GETARG_PMPZ(1));
-
-    mpz_init(zf);
-    mpz_add(zf, z1, z2);
-
-    res = pmpz_from_mpz(zf);
-    PG_RETURN_POINTER(res);
+#define PMPZ_OP(op) \
+ \
+PG_FUNCTION_INFO_V1(pmpz_ ## op); \
+ \
+Datum       pmpz_ ## op(PG_FUNCTION_ARGS); \
+ \
+Datum \
+pmpz_ ## op (PG_FUNCTION_ARGS) \
+{ \
+    const mpz_t     z1; \
+    const mpz_t     z2; \
+    mpz_t           zf; \
+    pmpz            *res; \
+ \
+    mpz_from_pmpz(z1, PG_GETARG_PMPZ(0)); \
+    mpz_from_pmpz(z2, PG_GETARG_PMPZ(1)); \
+ \
+    mpz_init(zf); \
+    mpz_ ## op (zf, z1, z2); \
+ \
+    res = pmpz_from_mpz(zf); \
+    PG_RETURN_POINTER(res); \
 }
+
+PMPZ_OP(add)
