@@ -33,6 +33,12 @@ void    *_pgmp_realloc(void *ptr, size_t old_size, size_t new_size);
 void    _pgmp_free(void *ptr, size_t size);
 
 
+/* A couple of constant limbs used to create constant mp? data
+ * from the content of varlena data */
+const mp_limb_t _pgmp_limb_0 = 0;
+const mp_limb_t _pgmp_limb_1 = 1;
+
+
 /*
  * Module initialization and cleanup
  */

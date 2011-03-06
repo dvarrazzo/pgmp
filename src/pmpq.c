@@ -25,6 +25,11 @@
 #include "fmgr.h"
 
 
+/* To be referred to to represent the zero */
+extern const mp_limb_t _pgmp_limb_0;
+extern const mp_limb_t _pgmp_limb_1;
+
+
 /*
  * Create a new pmpq structure from the content of a mpq
  */
@@ -34,7 +39,7 @@ pmpq_from_mpq(mpq_srcptr q)
     pmpq *res;
     int nsize = SIZ(mpq_numref(q));
 
-    if (0 != nsize)
+    if (LIKELY(0 != nsize))
     {
         int nalloc = ABS(nsize);
         int dsize = SIZ(mpq_denref(q));
@@ -53,17 +58,13 @@ pmpq_from_mpq(mpq_srcptr q)
     }
     else
     {
-        res = (pmpq *)palloc0(sizeof(pmpq));
-        SET_VARSIZE(res, sizeof(pmpq));
+        res = (pmpq *)palloc0(PMPQ_HDRSIZE);
+        SET_VARSIZE(res, PMPQ_HDRSIZE);
     }
 
     return res;
 }
 
-
-/* Two constant to address to create the representation of 0 */
-static const mp_limb_t limb0 = 0;
-static const mp_limb_t limb1 = 1;
 
 /*
  * Initialize a mpq from the content of a datum
@@ -98,11 +99,11 @@ mpq_from_pmpq(mpq_srcptr q, const pmpq *pq)
          * so let's just refer to some static const */
         ALLOC(mpq_numref(wq)) = 1;
         SIZ(mpq_numref(wq)) = 0;
-        LIMBS(mpq_numref(wq)) = (mp_limb_t *)(&limb0);
+        LIMBS(mpq_numref(wq)) = (mp_limb_t *)(&_pgmp_limb_0);
 
         ALLOC(mpq_denref(wq)) = 1;
         SIZ(mpq_denref(wq)) = 1;
-        LIMBS(mpq_denref(wq)) = (mp_limb_t *)(&limb1);
+        LIMBS(mpq_denref(wq)) = (mp_limb_t *)(&_pgmp_limb_1);
     }
 }
 

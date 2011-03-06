@@ -25,6 +25,10 @@
 #include "fmgr.h"
 
 
+/* To be referred to to represent the zero */
+extern const mp_limb_t _pgmp_limb_0;
+
+
 /*
  * Create a new pmpz structure from the content of a mpz
  */
@@ -34,7 +38,7 @@ pmpz_from_mpz(mpz_srcptr z)
     pmpz *res;
     int size = SIZ(z);
 
-    if (0 != size)
+    if (LIKELY(0 != size))
     {
         size_t slimbs;
         if (size > 0) {
@@ -51,8 +55,8 @@ pmpz_from_mpz(mpz_srcptr z)
     }
     else
     {
-        res = (pmpz *)palloc0(sizeof(pmpz));
-        SET_VARSIZE(res, sizeof(pmpz));
+        res = (pmpz *)palloc0(PMPZ_HDRSIZE);
+        SET_VARSIZE(res, PMPZ_HDRSIZE);
     }
 
     return res;
@@ -75,8 +79,19 @@ mpz_from_pmpz(mpz_srcptr z, const pmpz *pz)
     /* discard the const qualifier */
     mpz_ptr wz = (mpz_ptr)z;
 
-    ALLOC(wz) = pz->size ? ABS(pz->size) : 1;
-    SIZ(wz) = pz->size;
-    LIMBS(wz) = (mp_limb_t *)pz->data;
+    if (LIKELY(pz->size != 0))
+    {
+        ALLOC(wz) = ABS(pz->size);
+        SIZ(wz) = pz->size;
+        LIMBS(wz) = (mp_limb_t *)pz->data;
+    }
+    else
+    {
+        /* in the datum there is just the varlena header
+         * so let's just refer to some static const */
+        ALLOC(wz) = 1;
+        SIZ(wz) = 0;
+        LIMBS(wz) = (mp_limb_t *)&_pgmp_limb_0;
+    }
 }
 
