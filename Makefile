@@ -25,11 +25,12 @@ REGRESS_OPTS=--user postgres
 
 MODULE_big = pgmp
 OBJS = src/pgmp.o src/pgmp_test.o \
-	src/pmpz.o src/pmpza.o src/pmpz_io.o src/pmpz_arith.o
+	src/pmpz.o src/pmpza.o src/pmpz_io.o src/pmpz_arith.o \
+	src/pmpq.o src/pmpq_io.o
 
 DATA_built = pgmp.sql
 DATA = uninstall_pgmp.sql
-REGRESS = mpz
+REGRESS = mpz mpq
 
 PG_CONFIG = pg_config
 PGXS := $(shell $(PG_CONFIG) --pgxs)

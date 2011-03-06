@@ -1,4 +1,4 @@
-/* pgmp-impl -- Implementation details
+/* pmpq -- PostgreSQL data type for GMP mpq
  *
  * Copyright (C) 2011 Daniele Varrazzo
  *
@@ -19,33 +19,26 @@
  * http://www.gnu.org/licenses/.
  */
 
-#ifndef __PGMP_IMPL_H__
-#define __PGMP_IMPL_H__
+#ifndef __PMPQ_H__
+#define __PMPQ_H__
 
-/*
- * Macros equivalent to the ones defimed in gmp-impl.h
- */
+#include <gmp.h>
+#include "postgres.h"
 
-#define ABS(x)      ((x) >= 0 ? (x) : -(x))
-#define SIZ(z)      ((z)->_mp_size)
-#define NLIMBS(z)   ABS((z)->_mp_size)
-#define LIMBS(z)    ((z)->_mp_d)
-#define ALLOC(v)    ((v)->_mp_alloc)
+typedef struct
+{
+    char        vl_len_[4];     /* varlena header */
+    int         num_size;       /* number of limbs in numerator, with sign */
+    int         den_size;       /* number of limbs in denominator */
+    mp_limb_t   data[1];        /* limbs */
 
-/* Allow direct user access to numerator and denominator of a mpq_t object.  */
-#define mpq_numref(Q)   (&((Q)->_mp_num))
-#define mpq_denref(Q)   (&((Q)->_mp_den))
+} pmpq;
 
-/* __builtin_expect is in gcc 3.0, and not in 2.95. */
-#if __GNUC__ >= 3
-#define LIKELY(cond)    __builtin_expect ((cond) != 0, 1)
-#define UNLIKELY(cond)  __builtin_expect ((cond) != 0, 0)
-#else
-#define LIKELY(cond)    (cond)
-#define UNLIKELY(cond)  (cond)
-#endif
+#define PMPQ_HDRSIZE   MAXALIGN(offsetof(pmpq,data))
+#define PG_GETARG_PMPQ(x)   ((pmpq*)DatumGetPointer(PG_DETOAST_DATUM(PG_GETARG_DATUM(x))))
 
+pmpq * pmpq_from_mpq(mpq_srcptr q);
+void mpq_from_pmpq(mpq_srcptr q, const pmpq *pq);
 
-#endif  /* __PGMP_IMPL_H__ */
-
+#endif  /* __PMPQ_H__ */
 
