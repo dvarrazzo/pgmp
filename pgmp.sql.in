@@ -247,21 +247,21 @@ CREATE TYPE _mpza (
 );
 
 
-CREATE OR REPLACE FUNCTION pmpz_sum_s(_mpza, mpz)
-RETURNS _mpza
+CREATE OR REPLACE FUNCTION _pmpz_from_pmpza(_mpza)
+RETURNS mpz
 AS 'MODULE_PATHNAME'
 LANGUAGE C STRICT IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION pmpz_sum_f(_mpza)
-RETURNS mpz
+CREATE OR REPLACE FUNCTION _pmpz_agg_add(_mpza, mpz)
+RETURNS _mpza
 AS 'MODULE_PATHNAME'
 LANGUAGE C STRICT IMMUTABLE;
 
 CREATE AGGREGATE sum (mpz)
 (
-      SFUNC = pmpz_sum_s
+      SFUNC = _pmpz_agg_add
     , STYPE = _mpza
-    , FINALFUNC = pmpz_sum_f
+    , FINALFUNC = _pmpz_from_pmpza
     , INITCOND = ''
 );
 

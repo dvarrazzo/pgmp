@@ -28,14 +28,12 @@
 PG_FUNCTION_INFO_V1(pmpza_in);
 PG_FUNCTION_INFO_V1(pmpza_out);
 
-PG_FUNCTION_INFO_V1(pmpz_sum_s);
-PG_FUNCTION_INFO_V1(pmpz_sum_f);
+PG_FUNCTION_INFO_V1(_pmpz_from_pmpza);
 
 Datum       pmpza_in(PG_FUNCTION_ARGS);
 Datum       pmpza_out(PG_FUNCTION_ARGS);
 
-Datum       pmpz_sum_s(PG_FUNCTION_ARGS);
-Datum       pmpz_sum_f(PG_FUNCTION_ARGS);
+Datum       _pmpz_from_pmpza(PG_FUNCTION_ARGS);
 
 /*
  * Input/Output functions
@@ -94,37 +92,9 @@ pmpza_out(PG_FUNCTION_ARGS)
  * Accumulation functions
  */
 
+/* Convert an inplace accumulator into a pmpz structure */
 Datum
-pmpz_sum_s(PG_FUNCTION_ARGS)
-{
-    mpz_t           *a;
-    const mpz_t     z;
-
-    /* TODO: make compatible with PG < 9 */
-    if (UNLIKELY(!AggCheckCallContext(fcinfo, NULL)))
-    {
-        ereport(ERROR,
-            (errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
-            errmsg("pmpz_sum_s can only be called in accumulation")));
-
-        PG_RETURN_NULL();       /* unused, to avoid a warning */
-    }
-
-    a = (mpz_t *)PG_GETARG_POINTER(0);
-    mpz_from_pmpz(z, PG_GETARG_PMPZ(1));
-
-    if (LIKELY(LIMBS(*a))) {
-        mpz_add(*a, *a, z);
-    }
-    else {                      /* uninitialized */
-        mpz_init_set(*a, z);
-    }
-
-    PG_RETURN_POINTER(a);
-}
-
-Datum
-pmpz_sum_f(PG_FUNCTION_ARGS)
+_pmpz_from_pmpza(PG_FUNCTION_ARGS)
 {
     mpz_t       *a;
     pmpz        *res;
@@ -141,4 +111,41 @@ pmpz_sum_f(PG_FUNCTION_ARGS)
 }
 
 
+/* Macro to create an accumulation function from a gmp operator */
+
+#define PMPZ_AGG(op) \
+PG_FUNCTION_INFO_V1(_pmpz_agg_ ## op); \
+ \
+Datum       _pmpz_agg_ ## op (PG_FUNCTION_ARGS); \
+ \
+Datum \
+_pmpz_agg_ ## op (PG_FUNCTION_ARGS) \
+{ \
+    mpz_t           *a; \
+    const mpz_t     z; \
+ \
+    /* TODO: make compatible with PG < 9 */ \
+    if (UNLIKELY(!AggCheckCallContext(fcinfo, NULL))) \
+    { \
+        ereport(ERROR, \
+            (errcode(ERRCODE_DATA_EXCEPTION), \
+            errmsg("_pmpz_agg_" #op " can only be called in accumulation"))); \
+ \
+        PG_RETURN_NULL();       /* unused, to avoid a warning */ \
+    } \
+ \
+    a = (mpz_t *)PG_GETARG_POINTER(0); \
+    mpz_from_pmpz(z, PG_GETARG_PMPZ(1)); \
+ \
+    if (LIKELY(LIMBS(*a))) { \
+        mpz_ ## op (*a, *a, z); \
+    } \
+    else {                      /* uninitialized */ \
+        mpz_init_set(*a, z); \
+    } \
+ \
+    PG_RETURN_POINTER(a); \
+}
+
+PMPZ_AGG(add)
 
