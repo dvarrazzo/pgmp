@@ -98,7 +98,7 @@ SELECT -('0'::mpz), +('0'::mpz), -('1'::mpz), +('1'::mpz);
 0|0|-1|1
 SELECT -('12345678901234567890'::mpz), +('12345678901234567890'::mpz);
 -12345678901234567890|12345678901234567890
-SELECT '1'::text::mpz + '2'::text::mpz;
+SELECT '1'::mpz + '2'::mpz;
 3
 SELECT '2'::mpz + '-4'::mpz;
 -2
@@ -107,6 +107,76 @@ SELECT regexp_matches((
         ('2' || repeat('0', 1000))::mpz)::text,
     '^3(0000000000){100}$') IS NOT NULL;
 t
+SELECT '3'::mpz - '2'::mpz;
+1
+SELECT '3'::mpz - '5'::mpz;
+-2
+SELECT regexp_matches((
+        ('5' || repeat('0', 1000))::mpz -
+        ('2' || repeat('0', 1000))::mpz)::text,
+    '^3(0000000000){100}$') IS NOT NULL;
+t
+SELECT '3'::mpz * '2'::mpz;
+6
+SELECT '3'::mpz * '-5'::mpz;
+-15
+SELECT regexp_matches((
+        ('2' || repeat('0', 1000))::mpz *
+        ('3' || repeat('0', 1000))::mpz)::text,
+    '^6(00000000000000000000){100}$') IS NOT NULL;
+t
+-- PostgreSQL should apply the conventional precedence to operators
+-- with the same name of the builtin operators.
+SELECT '2'::mpz + '6'::mpz * '7'::mpz;  -- cit.
+44
+SELECT  '7'::mpz /  '3'::mpz;
+2
+SELECT '-7'::mpz /  '3'::mpz;
+-2
+SELECT  '7'::mpz / '-3'::mpz;
+-2
+SELECT '-7'::mpz / '-3'::mpz;
+2
+SELECT  '7'::mpz %  '3'::mpz;
+1
+SELECT '-7'::mpz %  '3'::mpz;
+-1
+SELECT  '7'::mpz % '-3'::mpz;
+1
+SELECT '-7'::mpz % '-3'::mpz;
+-1
+SELECT  '7'::mpz +/  '3'::mpz;
+3
+SELECT '-7'::mpz +/  '3'::mpz;
+-2
+SELECT  '7'::mpz +/ '-3'::mpz;
+-2
+SELECT '-7'::mpz +/ '-3'::mpz;
+3
+SELECT  '7'::mpz +%  '3'::mpz;
+-2
+SELECT '-7'::mpz +%  '3'::mpz;
+-1
+SELECT  '7'::mpz +% '-3'::mpz;
+1
+SELECT '-7'::mpz +% '-3'::mpz;
+2
+SELECT  '7'::mpz -/  '3'::mpz;
+2
+SELECT '-7'::mpz -/  '3'::mpz;
+-3
+SELECT  '7'::mpz -/ '-3'::mpz;
+-3
+SELECT '-7'::mpz -/ '-3'::mpz;
+2
+SELECT  '7'::mpz -%  '3'::mpz;
+1
+SELECT '-7'::mpz -%  '3'::mpz;
+2
+SELECT  '7'::mpz -% '-3'::mpz;
+-2
+SELECT '-7'::mpz -% '-3'::mpz;
+-1
 --
 -- mpz aggregation
 --

@@ -96,3 +96,12 @@ pmpz_ ## op (PG_FUNCTION_ARGS) \
 }
 
 PMPZ_OP(add)
+PMPZ_OP(sub)
+PMPZ_OP(mul)
+PMPZ_OP(tdiv_q)
+PMPZ_OP(tdiv_r)
+PMPZ_OP(cdiv_q)
+PMPZ_OP(cdiv_r)
+PMPZ_OP(fdiv_q)
+PMPZ_OP(fdiv_r)
+
