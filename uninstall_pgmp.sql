@@ -23,4 +23,6 @@
 SET search_path = public;
 
 DROP TYPE mpz CASCADE;
+DROP TYPE mpq CASCADE;
 
+DROP TYPE _mpza CASCADE;
