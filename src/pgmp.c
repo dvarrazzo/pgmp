@@ -28,9 +28,9 @@ PG_MODULE_MAGIC;
 void    _PG_init(void);
 void    _PG_fini(void);
 
-void    *_pgmp_alloc(size_t alloc_size);
-void    *_pgmp_realloc(void *ptr, size_t old_size, size_t new_size);
-void    _pgmp_free(void *ptr, size_t size);
+static void     *_pgmp_alloc(size_t alloc_size);
+static void     *_pgmp_realloc(void *ptr, size_t old_size, size_t new_size);
+static void     _pgmp_free(void *ptr, size_t size);
 
 
 /* A couple of constant limbs used to create constant mp? data
@@ -61,19 +61,19 @@ _PG_fini(void)
  * GMP custom allocation functions using PostgreSQL memory management.
  */
 
-void *
+static void *
 _pgmp_alloc(size_t alloc_size)
 {
     return palloc(alloc_size);
 }
 
-void *
+static void *
 _pgmp_realloc(void *ptr, size_t old_size, size_t new_size)
 {
     return repalloc(ptr, new_size);
 }
 
-void
+static void
 _pgmp_free(void *ptr, size_t size)
 {
     pfree(ptr);
