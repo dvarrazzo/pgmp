@@ -152,4 +152,5 @@ _pmpz_agg_ ## op (PG_FUNCTION_ARGS) \
 }
 
 PMPZ_AGG(add)
+PMPZ_AGG(mul)
 

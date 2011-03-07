@@ -142,6 +142,7 @@ INSERT INTO mpzagg SELECT generate_series(1, 100);
 INSERT INTO mpzagg VALUES (NULL);
 
 SELECT sum(z) FROM mpzagg;
+SELECT prod(z) FROM mpzagg;
 
 
 --

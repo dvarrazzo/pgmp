@@ -265,6 +265,19 @@ CREATE AGGREGATE sum (mpz)
     , INITCOND = ''
 );
 
+CREATE OR REPLACE FUNCTION _pmpz_agg_mul(_mpza, mpz)
+RETURNS _mpza
+AS 'MODULE_PATHNAME'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE AGGREGATE prod (mpz)
+(
+      SFUNC = _pmpz_agg_mul
+    , STYPE = _mpza
+    , FINALFUNC = _pmpz_from_pmpza
+    , INITCOND = ''
+);
+
 
 --
 -- Test functions
