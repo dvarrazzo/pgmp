@@ -54,17 +54,25 @@ pmpza_in(PG_FUNCTION_ARGS)
      * possibility to return null, as the accumulator type is not the same
      * type of the accumulated values.
      */
+
+    /* Note: currently is seems we can only have accumulators
+     * starting from null, unless we use a non strict accumulation
+     * function and extra care.
+     *
+     * The problem is that here we are called outside the agg context, so if
+     * we allocate limbs here we will die in a palloc during aggregation.
+     * It's only safe allocating space for the accumulator structure but we
+     * will delay initializing the structure to the first aggregated value.
+     */
+
     if (str[0] != '\0')
     {
-        z = (mpz_t *)palloc(sizeof(mpz_t));
+        ereport(ERROR, (
+            errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
+            errmsg("currently only aggregation starting from NULL "
+                    "is supported.") ));
 
-        if (0 != mpz_init_set_str(*z, str, 10))
-        {
-            ereport(ERROR,
-                    (errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
-                     errmsg("invalid input syntax for mpz: \"%s\"",
-                            str)));
-        }
+        PG_RETURN_NULL();   /* no you don't */
     }
     else {
         z = (mpz_t *)palloc0(sizeof(mpz_t));
