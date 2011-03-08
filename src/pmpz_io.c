@@ -78,9 +78,7 @@ pmpz_out(PG_FUNCTION_ARGS)
     mpz_from_pmpz(z, pz);
 
     /* TODO: make base variable */
-    res = (char *)palloc(mpz_sizeinbase(z, 10) + 2);    /* add sign and 0 */
-    mpz_get_str(res, 10, z);
-
+    res = mpz_get_str(NULL, 10, z);
     PG_RETURN_CSTRING(res);
 }
 
