@@ -126,6 +126,12 @@ SELECT '-7'::mpz -%  '3'::mpz;
 SELECT  '7'::mpz -% '-3'::mpz;
 SELECT '-7'::mpz -% '-3'::mpz;
 
+SELECT  '7'::mpz /  '0'::mpz;
+SELECT  '7'::mpz %  '0'::mpz;
+SELECT  '7'::mpz +/  '0'::mpz;
+SELECT  '7'::mpz +%  '0'::mpz;
+SELECT  '7'::mpz -/  '0'::mpz;
+SELECT  '7'::mpz -%  '0'::mpz;
 
 --
 -- mpz ordering operators

@@ -168,6 +168,18 @@ SELECT  '7'::mpz -% '-3'::mpz;
 -2
 SELECT '-7'::mpz -% '-3'::mpz;
 -1
+SELECT  '7'::mpz /  '0'::mpz;
+ERROR:  division by zero
+SELECT  '7'::mpz %  '0'::mpz;
+ERROR:  division by zero
+SELECT  '7'::mpz +/  '0'::mpz;
+ERROR:  division by zero
+SELECT  '7'::mpz +%  '0'::mpz;
+ERROR:  division by zero
+SELECT  '7'::mpz -/  '0'::mpz;
+ERROR:  division by zero
+SELECT  '7'::mpz -%  '0'::mpz;
+ERROR:  division by zero
 --
 -- mpz ordering operators
 --

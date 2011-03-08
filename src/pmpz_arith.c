@@ -20,6 +20,7 @@
  */
 
 #include "pmpz.h"
+#include "pgmp-impl.h"
 
 #include "fmgr.h"
 
@@ -71,6 +72,8 @@ pmpz_uplus(PG_FUNCTION_ARGS)
  * Binary operators
  */
 
+/* Template to generate regular binary operators */
+
 #define PMPZ_OP(op) \
  \
 PG_FUNCTION_INFO_V1(pmpz_ ## op); \
@@ -98,12 +101,47 @@ pmpz_ ## op (PG_FUNCTION_ARGS) \
 PMPZ_OP(add)
 PMPZ_OP(sub)
 PMPZ_OP(mul)
-PMPZ_OP(tdiv_q)
-PMPZ_OP(tdiv_r)
-PMPZ_OP(cdiv_q)
-PMPZ_OP(cdiv_r)
-PMPZ_OP(fdiv_q)
-PMPZ_OP(fdiv_r)
+
+
+/* Template to generate binary operators that may divide by zero */
+
+#define PMPZ_OP_DIV(op) \
+ \
+PG_FUNCTION_INFO_V1(pmpz_ ## op); \
+ \
+Datum       pmpz_ ## op(PG_FUNCTION_ARGS); \
+ \
+Datum \
+pmpz_ ## op (PG_FUNCTION_ARGS) \
+{ \
+    const mpz_t     z1; \
+    const mpz_t     z2; \
+    mpz_t           zf; \
+    pmpz            *res; \
+ \
+    mpz_from_pmpz(z2, PG_GETARG_PMPZ(1)); \
+    if (UNLIKELY(MPZ_IS_ZERO(z2))) \
+    { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_DIVISION_BY_ZERO), \
+            errmsg("division by zero"))); \
+    } \
+ \
+    mpz_from_pmpz(z1, PG_GETARG_PMPZ(0)); \
+ \
+    mpz_init(zf); \
+    mpz_ ## op (zf, z1, z2); \
+ \
+    res = pmpz_from_mpz(zf); \
+    PG_RETURN_POINTER(res); \
+}
+
+PMPZ_OP_DIV(tdiv_q)
+PMPZ_OP_DIV(tdiv_r)
+PMPZ_OP_DIV(cdiv_q)
+PMPZ_OP_DIV(cdiv_r)
+PMPZ_OP_DIV(fdiv_q)
+PMPZ_OP_DIV(fdiv_r)
 
 
 /*
