@@ -73,19 +73,19 @@ PGMP_PG_FUNCTION(pmpz_out)
 
 static Datum _pmpz_from_long(long in);
 
-PGMP_PG_FUNCTION(pmpz_from_smallint)
+PGMP_PG_FUNCTION(pmpz_from_int2)
 {
     int16 in = PG_GETARG_INT16(0);
     return _pmpz_from_long(in);
 }
 
-PGMP_PG_FUNCTION(pmpz_from_integer)
+PGMP_PG_FUNCTION(pmpz_from_int4)
 {
     int32 in = PG_GETARG_INT32(0);
     return _pmpz_from_long(in);
 }
 
-PGMP_PG_FUNCTION(pmpz_from_bigint)
+PGMP_PG_FUNCTION(pmpz_from_int8)
 {
     int64   in = PG_GETARG_INT64(0);
 

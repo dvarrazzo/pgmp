@@ -51,33 +51,33 @@ CREATE TYPE mpz (
 -- mpz cast
 --
 
-CREATE OR REPLACE FUNCTION mpz_from_smallint(smallint)
+CREATE OR REPLACE FUNCTION mpz_from_int2(int2)
 RETURNS mpz
-AS 'MODULE_PATHNAME', 'pmpz_from_smallint'
+AS 'MODULE_PATHNAME', 'pmpz_from_int2'
 LANGUAGE C IMMUTABLE STRICT;
 
-CREATE CAST (smallint AS mpz)
-WITH FUNCTION mpz_from_smallint(smallint)
+CREATE CAST (int2 AS mpz)
+WITH FUNCTION mpz_from_int2(int2)
 AS IMPLICIT;
 
 
-CREATE OR REPLACE FUNCTION mpz_from_integer(integer)
+CREATE OR REPLACE FUNCTION mpz_from_int4(int4)
 RETURNS mpz
-AS 'MODULE_PATHNAME', 'pmpz_from_integer'
+AS 'MODULE_PATHNAME', 'pmpz_from_int4'
 LANGUAGE C IMMUTABLE STRICT;
 
-CREATE CAST (integer AS mpz)
-WITH FUNCTION mpz_from_integer(integer)
+CREATE CAST (int4 AS mpz)
+WITH FUNCTION mpz_from_int4(int4)
 AS IMPLICIT;
 
 
-CREATE OR REPLACE FUNCTION mpz_from_bigint(bigint)
+CREATE OR REPLACE FUNCTION mpz_from_int8(int8)
 RETURNS mpz
-AS 'MODULE_PATHNAME', 'pmpz_from_bigint'
+AS 'MODULE_PATHNAME', 'pmpz_from_int8'
 LANGUAGE C IMMUTABLE STRICT;
 
-CREATE CAST (bigint AS mpz)
-WITH FUNCTION mpz_from_bigint(bigint)
+CREATE CAST (int8 AS mpz)
+WITH FUNCTION mpz_from_int8(int8)
 AS IMPLICIT;
 
 
