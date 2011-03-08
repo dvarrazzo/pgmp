@@ -131,6 +131,33 @@ SELECT '-7'::mpz -% '-3'::mpz;
 
 
 --
+-- mpz ordering operators
+--
+
+select 1000::mpz =   999::mpz;
+select 1000::mpz =  1000::mpz;
+select 1000::mpz =  1001::mpz;
+select 1000::mpz <>  999::mpz;
+select 1000::mpz <> 1000::mpz;
+select 1000::mpz <> 1001::mpz;
+select 1000::mpz !=  999::mpz;
+select 1000::mpz != 1000::mpz;
+select 1000::mpz != 1001::mpz;
+select 1000::mpz <   999::mpz;
+select 1000::mpz <  1000::mpz;
+select 1000::mpz <  1001::mpz;
+select 1000::mpz <=  999::mpz;
+select 1000::mpz <= 1000::mpz;
+select 1000::mpz <= 1001::mpz;
+select 1000::mpz >   999::mpz;
+select 1000::mpz >  1000::mpz;
+select 1000::mpz >  1001::mpz;
+select 1000::mpz >=  999::mpz;
+select 1000::mpz >= 1000::mpz;
+select 1000::mpz >= 1001::mpz;
+
+
+--
 -- mpz aggregation
 --
 

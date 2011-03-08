@@ -105,3 +105,33 @@ PMPZ_OP(cdiv_r)
 PMPZ_OP(fdiv_q)
 PMPZ_OP(fdiv_r)
 
+
+/*
+ * Comparison operators
+ */
+
+#define PMPZ_CMP(op, rel) \
+ \
+PG_FUNCTION_INFO_V1(pmpz_ ## op); \
+ \
+Datum       pmpz_ ## op(PG_FUNCTION_ARGS); \
+ \
+Datum \
+pmpz_ ## op (PG_FUNCTION_ARGS) \
+{ \
+    const mpz_t     z1; \
+    const mpz_t     z2; \
+ \
+    mpz_from_pmpz(z1, PG_GETARG_PMPZ(0)); \
+    mpz_from_pmpz(z2, PG_GETARG_PMPZ(1)); \
+ \
+    PG_RETURN_BOOL(mpz_cmp(z1, z2) rel 0); \
+}
+
+PMPZ_CMP(eq, ==)
+PMPZ_CMP(ne, !=)
+PMPZ_CMP(gt, >)
+PMPZ_CMP(ge, >=)
+PMPZ_CMP(lt, <)
+PMPZ_CMP(le, <=)
+

@@ -178,6 +178,51 @@ SELECT  '7'::mpz -% '-3'::mpz;
 SELECT '-7'::mpz -% '-3'::mpz;
 -1
 --
+-- mpz ordering operators
+--
+select 1000::mpz =   999::mpz;
+f
+select 1000::mpz =  1000::mpz;
+t
+select 1000::mpz =  1001::mpz;
+f
+select 1000::mpz <>  999::mpz;
+t
+select 1000::mpz <> 1000::mpz;
+f
+select 1000::mpz <> 1001::mpz;
+t
+select 1000::mpz !=  999::mpz;
+t
+select 1000::mpz != 1000::mpz;
+f
+select 1000::mpz != 1001::mpz;
+t
+select 1000::mpz <   999::mpz;
+f
+select 1000::mpz <  1000::mpz;
+f
+select 1000::mpz <  1001::mpz;
+t
+select 1000::mpz <=  999::mpz;
+f
+select 1000::mpz <= 1000::mpz;
+t
+select 1000::mpz <= 1001::mpz;
+t
+select 1000::mpz >   999::mpz;
+t
+select 1000::mpz >  1000::mpz;
+f
+select 1000::mpz >  1001::mpz;
+f
+select 1000::mpz >=  999::mpz;
+t
+select 1000::mpz >= 1000::mpz;
+t
+select 1000::mpz >= 1001::mpz;
+f
+--
 -- mpz aggregation
 --
 CREATE TABLE mpzagg(z mpz);

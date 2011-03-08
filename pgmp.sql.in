@@ -224,6 +224,97 @@ CREATE OPERATOR -% (
 
 
 --
+-- mpz comparisons
+--
+
+CREATE OR REPLACE FUNCTION pmpz_eq(mpz, mpz)
+RETURNS boolean
+AS 'MODULE_PATHNAME'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OPERATOR = (
+	LEFTARG = mpz
+	, RIGHTARG = mpz
+	, PROCEDURE = pmpz_eq
+    , COMMUTATOR = =
+    , NEGATOR = <>
+    , RESTRICT = eqsel
+);
+
+CREATE OR REPLACE FUNCTION pmpz_ne(mpz, mpz)
+RETURNS boolean
+AS 'MODULE_PATHNAME'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OPERATOR <> (
+	LEFTARG = mpz
+	, RIGHTARG = mpz
+	, PROCEDURE = pmpz_ne
+    , COMMUTATOR = <>
+    , NEGATOR = =
+    , RESTRICT = neqsel
+);
+
+CREATE OR REPLACE FUNCTION pmpz_gt(mpz, mpz)
+RETURNS boolean
+AS 'MODULE_PATHNAME'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OPERATOR > (
+	LEFTARG = mpz
+	, RIGHTARG = mpz
+	, PROCEDURE = pmpz_gt
+    , COMMUTATOR = <
+    , NEGATOR = <=
+    , RESTRICT = scalargtsel
+);
+
+CREATE OR REPLACE FUNCTION pmpz_ge(mpz, mpz)
+RETURNS boolean
+AS 'MODULE_PATHNAME'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OPERATOR >= (
+	LEFTARG = mpz
+	, RIGHTARG = mpz
+	, PROCEDURE = pmpz_ge
+    , COMMUTATOR = <=
+    , NEGATOR = <
+    , RESTRICT = scalargtsel
+);
+
+CREATE OR REPLACE FUNCTION pmpz_lt(mpz, mpz)
+RETURNS boolean
+AS 'MODULE_PATHNAME'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OPERATOR < (
+	LEFTARG = mpz
+	, RIGHTARG = mpz
+	, PROCEDURE = pmpz_lt
+    , COMMUTATOR = >
+    , NEGATOR = >=
+    , RESTRICT = scalarltsel
+);
+
+CREATE OR REPLACE FUNCTION pmpz_le(mpz, mpz)
+RETURNS boolean
+AS 'MODULE_PATHNAME'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OPERATOR <= (
+	LEFTARG = mpz
+	, RIGHTARG = mpz
+	, PROCEDURE = pmpz_le
+    , COMMUTATOR = >=
+    , NEGATOR = >
+    , RESTRICT = scalarltsel
+);
+
+
+
+
+--
 -- Aggregation functions
 --
 
