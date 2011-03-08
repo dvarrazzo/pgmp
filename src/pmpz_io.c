@@ -20,9 +20,11 @@
  */
 
 #include "pmpz.h"
+#include "pgmp-impl.h"
 
 #include "fmgr.h"
 
+#include <limits.h>
 
 PG_FUNCTION_INFO_V1(pmpz_in);
 PG_FUNCTION_INFO_V1(pmpz_out);
@@ -87,7 +89,7 @@ pmpz_out(PG_FUNCTION_ARGS)
  * Cast functions
  */
 
-static Datum _pmpz_from_long(int64 in);
+static Datum _pmpz_from_long(long in);
 
 Datum
 pmpz_from_smallint(PG_FUNCTION_ARGS)
@@ -106,14 +108,58 @@ pmpz_from_integer(PG_FUNCTION_ARGS)
 Datum
 pmpz_from_bigint(PG_FUNCTION_ARGS)
 {
-    /* TODO: this function doesn't work - see regression tests. */
-    int64 in = PG_GETARG_INT64(0);
-    elog(INFO, "%ld", in);
+    int64   in = PG_GETARG_INT64(0);
+
+#if LONG_MAX == INT64_MAX
+
     return _pmpz_from_long(in);
+
+#elif LONG_MAX == INT32_MAX
+
+    int         neg = 0;
+    uint32      lo;
+    uint32      hi;
+    mpz_t       z;
+    pmpz        *res;
+
+    if (LIKELY(in != INT64_MIN))
+    {
+        if (in < 0) {
+            neg = 1;
+            in = -in;
+        }
+
+        lo = in & 0xFFFFFFFFUL;
+        hi = in >> 32;
+
+        if (hi) {
+            mpz_init_set_ui(z, hi);
+            mpz_mul_2exp(z, z, 32);
+            mpz_add_ui(z, z, lo);
+        }
+        else {
+            mpz_init_set_ui(z, lo);
+        }
+
+        if (neg) {
+            mpz_neg(z, z);
+        }
+    }
+    else {
+        /* this would overflow the long */
+        mpz_init_set_si(z, 1L);
+        mpz_mul_2exp(z, z, 63);
+        mpz_neg(z, z);
+    }
+
+    res = pmpz_from_mpz(z);
+    PG_RETURN_POINTER(res);
+
+#endif
 }
 
 static Datum
-_pmpz_from_long(int64 in)
+_pmpz_from_long(long in)
 {
     mpz_t   z;
     pmpz    *res;
