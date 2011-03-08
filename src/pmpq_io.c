@@ -25,19 +25,11 @@
 #include "fmgr.h"
 
 
-PG_FUNCTION_INFO_V1(pmpq_in);
-PG_FUNCTION_INFO_V1(pmpq_out);
-
-Datum       pmpq_in(PG_FUNCTION_ARGS);
-Datum       pmpq_out(PG_FUNCTION_ARGS);
-
-
 /*
  * Input/Output functions
  */
 
-Datum
-pmpq_in(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(pmpq_in)
 {
     char    *str;
     mpq_t   q;
@@ -66,8 +58,7 @@ pmpq_in(PG_FUNCTION_ARGS)
     PG_RETURN_POINTER(res);
 }
 
-Datum
-pmpq_out(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(pmpq_out)
 {
     const pmpq      *pz;
     const mpq_t     q;

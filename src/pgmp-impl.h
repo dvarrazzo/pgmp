@@ -49,6 +49,16 @@
 #endif
 
 
+/* Less noise in the creation of postgresql functions */
+#define PGMP_PG_FUNCTION(name) \
+\
+PG_FUNCTION_INFO_V1(name); \
+\
+Datum name(PG_FUNCTION_ARGS); \
+\
+Datum name(PG_FUNCTION_ARGS)
+
+
 #endif  /* __PGMP_IMPL_H__ */
 
 

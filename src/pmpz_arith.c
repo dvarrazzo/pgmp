@@ -25,20 +25,11 @@
 #include "fmgr.h"
 
 
-PG_FUNCTION_INFO_V1(pmpz_uminus);
-PG_FUNCTION_INFO_V1(pmpz_uplus);
-
-
-Datum       pmpz_uminus(PG_FUNCTION_ARGS);
-Datum       pmpz_uplus(PG_FUNCTION_ARGS);
-
-
 /*
  * Unary minus, plus
  */
 
-Datum
-pmpz_uminus(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(pmpz_uminus)
 {
     const mpz_t     z1;
     mpz_t           zf;
@@ -53,8 +44,7 @@ pmpz_uminus(PG_FUNCTION_ARGS)
     PG_RETURN_POINTER(res);
 }
 
-Datum
-pmpz_uplus(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(pmpz_uplus)
 {
     const pmpz      *pz1;
     pmpz            *res;
@@ -76,12 +66,7 @@ pmpz_uplus(PG_FUNCTION_ARGS)
 
 #define PMPZ_OP(op) \
  \
-PG_FUNCTION_INFO_V1(pmpz_ ## op); \
- \
-Datum       pmpz_ ## op(PG_FUNCTION_ARGS); \
- \
-Datum \
-pmpz_ ## op (PG_FUNCTION_ARGS) \
+PGMP_PG_FUNCTION(pmpz_ ## op) \
 { \
     const mpz_t     z1; \
     const mpz_t     z2; \
@@ -107,12 +92,7 @@ PMPZ_OP(mul)
 
 #define PMPZ_OP_DIV(op) \
  \
-PG_FUNCTION_INFO_V1(pmpz_ ## op); \
- \
-Datum       pmpz_ ## op(PG_FUNCTION_ARGS); \
- \
-Datum \
-pmpz_ ## op (PG_FUNCTION_ARGS) \
+PGMP_PG_FUNCTION(pmpz_ ## op) \
 { \
     const mpz_t     z1; \
     const mpz_t     z2; \
@@ -167,12 +147,7 @@ pmpz_cmp(PG_FUNCTION_ARGS)
 
 #define PMPZ_CMP(op, rel) \
  \
-PG_FUNCTION_INFO_V1(pmpz_ ## op); \
- \
-Datum       pmpz_ ## op(PG_FUNCTION_ARGS); \
- \
-Datum \
-pmpz_ ## op (PG_FUNCTION_ARGS) \
+PGMP_PG_FUNCTION(pmpz_ ## op) \
 { \
     const mpz_t     z1; \
     const mpz_t     z2; \

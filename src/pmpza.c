@@ -25,22 +25,11 @@
 #include "fmgr.h"
 
 
-PG_FUNCTION_INFO_V1(pmpza_in);
-PG_FUNCTION_INFO_V1(pmpza_out);
-
-PG_FUNCTION_INFO_V1(_pmpz_from_pmpza);
-
-Datum       pmpza_in(PG_FUNCTION_ARGS);
-Datum       pmpza_out(PG_FUNCTION_ARGS);
-
-Datum       _pmpz_from_pmpza(PG_FUNCTION_ARGS);
-
 /*
  * Input/Output functions
  */
 
-Datum
-pmpza_in(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(pmpza_in)
 {
     char    *str;
     mpz_t   *z;
@@ -81,8 +70,7 @@ pmpza_in(PG_FUNCTION_ARGS)
     PG_RETURN_POINTER(z);
 }
 
-Datum
-pmpza_out(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(pmpza_out)
 {
     mpz_t       *z;
     char        *res;
@@ -99,8 +87,7 @@ pmpza_out(PG_FUNCTION_ARGS)
  */
 
 /* Convert an inplace accumulator into a pmpz structure */
-Datum
-_pmpz_from_pmpza(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(_pmpz_from_pmpza)
 {
     mpz_t       *a;
     pmpz        *res;
@@ -120,12 +107,8 @@ _pmpz_from_pmpza(PG_FUNCTION_ARGS)
 /* Macro to create an accumulation function from a gmp operator */
 
 #define PMPZ_AGG(op) \
-PG_FUNCTION_INFO_V1(_pmpz_agg_ ## op); \
  \
-Datum       _pmpz_agg_ ## op (PG_FUNCTION_ARGS); \
- \
-Datum \
-_pmpz_agg_ ## op (PG_FUNCTION_ARGS) \
+PGMP_PG_FUNCTION(_pmpz_agg_ ## op) \
 { \
     mpz_t           *a; \
     const mpz_t     z; \

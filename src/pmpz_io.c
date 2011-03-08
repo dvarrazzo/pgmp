@@ -26,27 +26,12 @@
 
 #include <limits.h>
 
-PG_FUNCTION_INFO_V1(pmpz_in);
-PG_FUNCTION_INFO_V1(pmpz_out);
-
-PG_FUNCTION_INFO_V1(pmpz_from_smallint);
-PG_FUNCTION_INFO_V1(pmpz_from_integer);
-PG_FUNCTION_INFO_V1(pmpz_from_bigint);
-
-Datum       pmpz_in(PG_FUNCTION_ARGS);
-Datum       pmpz_out(PG_FUNCTION_ARGS);
-
-Datum       pmpz_from_smallint(PG_FUNCTION_ARGS);
-Datum       pmpz_from_integer(PG_FUNCTION_ARGS);
-Datum       pmpz_from_bigint(PG_FUNCTION_ARGS);
-
 
 /*
  * Input/Output functions
  */
 
-Datum
-pmpz_in(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(pmpz_in)
 {
     char    *str;
     mpz_t   z;
@@ -67,8 +52,7 @@ pmpz_in(PG_FUNCTION_ARGS)
     PG_RETURN_POINTER(res);
 }
 
-Datum
-pmpz_out(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(pmpz_out)
 {
     const pmpz      *pz;
     const mpz_t     z;
@@ -89,22 +73,19 @@ pmpz_out(PG_FUNCTION_ARGS)
 
 static Datum _pmpz_from_long(long in);
 
-Datum
-pmpz_from_smallint(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(pmpz_from_smallint)
 {
     int16 in = PG_GETARG_INT16(0);
     return _pmpz_from_long(in);
 }
 
-Datum
-pmpz_from_integer(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(pmpz_from_integer)
 {
     int32 in = PG_GETARG_INT32(0);
     return _pmpz_from_long(in);
 }
 
-Datum
-pmpz_from_bigint(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(pmpz_from_bigint)
 {
     int64   in = PG_GETARG_INT64(0);
 

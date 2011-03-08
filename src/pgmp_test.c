@@ -27,12 +27,6 @@
 #include "funcapi.h"
 #include "utils/numeric.h"
 
-PG_FUNCTION_INFO_V1(mpz_test_dataset);
-PG_FUNCTION_INFO_V1(numeric_test_dataset);
-
-Datum mpz_test_dataset(PG_FUNCTION_ARGS);
-Datum numeric_test_dataset(PG_FUNCTION_ARGS);
-
 
 /*
  * Generate a sequence of mpz
@@ -43,8 +37,7 @@ Datum numeric_test_dataset(PG_FUNCTION_ARGS);
  * - num: items to generate
  * - size: number of digits in each item
  */
-Datum
-mpz_test_dataset(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(mpz_test_dataset)
 {
     FuncCallContext *funcctx;
 
@@ -106,8 +99,7 @@ mpz_test_dataset(PG_FUNCTION_ARGS)
  *
  *   TODO: is there an easy way to generate a numeric programmatically?
  */
-Datum
-numeric_test_dataset(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(numeric_test_dataset)
 {
     FuncCallContext *funcctx;
 
