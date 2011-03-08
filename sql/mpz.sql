@@ -160,6 +160,11 @@ select mpz_cmp(1000::mpz,  999::mpz);
 select mpz_cmp(1000::mpz, 1000::mpz);
 select mpz_cmp(1000::mpz, 1001::mpz);
 
+-- Can create a btree index
+create table test_mpz_idx (z mpz);
+create index test_mpz_idx_idx on test_mpz_idx (z);
+
+
 --
 -- mpz aggregation
 --

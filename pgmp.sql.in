@@ -239,6 +239,9 @@ CREATE OPERATOR = (
     , COMMUTATOR = =
     , NEGATOR = <>
     , RESTRICT = eqsel
+    , JOIN = eqjoinsel
+    , HASHES
+    , MERGES
 );
 
 CREATE OR REPLACE FUNCTION pmpz_ne(mpz, mpz)
@@ -253,6 +256,7 @@ CREATE OPERATOR <> (
     , COMMUTATOR = <>
     , NEGATOR = =
     , RESTRICT = neqsel
+    , JOIN = neqjoinsel
 );
 
 CREATE OR REPLACE FUNCTION pmpz_gt(mpz, mpz)
@@ -267,6 +271,7 @@ CREATE OPERATOR > (
     , COMMUTATOR = <
     , NEGATOR = <=
     , RESTRICT = scalargtsel
+    , JOIN = scalargtjoinsel
 );
 
 CREATE OR REPLACE FUNCTION pmpz_ge(mpz, mpz)
@@ -281,6 +286,7 @@ CREATE OPERATOR >= (
     , COMMUTATOR = <=
     , NEGATOR = <
     , RESTRICT = scalargtsel
+    , JOIN = scalargtjoinsel
 );
 
 CREATE OR REPLACE FUNCTION pmpz_lt(mpz, mpz)
@@ -295,6 +301,7 @@ CREATE OPERATOR < (
     , COMMUTATOR = >
     , NEGATOR = >=
     , RESTRICT = scalarltsel
+    , JOIN = scalarltjoinsel
 );
 
 CREATE OR REPLACE FUNCTION pmpz_le(mpz, mpz)
@@ -309,6 +316,7 @@ CREATE OPERATOR <= (
     , COMMUTATOR = >=
     , NEGATOR = >
     , RESTRICT = scalarltsel
+    , JOIN = scalarltjoinsel
 );
 
 
@@ -321,7 +329,17 @@ RETURNS integer
 AS 'MODULE_PATHNAME', 'pmpz_cmp'
 LANGUAGE C STRICT IMMUTABLE;
 
+CREATE OPERATOR CLASS mpz_btree_ops
+DEFAULT FOR TYPE mpz USING btree AS
+    OPERATOR    1   <   ,
+    OPERATOR    2   <=  ,
+    OPERATOR    3   =   ,
+    OPERATOR    4   >=  ,
+    OPERATOR    5   >   ,
+    FUNCTION    1   mpz_cmp(mpz, mpz)
+    ;
 
+-- TODO: OPERATOR FAMILY?
 
 
 --
