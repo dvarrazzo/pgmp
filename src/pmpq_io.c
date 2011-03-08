@@ -45,8 +45,6 @@ pmpq_in(PG_FUNCTION_ARGS)
 
     str = PG_GETARG_CSTRING(0);
 
-    /* TODO: the input 1/0 causes an exception to be raised and is trapped
-     * by the database. Is there a way to trap it ourselves? */
     mpq_init(q);
     if (0 != mpq_set_str(q, str, 10))
     {
@@ -54,6 +52,13 @@ pmpq_in(PG_FUNCTION_ARGS)
                 (errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
                  errmsg("invalid input syntax for mpq: \"%s\"",
                         str)));
+    }
+
+    if (UNLIKELY(MPZ_IS_ZERO(mpq_denref(q))))
+    {
+        ereport(ERROR, (
+            errcode(ERRCODE_DIVISION_BY_ZERO),
+            errmsg("denominator can't be zero")));
     }
 
     mpq_canonicalize(q);

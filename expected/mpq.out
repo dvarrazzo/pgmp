@@ -56,9 +56,7 @@ SELECT '18446744073709551616/18446744073709551616'::mpq;
 SELECT '12345678901234567890123456789012345678901234567890123456789012345678901234567890/'
        '88888888888888888888888888888888888888888888888888888888888888888888888888888888'::mpq;
 617283945/4444444444
--- TODO: find a more "elegant" way to trap this?
 SELECT '1/0'::mpq;
-ERROR:  floating-point exception
+ERROR:  denominator can't be zero
 LINE 1: SELECT '1/0'::mpq;
                ^
-DETAIL:  An invalid floating-point operation was signaled. This probably means an out-of-range result or an invalid operation, such as division by zero.

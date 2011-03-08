@@ -22,6 +22,9 @@
 #ifndef __PGMP_IMPL_H__
 #define __PGMP_IMPL_H__
 
+
+#define MPZ_IS_ZERO(z) (SIZ(z) == 0)
+
 /*
  * Macros equivalent to the ones defimed in gmp-impl.h
  */
