@@ -156,6 +156,9 @@ select 1000::mpz >=  999::mpz;
 select 1000::mpz >= 1000::mpz;
 select 1000::mpz >= 1001::mpz;
 
+select mpz_cmp(1000::mpz,  999::mpz);
+select mpz_cmp(1000::mpz, 1000::mpz);
+select mpz_cmp(1000::mpz, 1001::mpz);
 
 --
 -- mpz aggregation

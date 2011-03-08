@@ -312,6 +312,16 @@ CREATE OPERATOR <= (
 );
 
 
+--
+-- mpz indexes
+--
+
+CREATE OR REPLACE FUNCTION mpz_cmp(mpz, mpz)
+RETURNS integer
+AS 'MODULE_PATHNAME', 'pmpz_cmp'
+LANGUAGE C STRICT IMMUTABLE;
+
+
 
 
 --
