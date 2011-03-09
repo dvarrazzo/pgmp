@@ -186,6 +186,42 @@ SELECT  '10000000000'::mpz << 0;
 10000000000
 SELECT  '10000000000'::mpz << -1;
 ERROR:  op2 can't be negative
+SELECT  '1027'::mpz >>   3;
+128
+SELECT '-1027'::mpz >>   3;
+-128
+SELECT  '1027'::mpz >>  -3;
+ERROR:  op2 can't be negative
+SELECT  '1027'::mpz %>>  3;
+3
+SELECT '-1027'::mpz %>>  3;
+-3
+SELECT  '1027'::mpz %>> -3;
+ERROR:  op2 can't be negative
+SELECT  '1027'::mpz +>>   3;
+129
+SELECT '-1027'::mpz +>>   3;
+-128
+SELECT  '1027'::mpz +>>  -3;
+ERROR:  op2 can't be negative
+SELECT  '1027'::mpz +%>>  3;
+-5
+SELECT '-1027'::mpz +%>>  3;
+-3
+SELECT  '1027'::mpz +%>> -3;
+ERROR:  op2 can't be negative
+SELECT  '1027'::mpz ->>   3;
+128
+SELECT '-1027'::mpz ->>   3;
+-129
+SELECT  '1027'::mpz ->>  -3;
+ERROR:  op2 can't be negative
+SELECT  '1027'::mpz -%>>  3;
+3
+SELECT '-1027'::mpz -%>>  3;
+5
+SELECT  '1027'::mpz -%>> -3;
+ERROR:  op2 can't be negative
 --
 -- mpz ordering operators
 --

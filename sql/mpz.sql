@@ -137,6 +137,27 @@ SELECT  '10000000000'::mpz << 10;
 SELECT  '10000000000'::mpz << 0;
 SELECT  '10000000000'::mpz << -1;
 
+SELECT  '1027'::mpz >>   3;
+SELECT '-1027'::mpz >>   3;
+SELECT  '1027'::mpz >>  -3;
+SELECT  '1027'::mpz %>>  3;
+SELECT '-1027'::mpz %>>  3;
+SELECT  '1027'::mpz %>> -3;
+
+SELECT  '1027'::mpz +>>   3;
+SELECT '-1027'::mpz +>>   3;
+SELECT  '1027'::mpz +>>  -3;
+SELECT  '1027'::mpz +%>>  3;
+SELECT '-1027'::mpz +%>>  3;
+SELECT  '1027'::mpz +%>> -3;
+
+SELECT  '1027'::mpz ->>   3;
+SELECT '-1027'::mpz ->>   3;
+SELECT  '1027'::mpz ->>  -3;
+SELECT  '1027'::mpz -%>>  3;
+SELECT '-1027'::mpz -%>>  3;
+SELECT  '1027'::mpz -%>> -3;
+
 
 --
 -- mpz ordering operators

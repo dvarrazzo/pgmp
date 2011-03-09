@@ -152,6 +152,12 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
 }
 
 PMPZ_BIT(mul_2exp)
+PMPZ_BIT(tdiv_q_2exp)
+PMPZ_BIT(tdiv_r_2exp)
+PMPZ_BIT(cdiv_q_2exp)
+PMPZ_BIT(cdiv_r_2exp)
+PMPZ_BIT(fdiv_q_2exp)
+PMPZ_BIT(fdiv_r_2exp)
 
 
 /*
