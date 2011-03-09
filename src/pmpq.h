@@ -35,7 +35,10 @@ typedef struct
 } pmpq;
 
 #define PMPQ_HDRSIZE   MAXALIGN(offsetof(pmpq,data))
-#define PG_GETARG_PMPQ(x)   ((pmpq*)DatumGetPointer(PG_DETOAST_DATUM(PG_GETARG_DATUM(x))))
+#define PG_GETARG_PMPQ(x) \
+    ((pmpq*)DatumGetPointer(PG_DETOAST_DATUM(PG_GETARG_DATUM(x))))
+#define PG_RETURN_MPQ(q) \
+    PG_RETURN_POINTER(pmpq_from_mpq(q))
 
 pmpq * pmpq_from_mpq(mpq_srcptr q);
 void mpq_from_pmpq(mpq_srcptr q, const pmpq *pq);

@@ -90,13 +90,11 @@ PGMP_PG_FUNCTION(pmpza_out)
 PGMP_PG_FUNCTION(_pmpz_from_pmpza)
 {
     mpz_t       *a;
-    pmpz        *res;
 
     a = (mpz_t *)PG_GETARG_POINTER(0);
 
     if (LIKELY(LIMBS(*a))) {
-        res = pmpz_from_mpz(*a);
-        PG_RETURN_POINTER(res);
+        PG_RETURN_MPZ(*a);
     }
     else {                      /* uninitialized */
         PG_RETURN_NULL();

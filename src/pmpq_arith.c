@@ -32,7 +32,6 @@ PGMP_PG_FUNCTION(pmpq_uminus)
 {
     const mpq_t     q1;
     mpq_t           qf;
-    pmpq            *res;
 
     mpq_from_pmpq(q1, PG_GETARG_PMPQ(0));
 
@@ -40,8 +39,7 @@ PGMP_PG_FUNCTION(pmpq_uminus)
     mpz_init_set(mpq_denref(qf), mpq_denref(q1));
     mpz_neg(mpq_numref(qf), mpq_numref(qf));
 
-    res = pmpq_from_mpq(qf);
-    PG_RETURN_POINTER(res);
+    PG_RETURN_MPQ(qf);
 }
 
 PGMP_PG_FUNCTION(pmpq_uplus)
@@ -71,7 +69,6 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
     const mpq_t     q1; \
     const mpq_t     q2; \
     mpq_t           qf; \
-    pmpq            *res; \
  \
     mpq_from_pmpq(q1, PG_GETARG_PMPQ(0)); \
     mpq_from_pmpq(q2, PG_GETARG_PMPQ(1)); \
@@ -80,8 +77,7 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
     mpq_ ## op (qf, q1, q2); \
     mpq_canonicalize(qf); \
  \
-    res = pmpq_from_mpq(qf); \
-    PG_RETURN_POINTER(res); \
+    PG_RETURN_MPQ(qf); \
 }
 
 PMPQ_OP(add)
@@ -98,7 +94,6 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
     const mpq_t     q1; \
     const mpq_t     q2; \
     mpq_t           qf; \
-    pmpq            *res; \
  \
     mpq_from_pmpq(q2, PG_GETARG_PMPQ(1)); \
     if (UNLIKELY(MPZ_IS_ZERO(mpq_numref(q2)))) \
@@ -114,8 +109,7 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
     mpq_ ## op (qf, q1, q2); \
     mpq_canonicalize(qf); \
  \
-    res = pmpq_from_mpq(qf); \
-    PG_RETURN_POINTER(res); \
+    PG_RETURN_MPQ(qf); \
 }
 
 PMPQ_OP_DIV(div)
@@ -130,7 +124,6 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
     const mpq_t     q; \
     long            b; \
     mpq_t           qf; \
-    pmpq            *res; \
  \
     mpq_from_pmpq(q, PG_GETARG_PMPQ(0)); \
     b = PG_GETARG_INT32(1); \
@@ -144,8 +137,7 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
     mpq_init(qf); \
     mpq_ ## op (qf, q, (unsigned long)b); \
  \
-    res = pmpq_from_mpq(qf); \
-    PG_RETURN_POINTER(res); \
+    PG_RETURN_MPQ(qf); \
 }
 
 

@@ -33,15 +33,13 @@ PGMP_PG_FUNCTION(pmpz_uminus)
 {
     const mpz_t     z1;
     mpz_t           zf;
-    pmpz            *res;
 
     mpz_from_pmpz(z1, PG_GETARG_PMPZ(0));
 
     mpz_init_set(zf, z1);
     mpz_neg(zf, zf);
 
-    res = pmpz_from_mpz(zf);
-    PG_RETURN_POINTER(res);
+    PG_RETURN_MPZ(zf);
 }
 
 PGMP_PG_FUNCTION(pmpz_uplus)
@@ -71,7 +69,6 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     const mpz_t     z1; \
     const mpz_t     z2; \
     mpz_t           zf; \
-    pmpz            *res; \
  \
     mpz_from_pmpz(z1, PG_GETARG_PMPZ(0)); \
     mpz_from_pmpz(z2, PG_GETARG_PMPZ(1)); \
@@ -79,8 +76,7 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     mpz_init(zf); \
     mpz_ ## op (zf, z1, z2); \
  \
-    res = pmpz_from_mpz(zf); \
-    PG_RETURN_POINTER(res); \
+    PG_RETURN_MPZ(zf); \
 }
 
 PMPZ_OP(add)
@@ -97,7 +93,6 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     const mpz_t     z1; \
     const mpz_t     z2; \
     mpz_t           zf; \
-    pmpz            *res; \
  \
     mpz_from_pmpz(z2, PG_GETARG_PMPZ(1)); \
     if (UNLIKELY(MPZ_IS_ZERO(z2))) \
@@ -112,8 +107,7 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     mpz_init(zf); \
     mpz_ ## op (zf, z1, z2); \
  \
-    res = pmpz_from_mpz(zf); \
-    PG_RETURN_POINTER(res); \
+    PG_RETURN_MPZ(zf); \
 }
 
 PMPZ_OP_DIV(tdiv_q)
@@ -133,7 +127,6 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     const mpz_t     z; \
     long            b; \
     mpz_t           zf; \
-    pmpz            *res; \
  \
     mpz_from_pmpz(z, PG_GETARG_PMPZ(0)); \
     b = PG_GETARG_INT32(1); \
@@ -147,8 +140,7 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     mpz_init(zf); \
     mpz_ ## op (zf, z, (unsigned long)b); \
  \
-    res = pmpz_from_mpz(zf); \
-    PG_RETURN_POINTER(res); \
+    PG_RETURN_MPZ(zf); \
 }
 
 PMPZ_BIT(mul_2exp)

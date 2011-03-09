@@ -35,7 +35,6 @@ PGMP_PG_FUNCTION(pmpz_in)
 {
     char    *str;
     mpz_t   z;
-    pmpz    *res;
 
     str = PG_GETARG_CSTRING(0);
 
@@ -48,8 +47,7 @@ PGMP_PG_FUNCTION(pmpz_in)
                         str)));
     }
 
-    res = pmpz_from_mpz(z);
-    PG_RETURN_POINTER(res);
+    PG_RETURN_MPZ(z);
 }
 
 PGMP_PG_FUNCTION(pmpz_out)
@@ -99,7 +97,6 @@ PGMP_PG_FUNCTION(pmpz_from_int8)
     uint32      lo;
     uint32      hi;
     mpz_t       z;
-    pmpz        *res;
 
     if (LIKELY(in != INT64_MIN))
     {
@@ -131,8 +128,7 @@ PGMP_PG_FUNCTION(pmpz_from_int8)
         mpz_neg(z, z);
     }
 
-    res = pmpz_from_mpz(z);
-    PG_RETURN_POINTER(res);
+    PG_RETURN_MPZ(z);
 
 #endif
 }
@@ -141,11 +137,9 @@ static Datum
 _pmpz_from_long(long in)
 {
     mpz_t   z;
-    pmpz    *res;
 
     mpz_init_set_si(z, in);
 
-    res = pmpz_from_mpz(z);
-    PG_RETURN_POINTER(res);
+    PG_RETURN_MPZ(z);
 }
 
