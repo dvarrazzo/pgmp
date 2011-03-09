@@ -16,8 +16,11 @@ really can't understand.
 Status
 ------
 
-I have implemented an mpz data type, the + operator and the sum() aggregation
-function. Result are interesting: size on disk for mpz is comparable to
+Currently the mpz and mpq are wrapped, with several operators defined. mpz also
+has a few aggregation functions defined and comparison operators and btree
+index.
+
+Result are interesting: size on disk for mpz is comparable to
 numeric, slightly better for bigger numbers. Performance on sum() is always
 better for mpz than for numeric, increasing with the numbers size. See
 ``sandbox/bench`` for tests and results.
