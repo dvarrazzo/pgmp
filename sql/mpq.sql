@@ -84,3 +84,8 @@ SELECT '4/5'::mpq * '6/8'::mpq;
 SELECT '4/5'::mpq / '6/8'::mpq;
 SELECT '4/5'::mpq / '0'::mpq;
 
+SELECT '4/5'::mpq << 4;
+SELECT '4/5'::mpq << -1;
+SELECT '4/5'::mpq >> 4;
+SELECT '4/5'::mpq >> -1;
+

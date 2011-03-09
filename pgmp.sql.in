@@ -648,4 +648,28 @@ CREATE OPERATOR / (
 );
 
 
+CREATE OR REPLACE FUNCTION mpq_mul_2exp(mpq, int4)
+RETURNS mpq
+AS 'MODULE_PATHNAME', 'pmpq_mul_2exp'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OPERATOR << (
+	LEFTARG = mpq,
+	RIGHTARG = int4,
+	PROCEDURE = mpq_mul_2exp
+);
+
+
+CREATE OR REPLACE FUNCTION mpq_div_2exp(mpq, int4)
+RETURNS mpq
+AS 'MODULE_PATHNAME', 'pmpq_div_2exp'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OPERATOR >> (
+	LEFTARG = mpq,
+	RIGHTARG = int4,
+	PROCEDURE = mpq_div_2exp
+);
+
+
 

@@ -120,3 +120,35 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
 
 PMPQ_OP_DIV(div)
 
+
+/* Functions defined on bit count */
+
+#define PMPQ_BIT(op) \
+ \
+PGMP_PG_FUNCTION(pmpq_ ## op) \
+{ \
+    const mpq_t     q; \
+    long            b; \
+    mpq_t           qf; \
+    pmpq            *res; \
+ \
+    mpq_from_pmpq(q, PG_GETARG_PMPQ(0)); \
+    b = PG_GETARG_INT32(1); \
+ \
+    if (UNLIKELY(b < 0)) { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
+            errmsg("op2 can't be negative") )); \
+    } \
+ \
+    mpq_init(qf); \
+    mpq_ ## op (qf, q, (unsigned long)b); \
+ \
+    res = pmpq_from_mpq(qf); \
+    PG_RETURN_POINTER(res); \
+}
+
+
+PMPQ_BIT(mul_2exp)
+PMPQ_BIT(div_2exp)
+
