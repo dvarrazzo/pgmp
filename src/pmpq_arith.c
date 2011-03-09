@@ -58,3 +58,65 @@ PGMP_PG_FUNCTION(pmpq_uplus)
 }
 
 
+/*
+ * Binary operators
+ */
+
+/* Template to generate regular binary operators */
+
+#define PMPQ_OP(op) \
+ \
+PGMP_PG_FUNCTION(pmpq_ ## op) \
+{ \
+    const mpq_t     q1; \
+    const mpq_t     q2; \
+    mpq_t           qf; \
+    pmpq            *res; \
+ \
+    mpq_from_pmpq(q1, PG_GETARG_PMPQ(0)); \
+    mpq_from_pmpq(q2, PG_GETARG_PMPQ(1)); \
+ \
+    mpq_init(qf); \
+    mpq_ ## op (qf, q1, q2); \
+    mpq_canonicalize(qf); \
+ \
+    res = pmpq_from_mpq(qf); \
+    PG_RETURN_POINTER(res); \
+}
+
+PMPQ_OP(add)
+PMPQ_OP(sub)
+PMPQ_OP(mul)
+
+
+/* Template to generate binary operators that may divide by zero */
+
+#define PMPQ_OP_DIV(op) \
+ \
+PGMP_PG_FUNCTION(pmpq_ ## op) \
+{ \
+    const mpq_t     q1; \
+    const mpq_t     q2; \
+    mpq_t           qf; \
+    pmpq            *res; \
+ \
+    mpq_from_pmpq(q2, PG_GETARG_PMPQ(1)); \
+    if (UNLIKELY(MPZ_IS_ZERO(mpq_numref(q2)))) \
+    { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_DIVISION_BY_ZERO), \
+            errmsg("division by zero"))); \
+    } \
+ \
+    mpq_from_pmpq(q1, PG_GETARG_PMPQ(0)); \
+ \
+    mpq_init(qf); \
+    mpq_ ## op (qf, q1, q2); \
+    mpq_canonicalize(qf); \
+ \
+    res = pmpq_from_mpq(qf); \
+    PG_RETURN_POINTER(res); \
+}
+
+PMPQ_OP_DIV(div)
+
