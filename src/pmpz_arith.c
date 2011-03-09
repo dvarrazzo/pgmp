@@ -124,6 +124,36 @@ PMPZ_OP_DIV(fdiv_q)
 PMPZ_OP_DIV(fdiv_r)
 
 
+/* Functions defined on bit count */
+
+#define PMPZ_BIT(op) \
+ \
+PGMP_PG_FUNCTION(pmpz_ ## op) \
+{ \
+    const mpz_t     z; \
+    long            b; \
+    mpz_t           zf; \
+    pmpz            *res; \
+ \
+    mpz_from_pmpz(z, PG_GETARG_PMPZ(0)); \
+    b = PG_GETARG_INT32(1); \
+ \
+    if (UNLIKELY(b < 0)) { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
+            errmsg("op2 can't be negative") )); \
+    } \
+ \
+    mpz_init(zf); \
+    mpz_ ## op (zf, z, (unsigned long)b); \
+ \
+    res = pmpz_from_mpz(zf); \
+    PG_RETURN_POINTER(res); \
+}
+
+PMPZ_BIT(mul_2exp)
+
+
 /*
  * Comparison operators
  */

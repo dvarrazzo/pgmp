@@ -223,6 +223,18 @@ CREATE OPERATOR -% (
 );
 
 
+CREATE OR REPLACE FUNCTION mpz_mul_2exp(mpz, int4)
+RETURNS mpz
+AS 'MODULE_PATHNAME', 'pmpz_mul_2exp'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OPERATOR << (
+	LEFTARG = mpz,
+	RIGHTARG = int4,
+	PROCEDURE = mpz_mul_2exp
+);
+
+
 --
 -- mpz comparisons
 --

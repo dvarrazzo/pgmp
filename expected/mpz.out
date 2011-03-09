@@ -180,6 +180,12 @@ SELECT  '7'::mpz -/  '0'::mpz;
 ERROR:  division by zero
 SELECT  '7'::mpz -%  '0'::mpz;
 ERROR:  division by zero
+SELECT  '10000000000'::mpz << 10;
+10240000000000
+SELECT  '10000000000'::mpz << 0;
+10000000000
+SELECT  '10000000000'::mpz << -1;
+ERROR:  op2 can't be negative
 --
 -- mpz ordering operators
 --
