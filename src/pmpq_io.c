@@ -49,12 +49,7 @@ PGMP_PG_FUNCTION(pmpq_in)
                         str)));
     }
 
-    if (UNLIKELY(MPZ_IS_ZERO(mpq_denref(q))))
-    {
-        ereport(ERROR, (
-            errcode(ERRCODE_DIVISION_BY_ZERO),
-            errmsg("denominator can't be zero")));
-    }
+    ERROR_IF_DENOM_ZERO(mpq_denref(q));
 
     mpq_canonicalize(q);
     res = pmpq_from_mpq(q);
