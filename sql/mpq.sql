@@ -42,3 +42,25 @@ SELECT '123456789012345678901234567890123456789012345678901234567890123456789012
 
 SELECT '1/0'::mpq;
 
+--
+-- mpq cast
+--
+
+SELECT 0::smallint::mpq, (-32768)::smallint::mpq, 32767::smallint::mpq;
+SELECT 0::integer::mpq, (-2147483648)::integer::mpq, 2147483647::integer::mpq;
+SELECT 0::bigint::mpq, (-9223372036854775808)::bigint::mpq, 9223372036854775807::bigint::mpq;
+SELECT 0::numeric::mpq, (-12345678901234567890)::numeric::mpq, 12345678901234567890::numeric::mpq;
+SELECT 0::mpz::mpq, (-12345678901234567890)::mpz::mpq, 12345678901234567890::mpz::mpq;
+-- TODO - together with conversion from mpf
+-- SELECT 0.0::float4::mpq, (-12345.25)::float4::mpq, 12345.25::float4::mpq;
+-- SELECT 0.0::float8::mpq, (-123456789012.25)::float8::mpq, 123456789012.25::float8::mpq;
+SELECT 0.0::numeric::mpq, (-1234567890.12345)::numeric::mpq, 1234567890.12345::numeric::mpq;
+
+SELECT 0::mpq, 1::mpq, (-1)::mpq;       -- automatic casts
+SELECT 1000000::mpq, (-1000000)::mpq;
+SELECT 1000000000::mpq, (-1000000000)::mpq;
+SELECT 1000000000000000::mpq, (-1000000000000000)::mpq;
+SELECT 1000000000000000000000000000000::mpq, (-1000000000000000000000000000000)::mpq;
+SELECT 0.0::mpq, (-1234567890.12345)::mpq, 1234567890.12345::mpq;
+-- TODO: can we live with this error?
+SELECT 'NaN'::decimal::mpq;

@@ -438,4 +438,54 @@ CREATE TYPE mpq (
 );
 
 
+CREATE OR REPLACE FUNCTION mpq_from_int2(int2)
+RETURNS mpq
+AS 'MODULE_PATHNAME', 'pmpq_from_int2'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE CAST (int2 AS mpq)
+WITH FUNCTION mpq_from_int2(int2)
+AS IMPLICIT;
+
+
+CREATE OR REPLACE FUNCTION mpq_from_int4(int4)
+RETURNS mpq
+AS 'MODULE_PATHNAME', 'pmpq_from_int4'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE CAST (int4 AS mpq)
+WITH FUNCTION mpq_from_int4(int4)
+AS IMPLICIT;
+
+
+CREATE OR REPLACE FUNCTION mpq_from_int8(int8)
+RETURNS mpq
+AS 'MODULE_PATHNAME', 'pmpq_from_int8'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE CAST (int8 AS mpq)
+WITH FUNCTION mpq_from_int8(int8)
+AS IMPLICIT;
+
+
+CREATE OR REPLACE FUNCTION mpq_from_numeric(numeric)
+RETURNS mpq
+AS 'MODULE_PATHNAME', 'pmpq_from_numeric'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE CAST (numeric AS mpq)
+WITH FUNCTION mpq_from_numeric(numeric)
+AS IMPLICIT;
+
+
+CREATE OR REPLACE FUNCTION mpq_from_mpz(mpz)
+RETURNS mpq
+AS 'MODULE_PATHNAME', 'pmpq_from_mpz'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE CAST (mpz AS mpq)
+WITH FUNCTION mpq_from_mpz(mpz)
+AS IMPLICIT;
+
+
 

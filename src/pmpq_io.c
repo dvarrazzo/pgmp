@@ -20,9 +20,12 @@
  */
 
 #include "pmpq.h"
+#include "pmpz.h"
 #include "pgmp-impl.h"
 
 #include "fmgr.h"
+
+#include <string.h>
 
 
 /*
@@ -69,5 +72,123 @@ PGMP_PG_FUNCTION(pmpq_out)
 
     res = mpq_get_str(NULL, 10, q);
     PG_RETURN_CSTRING(res);
+}
+
+
+/*
+ * Cast functions
+ */
+
+static Datum _pmpq_from_long(long in);
+
+PGMP_PG_FUNCTION(pmpq_from_int2)
+{
+    int16 in = PG_GETARG_INT16(0);
+    return _pmpq_from_long(in);
+}
+
+PGMP_PG_FUNCTION(pmpq_from_int4)
+{
+    int32 in = PG_GETARG_INT32(0);
+    return _pmpq_from_long(in);
+}
+
+static Datum
+_pmpq_from_long(long in)
+{
+    mpq_t   q;
+    pmpq    *res;
+
+    mpz_init_set_si(mpq_numref(q), in);
+    mpz_init_set_si(mpq_denref(q), 1L);
+
+    res = pmpq_from_mpq(q);
+    PG_RETURN_POINTER(res);
+}
+
+
+/* to convert from int8 we piggyback all the mess we've made for mpz */
+
+Datum pmpz_from_int8(PG_FUNCTION_ARGS);
+
+PGMP_PG_FUNCTION(pmpq_from_int8)
+{
+    mpq_t           q;
+    pmpq            *res;
+
+    mpz_from_pmpz(mpq_numref(q),
+        (pmpz *)DirectFunctionCall1(pmpz_from_int8,
+            PG_GETARG_DATUM(0)));
+
+    mpz_init_set_si(mpq_denref(q), 1L);
+
+    res = pmpq_from_mpq(q);
+    PG_RETURN_POINTER(res);
+}
+
+
+/* To convert from numeric we convert the numeric in str, then work on that */
+
+Datum numeric_out(PG_FUNCTION_ARGS);
+
+PGMP_PG_FUNCTION(pmpq_from_numeric)
+{
+    mpq_t       q;
+    pmpq        *res;
+    char        *sn, *pn;
+
+    sn = DatumGetCString(DirectFunctionCall1(numeric_out,
+            PG_GETARG_DATUM(0)));
+
+    if ((pn = strchr(sn, '.')))
+    {
+        char    *sd, *pd;
+
+        /* Convert "123.45" into "12345" and produce "100" in the process. */
+        pd = sd = (char *)palloc(strlen(sn));
+        *pd++ = '1';
+        while (pn[1])
+        {
+            pn[0] = pn[1];
+            ++pn;
+            *pd++ = '0';
+        }
+        *pd = *pn = '\0';
+
+        if (0 != mpz_init_set_str(mpq_numref(q), sn, 10))
+        {
+            ereport(ERROR, (
+                errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
+                errmsg("invalid input syntax for mpq: \"%s\"", sn)));
+        }
+
+        mpz_init_set_str(mpq_denref(q), sd, 10);
+        mpq_canonicalize(q);
+    }
+    else {
+        /* just an integer */
+        if (0 != mpz_init_set_str(mpq_numref(q), sn, 10))
+        {
+            ereport(ERROR, (
+                errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
+                errmsg("invalid input syntax for mpq: \"%s\"", sn)));
+        }
+        mpz_init_set_si(mpq_denref(q), 1L);
+    }
+
+    res = pmpq_from_mpq(q);
+    PG_RETURN_POINTER(res);
+}
+
+PGMP_PG_FUNCTION(pmpq_from_mpz)
+{
+    mpq_t           q;
+    pmpq            *res;
+
+    mpz_from_pmpz(mpq_numref(q), PG_GETARG_PMPZ(0));
+    mpz_init_set_si(mpq_denref(q), 1L);
+
+    res = pmpq_from_mpq(q);
+    PG_RETURN_POINTER(res);
 }
 
