@@ -75,7 +75,6 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
  \
     mpq_init(qf); \
     mpq_ ## op (qf, q1, q2); \
-    mpq_canonicalize(qf); \
  \
     PG_RETURN_MPQ(qf); \
 }
@@ -107,7 +106,6 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
  \
     mpq_init(qf); \
     mpq_ ## op (qf, q1, q2); \
-    mpq_canonicalize(qf); \
  \
     PG_RETURN_MPQ(qf); \
 }
