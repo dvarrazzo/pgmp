@@ -488,4 +488,30 @@ WITH FUNCTION mpq_from_mpz(mpz)
 AS IMPLICIT;
 
 
+--
+-- mpq operators
+--
+
+CREATE OR REPLACE FUNCTION mpq_uminus(mpq)
+RETURNS mpq
+AS 'MODULE_PATHNAME', 'pmpq_uminus'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OPERATOR - (
+	RIGHTARG = mpq,
+	PROCEDURE = mpq_uminus
+);
+
+
+CREATE OR REPLACE FUNCTION mpq_uplus(mpq)
+RETURNS mpq
+AS 'MODULE_PATHNAME', 'pmpq_uplus'
+LANGUAGE C STRICT IMMUTABLE;
+
+CREATE OPERATOR + (
+	RIGHTARG = mpq,
+	PROCEDURE = mpq_uplus
+);
+
+
 

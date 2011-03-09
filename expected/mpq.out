@@ -93,3 +93,20 @@ SELECT 0.0::mpq, (-1234567890.12345)::mpq, 1234567890.12345::mpq;
 -- TODO: can we live with this error?
 SELECT 'NaN'::decimal::mpq;
 ERROR:  invalid input syntax for mpq: "NaN"
+SELECT -1::mpq;       -- these take the unary minus to work
+-1
+SELECT -1000000::mpq;
+-1000000
+SELECT -1000000000::mpq;
+-1000000000
+SELECT -1000000000000000::mpq;
+-1000000000000000
+SELECT -1000000000000000000000000000000::mpq;
+-1000000000000000000000000000000
+--
+-- mpq arithmetic
+--
+SELECT -('0'::mpq), +('0'::mpq), -('1'::mpq), +('1'::mpq), -('-1'::mpq), +('-1'::mpq);
+0|0|-1|1|1|-1
+SELECT -('1234567890123456/7890'::mpq), +('1234567890123456/7890'::mpq);
+-205761315020576/1315|205761315020576/1315

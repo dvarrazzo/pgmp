@@ -64,3 +64,17 @@ SELECT 1000000000000000000000000000000::mpq, (-1000000000000000000000000000000):
 SELECT 0.0::mpq, (-1234567890.12345)::mpq, 1234567890.12345::mpq;
 -- TODO: can we live with this error?
 SELECT 'NaN'::decimal::mpq;
+
+SELECT -1::mpq;       -- these take the unary minus to work
+SELECT -1000000::mpq;
+SELECT -1000000000::mpq;
+SELECT -1000000000000000::mpq;
+SELECT -1000000000000000000000000000000::mpq;
+
+
+--
+-- mpq arithmetic
+--
+
+SELECT -('0'::mpq), +('0'::mpq), -('1'::mpq), +('1'::mpq), -('-1'::mpq), +('-1'::mpq);
+SELECT -('1234567890123456/7890'::mpq), +('1234567890123456/7890'::mpq);
