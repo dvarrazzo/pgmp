@@ -187,3 +187,70 @@ PGMP_PG_FUNCTION(pmpq_from_mpz)
     PG_RETURN_POINTER(res);
 }
 
+
+/*
+ * Constructor and accessors to num and den
+ */
+
+PGMP_PG_FUNCTION(pmpq_mpz_mpz)
+{
+    const mpz_t     num;
+    const mpz_t     den;
+    mpq_t           q;
+    pmpq            *res;
+
+    /* We must take a copy of num and den because they may be modified by
+     * canonicalize */
+    mpz_from_pmpz(num, PG_GETARG_PMPZ(0));
+    mpz_from_pmpz(den, PG_GETARG_PMPZ(1));
+    ERROR_IF_DENOM_ZERO(den);
+
+    /* Put together the input and canonicalize */
+    mpz_init_set(mpq_numref(q), num);
+    mpz_init_set(mpq_denref(q), den);
+    mpq_canonicalize(q);
+
+    res = pmpq_from_mpq(q);
+    PG_RETURN_POINTER(res);
+}
+
+PGMP_PG_FUNCTION(pmpq_int4_int4)
+{
+    int32 num = PG_GETARG_INT32(0);
+    int32 den = PG_GETARG_INT32(1);
+    mpq_t           q;
+    pmpq            *res;
+
+    /* Put together the input and canonicalize */
+    mpz_init_set_si(mpq_numref(q), (long)num);
+    mpz_init_set_si(mpq_denref(q), (long)den);
+    ERROR_IF_DENOM_ZERO(mpq_denref(q));
+    mpq_canonicalize(q);
+
+    res = pmpq_from_mpq(q);
+    PG_RETURN_POINTER(res);
+}
+
+PGMP_PG_FUNCTION(pmpq_num)
+{
+    const mpq_t     q;
+    pmpz            *res;
+
+    mpq_from_pmpq(q, PG_GETARG_PMPQ(0));
+
+    res = pmpz_from_mpz(mpq_numref(q));
+    PG_RETURN_POINTER(res);
+}
+
+PGMP_PG_FUNCTION(pmpq_den)
+{
+    const mpq_t     q;
+    pmpz            *res;
+
+    mpq_from_pmpq(q, PG_GETARG_PMPQ(0));
+
+    res = pmpz_from_mpz(mpq_denref(q));
+    PG_RETURN_POINTER(res);
+}
+
+
