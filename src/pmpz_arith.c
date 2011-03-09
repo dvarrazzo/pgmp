@@ -164,12 +164,7 @@ PMPZ_BIT(fdiv_r_2exp)
  * Comparison operators
  */
 
-PG_FUNCTION_INFO_V1(pmpz_cmp);
-
-Datum       pmpz_cmp(PG_FUNCTION_ARGS);
-
-Datum
-pmpz_cmp(PG_FUNCTION_ARGS)
+PGMP_PG_FUNCTION(pmpz_cmp)
 {
     const mpz_t     z1;
     const mpz_t     z2;
