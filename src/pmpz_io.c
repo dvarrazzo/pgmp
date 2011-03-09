@@ -201,3 +201,91 @@ _pmpz_from_long(long in)
     PG_RETURN_MPZ(z);
 }
 
+
+PGMP_PG_FUNCTION(pmpz_to_int4)
+{
+    const pmpz      *pz;
+    const mpz_t     q;
+    int32           out;
+
+    pz = PG_GETARG_PMPZ(0);
+    mpz_from_pmpz(q, pz);
+
+    if (!mpz_fits_sint_p(q)) {
+        ereport(ERROR,
+                (errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+                 errmsg("numeric value too big to be converted in integer data type")));
+    }
+
+    out = mpz_get_si(q);
+    PG_RETURN_INT32(out);
+}
+
+PGMP_PG_FUNCTION(pmpz_to_int2)
+{
+    const pmpz      *pz;
+    const mpz_t     q;
+    int16           out;
+
+    pz = PG_GETARG_PMPZ(0);
+    mpz_from_pmpz(q, pz);
+
+    if (!mpz_fits_sshort_p(q)) {
+        ereport(ERROR,
+                (errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+                 errmsg("numeric value too big to be converted in smallint data type")));
+    }
+
+    out = mpz_get_si(q);
+    PG_RETURN_INT16(out);
+}
+
+PGMP_PG_FUNCTION(pmpz_to_int8)
+{
+    const pmpz      *pz;
+    const mpz_t     z;
+    int64           out;
+    mp_limb_t       msLimb=0;
+
+    pz = PG_GETARG_PMPZ(0);
+    mpz_from_pmpz(z, pz);
+
+#if LONG_MAX == INT64_MAX
+
+    if (!mpz_fits_slong_p(z)) {
+        goto errorNotInt8Value;
+    } else {
+        out = mpz_get_si(z);
+    }
+
+#elif LONG_MAX == INT32_MAX
+
+    if (mpz_size(z) > 2) {
+        goto errorNotInt8Value;
+    }
+    if (mpz_size(z) == 2) {
+        msLimb = mpz_getlimbn(z,1);
+        if (msLimb > 0x7fffffff) {
+            goto errorNotInt8Value;
+        }
+    }
+
+    out = msLimb;
+    out = out << 32;
+    if (mpz_size(z) > 0) {
+        msLimb = mpz_getlimbn(z,0);
+        out |= msLimb;
+    }
+    if (SIZ(z)<0) {
+        out = -out;
+    }
+    
+#endif
+    PG_RETURN_INT64(out);
+
+errorNotInt8Value:
+    ereport(ERROR,
+            (errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+             errmsg("numeric value too big to be converted in biginteger data type")));
+
+}
