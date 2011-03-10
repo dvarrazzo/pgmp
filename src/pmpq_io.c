@@ -164,6 +164,8 @@ error:
     ereport(ERROR, (
         errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
         errmsg("invalid input syntax for mpq: \"%s\"", sn)));
+
+    PG_RETURN_NULL();
 }
 
 PGMP_PG_FUNCTION(pmpq_from_mpz)

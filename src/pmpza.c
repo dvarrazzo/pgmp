@@ -60,12 +60,9 @@ PGMP_PG_FUNCTION(pmpza_in)
             errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
             errmsg("currently only aggregation starting from NULL "
                     "is supported.") ));
+    }
 
-        PG_RETURN_NULL();   /* no you don't */
-    }
-    else {
-        z = (mpz_t *)palloc0(sizeof(mpz_t));
-    }
+	z = (mpz_t *)palloc0(sizeof(mpz_t));
 
     PG_RETURN_POINTER(z);
 }
@@ -119,8 +116,6 @@ PGMP_PG_FUNCTION(_pmpz_agg_ ## op) \
         ereport(ERROR, \
             (errcode(ERRCODE_DATA_EXCEPTION), \
             errmsg("_pmpz_agg_" #op " can only be called in accumulation"))); \
- \
-        PG_RETURN_NULL();       /* unused, to avoid a warning */ \
     } \
  \
     a = (mpz_t *)PG_GETARG_POINTER(0); \
