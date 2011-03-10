@@ -143,11 +143,8 @@ PGMP_PG_FUNCTION(pmpq_from_numeric)
         }
         *pd = *pn = '\0';
 
-        if (0 != mpz_init_set_str(mpq_numref(q), sn, 10))
-        {
-            ereport(ERROR, (
-                errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
-                errmsg("invalid input syntax for mpq: \"%s\"", sn)));
+        if (0 != mpz_init_set_str(mpq_numref(q), sn, 10)) {
+            goto error;
         }
 
         mpz_init_set_str(mpq_denref(q), sd, 10);
@@ -155,16 +152,18 @@ PGMP_PG_FUNCTION(pmpq_from_numeric)
     }
     else {
         /* just an integer */
-        if (0 != mpz_init_set_str(mpq_numref(q), sn, 10))
-        {
-            ereport(ERROR, (
-                errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
-                errmsg("invalid input syntax for mpq: \"%s\"", sn)));
+        if (0 != mpz_init_set_str(mpq_numref(q), sn, 10)) {
+            goto error;
         }
         mpz_init_set_si(mpq_denref(q), 1L);
     }
 
     PG_RETURN_MPQ(q);
+
+error:
+    ereport(ERROR, (
+        errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
+        errmsg("invalid input syntax for mpq: \"%s\"", sn)));
 }
 
 PGMP_PG_FUNCTION(pmpq_from_mpz)
