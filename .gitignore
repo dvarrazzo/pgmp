@@ -4,3 +4,5 @@ pgmp.sql
 results/*.out
 regression.diffs
 regression.out
+docs/env
+docs/html
