@@ -47,6 +47,19 @@ CREATE TYPE mpz (
 );
 
 
+-- Other I/O functions
+
+CREATE OR REPLACE FUNCTION mpz(text, int4)
+RETURNS mpz
+AS 'MODULE_PATHNAME', 'pmpz_in_base'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OR REPLACE FUNCTION text(mpz, int4)
+RETURNS cstring
+AS 'MODULE_PATHNAME', 'pmpz_out_base'
+LANGUAGE C IMMUTABLE STRICT;
+
+
 --
 -- mpz cast
 --

@@ -40,10 +40,55 @@ PGMP_PG_FUNCTION(pmpz_in)
 
     if (0 != mpz_init_set_str(z, str, 0))
     {
-        ereport(ERROR,
-                (errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
-                 errmsg("invalid input syntax for mpz: \"%s\"",
-                        str)));
+        const char *ell;
+        const int maxchars = 50;
+        ell = (strlen(str) > maxchars) ? "..." : "";
+
+        ereport(ERROR, (
+            errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
+            errmsg("invalid input for mpz: \"%.*s%s\"",
+                maxchars, str, ell)));
+    }
+
+    PG_RETURN_MPZ(z);
+}
+
+PGMP_PG_FUNCTION(pmpz_in_base)
+{
+    text    *txt;
+    int     base;
+    char    *str;
+    mpz_t   z;
+
+    /* we don't get this as a cstring, because there is no implicit cast
+     * from text, so mpz(expr, base) fails if expr is not a constant.
+     */
+    txt = PG_GETARG_TEXT_P(0);
+    base = PG_GETARG_INT32(1);
+
+    if (!(2 <= base && base <= 62))
+    {
+        ereport(ERROR, (
+            errcode(ERRCODE_INVALID_PARAMETER_VALUE),
+            errmsg("invalid base for mpz input: %d", base),
+            errhint("base should be between 2 and 62")));
+    }
+
+    /* convert the input text into a null-terminated string */
+    str = (char *)palloc(VARSIZE(txt) + 1);
+    memcpy(str, VARDATA(txt), VARSIZE(txt));
+    str[VARSIZE(txt)] = '\0';
+
+    if (0 != mpz_init_set_str(z, str, base))
+    {
+        const char *ell;
+        const int maxchars = 50;
+        ell = (strlen(str) > maxchars) ? "..." : "";
+
+        ereport(ERROR, (
+            errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
+            errmsg("invalid input for mpz base %d: \"%.*s%s\"",
+                base, 50, str, ell)));
     }
 
     PG_RETURN_MPZ(z);
@@ -51,16 +96,30 @@ PGMP_PG_FUNCTION(pmpz_in)
 
 PGMP_PG_FUNCTION(pmpz_out)
 {
-    const pmpz      *pz;
     const mpz_t     z;
-    char            *res;
 
-    pz = PG_GETARG_PMPZ(0);
-    mpz_from_pmpz(z, pz);
+    mpz_from_pmpz(z, PG_GETARG_PMPZ(0));
 
-    /* TODO: make base variable */
-    res = mpz_get_str(NULL, 10, z);
-    PG_RETURN_CSTRING(res);
+    PG_RETURN_CSTRING(mpz_get_str(NULL, 10, z));
+}
+
+PGMP_PG_FUNCTION(pmpz_out_base)
+{
+    const mpz_t     z;
+    int             base;
+
+    mpz_from_pmpz(z, PG_GETARG_PMPZ(0));
+    base = PG_GETARG_INT32(1);
+
+    if (!(-36 <= base && base <= 62) || base == -1 || base == 1)
+    {
+        ereport(ERROR, (
+            errcode(ERRCODE_INVALID_PARAMETER_VALUE),
+            errmsg("invalid base for mpz output: %d", base),
+            errhint("base should be between -36 and 62 and cant'be -1 or 1")));
+    }
+
+    PG_RETURN_CSTRING(mpz_get_str(NULL, base, z));
 }
 
 

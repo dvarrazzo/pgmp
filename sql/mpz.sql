@@ -45,7 +45,21 @@ SELECT '123456789012345678901234567890123456789012345678901234567890123456789012
 
 -- other bases
 SELECT '0x10'::mpz, '010'::mpz, '0b10'::mpz;
+SELECT mpz('10'), mpz('10', 16), mpz('10', 2), mpz('10', 62);
+SELECT mpz('10', 1);
+SELECT mpz('10', 63);
 
+SELECT text(10::mpz);
+SELECT text(255::mpz, 16);
+SELECT text((36 * 36 - 1)::mpz, 36);
+SELECT text((62 * 62 - 1)::mpz, 62);
+SELECT text((36 * 36 - 1)::mpz, -36);
+SELECT text(10::mpz, -37);
+SELECT text(10::mpz, 63);
+
+-- limited error
+SELECT ('xx' || repeat('1234567890', 10))::mpz;
+SELECT mpz('xx' || repeat('1234567890', 10), 42);
 --
 -- mpz cast
 --
