@@ -1,15 +1,15 @@
 .. PostgreSQL Multiple Precision Arithmetic documentation master file, created by
    sphinx-quickstart on Thu Mar 10 01:09:43 2011.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
 
-Welcome to PostgreSQL Multiple Precision Arithmetic's documentation!
-====================================================================
+PostgreSQL Multiple Precision Arithmetic
+========================================
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
+
+   mpz
 
 Indices and tables
 ==================

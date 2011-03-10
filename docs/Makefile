@@ -37,3 +37,6 @@ ez_setup:
 	mkdir -p $(ENV_LIB)
 	wget -O $(EZ_SETUP) http://peak.telecommunity.com/dist/ez_setup.py
 
+clean:
+	$(RM) -r html
+
