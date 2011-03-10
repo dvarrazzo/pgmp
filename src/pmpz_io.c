@@ -38,8 +38,7 @@ PGMP_PG_FUNCTION(pmpz_in)
 
     str = PG_GETARG_CSTRING(0);
 
-    /* TODO: make base variable */
-    if (0 != mpz_init_set_str(z, str, 10))
+    if (0 != mpz_init_set_str(z, str, 0))
     {
         ereport(ERROR,
                 (errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
