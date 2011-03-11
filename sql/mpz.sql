@@ -106,6 +106,16 @@ SELECT (-65536::mpz*65536::mpz*65536::mpz)::bigint;
 SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz/2::mpz+1::mpz)::bigint;
 -- TODO: error on 32 bit, works on 64 bit.
 -- SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz/2::mpz)::bigint;
+SELECT (65536::mpz)::numeric;
+SELECT (65536::mpz*65536::mpz)::numeric;
+SELECT (65536::mpz*65536::mpz*65536::mpz)::numeric;
+SELECT (65536::mpz*65536::mpz*65536::mpz*65536::mpz)::numeric;
+SELECT (65536::mpz*65536::mpz*65536::mpz*65536::mpz-1::mpz)::numeric;
+SELECT (-65536::mpz)::numeric;
+SELECT (-65536::mpz*65536::mpz)::numeric;
+SELECT (-65536::mpz*65536::mpz*65536::mpz)::numeric;
+SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz)::numeric;
+SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz+1::mpz)::numeric;
 
 
 --

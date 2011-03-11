@@ -124,6 +124,11 @@ WITH FUNCTION mpz_to_int2(mpz)
 AS ASSIGNMENT;
 
 
+CREATE CAST (mpz AS numeric)
+WITH INOUT
+AS ASSIGNMENT;
+
+
 -- TODO: stub - only good for ints
 CREATE CAST (numeric AS mpz)
 WITH INOUT
