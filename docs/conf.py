@@ -88,6 +88,11 @@ pygments_style = 'sphinx'
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
 
+# Plugins configuration
+todo_include_todos = True
+mathjax_path = 'http://mathjax.connectmv.com/MathJax.js'
+jsmath_path = 'jsMath/easy/load.js'
+
 
 # -- Options for HTML output ---------------------------------------------------
 

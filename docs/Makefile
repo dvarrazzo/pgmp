@@ -12,7 +12,7 @@ SPHINXBUILD   = $(ENV_BIN)/sphinx-build
 PAPER         =
 BUILDDIR      = .
 
-.PHONY: env clean
+.PHONY: env clean html
 
 default: html
 

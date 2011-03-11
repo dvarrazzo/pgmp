@@ -6,3 +6,4 @@ regression.diffs
 regression.out
 docs/env
 docs/html
+docs/_static/jsMath/
