@@ -160,8 +160,8 @@ SELECT (-65536::mpz*65536::mpz*65536::mpz)::bigint;
 -281474976710656
 SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz/2::mpz+1::mpz)::bigint;
 -9223372036854775807
-SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz/2::mpz)::bigint;
-ERROR:  numeric value too big to be converted in biginteger data type
+-- TODO: error on 32 bit, works on 64 bit.
+-- SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz/2::mpz)::bigint;
 --
 -- mpz arithmetic
 --

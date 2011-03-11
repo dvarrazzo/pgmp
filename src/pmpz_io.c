@@ -245,7 +245,10 @@ PGMP_PG_FUNCTION(pmpz_to_int8)
     const pmpz      *pz;
     const mpz_t     z;
     int64           out;
+
+#if LONG_MAX == INT32_MAX
     mp_limb_t       msLimb=0;
+#endif
 
     pz = PG_GETARG_PMPZ(0);
     mpz_from_pmpz(z, pz);
@@ -254,9 +257,8 @@ PGMP_PG_FUNCTION(pmpz_to_int8)
 
     if (!mpz_fits_slong_p(z)) {
         goto errorNotInt8Value;
-    } else {
-        out = mpz_get_si(z);
     }
+    out = mpz_get_si(z);
 
 #elif LONG_MAX == INT32_MAX
 
@@ -279,7 +281,7 @@ PGMP_PG_FUNCTION(pmpz_to_int8)
     if (SIZ(z)<0) {
         out = -out;
     }
-    
+
 #endif
     PG_RETURN_INT64(out);
 
@@ -287,5 +289,5 @@ errorNotInt8Value:
     ereport(ERROR,
             (errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
              errmsg("numeric value too big to be converted in biginteger data type")));
-
+    PG_RETURN_NULL();
 }
