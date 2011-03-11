@@ -182,23 +182,23 @@ SELECT  '10000000000'::mpz << -1;
 SELECT  '1027'::mpz >>   3;
 SELECT '-1027'::mpz >>   3;
 SELECT  '1027'::mpz >>  -3;
-SELECT  '1027'::mpz %>>  3;
-SELECT '-1027'::mpz %>>  3;
-SELECT  '1027'::mpz %>> -3;
+SELECT  '1027'::mpz %>   3;
+SELECT '-1027'::mpz %>   3;
+SELECT  '1027'::mpz %>  -3;
 
 SELECT  '1027'::mpz +>>   3;
 SELECT '-1027'::mpz +>>   3;
 SELECT  '1027'::mpz +>>  -3;
-SELECT  '1027'::mpz +%>>  3;
-SELECT '-1027'::mpz +%>>  3;
-SELECT  '1027'::mpz +%>> -3;
+SELECT  '1027'::mpz +%>   3;
+SELECT '-1027'::mpz +%>   3;
+SELECT  '1027'::mpz +%>  -3;
 
 SELECT  '1027'::mpz ->>   3;
 SELECT '-1027'::mpz ->>   3;
 SELECT  '1027'::mpz ->>  -3;
-SELECT  '1027'::mpz -%>>  3;
-SELECT '-1027'::mpz -%>>  3;
-SELECT  '1027'::mpz -%>> -3;
+SELECT  '1027'::mpz -%>   3;
+SELECT '-1027'::mpz -%>   3;
+SELECT  '1027'::mpz -%>  -3;
 
 
 --
