@@ -104,6 +104,10 @@ html_theme_options = dict(
     sidebarwidth='15em',
 )
 
+# The stylesheet to use with HTML output: this will include the original one
+# adding a few classes.
+html_style = 'pgmp.css'
+
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
 

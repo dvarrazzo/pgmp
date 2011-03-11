@@ -1,0 +1,22 @@
+@import url("agogo.css");
+
+/* Tables */
+
+table.docutils {
+    border: 0;
+    border-collapse: collapse;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+table.docutils td, table.docutils th {
+    padding: 1px 8px 1px 5px;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 1px solid #aaa;
+}
+
+table.docutils th {
+     background-color; #eeeeec;
+}
