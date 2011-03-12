@@ -31,7 +31,12 @@ OBJS = src/pgmp.o src/pgmp_test.o \
 DATA_built = pgmp.sql
 DATA = uninstall_pgmp.sql
 REGRESS = mpz mpq
+EXTRA_CLEAN = pgmp.sql.in
 
 PG_CONFIG = pg_config
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 include $(PGXS)
+
+pgmp.sql.in: pgmp.pysql
+	tools/unmix.py < $< > $@
+

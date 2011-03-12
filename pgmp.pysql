@@ -1,0 +1,415 @@
+/* pgmp -- Module installation SQL script
+ *
+ * Copyright (C) 2011 Daniele Varrazzo
+ *
+ * This file is part of the PostgreSQL GMP Module
+ *
+ * The PostgreSQL GMP Module is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * The PostgreSQL GMP Module is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with the PostgreSQL GMP Module.  If not, see
+ * http://www.gnu.org/licenses/.
+ */
+
+!# This file is made of a mix of Python code and SQL statements.
+!# Use the script ``tools/unmix.py`` to convert it into plain SQL.
+
+-- Adjust this setting to control where the objects get created.
+SET search_path = public;
+
+!! PYON
+
+def func(sqlname, argin, argout=None, cname=None):
+    """Create a SQL function from a C function"""
+    if not argout: argout = base_type
+    print "CREATE OR REPLACE FUNCTION %s(%s)" \
+        % (sqlname, ", ".join(argin.split()))
+    print "RETURNS", argout
+    if not cname: cname = "p" + sqlname
+    print "AS 'MODULE_PATHNAME', '%s'" % cname
+    print "LANGUAGE C IMMUTABLE STRICT;"
+    print
+
+!! PYOFF
+
+--
+-- mpz user-defined type
+--
+
+!! PYON
+
+base_type = 'mpz'
+
+func('mpz_in', 'cstring', 'mpz')
+func('mpz_out', 'mpz', 'cstring')
+
+!! PYOFF
+
+CREATE TYPE mpz (
+      INPUT = mpz_in
+    , OUTPUT = mpz_out
+    , INTERNALLENGTH = VARIABLE
+    , STORAGE = EXTENDED
+    , CATEGORY = 'N'
+);
+
+
+-- Other I/O functions
+
+!! PYON
+
+func('mpz', 'text int4', 'mpz', cname='pmpz_in_base')
+func('text', 'mpz int4', 'cstring', cname='pmpz_out_base')
+
+!! PYOFF
+
+
+--
+-- mpz cast
+--
+
+!! PYON
+
+import re
+
+def castfrom(typname, implicit=False):
+    """Create a cast from a different type to `base_type`"""
+    fname = "%s_from_%s" % (base_type, typname)
+
+    func(fname, typname)
+
+    print "CREATE CAST (%s AS %s)" % (typname, base_type)
+    print "WITH FUNCTION %s(%s)" % (fname, typname)
+    print {'I': "AS IMPLICIT;", 'A': "AS ASSIGNMENT;", False: ';'}[implicit]
+    print
+    print
+
+castfrom('int2', implicit='I')
+castfrom('int4', implicit='I')
+castfrom('int8', implicit='I')
+
+def castto(typname, implicit=False):
+    fname = "%s_to_%s" % (base_type, typname)
+    """Create a cast from `base_type` to a different type"""
+
+    func(fname, base_type, typname)
+
+    print "CREATE CAST (%s AS %s)" % (base_type, typname)
+    print "WITH FUNCTION %s(%s)" % (fname, base_type)
+    print {'I': "AS IMPLICIT;", 'A': "AS ASSIGNMENT;", False: ';'}[implicit]
+    print
+    print
+
+castto('int8', implicit='A')
+castto('int4', implicit='A')
+castto('int2', implicit='A')
+
+!! PYOFF
+
+CREATE CAST (mpz AS numeric)
+WITH INOUT
+AS ASSIGNMENT;
+
+
+-- TODO: stub - only good for ints
+CREATE CAST (numeric AS mpz)
+WITH INOUT
+AS IMPLICIT;
+
+
+--
+-- mpz operators
+--
+
+!! PYON
+
+func('mpz_uminus', 'mpz')
+func('mpz_uplus', 'mpz')
+
+!! PYOFF
+
+CREATE OPERATOR - (
+    RIGHTARG = mpz,
+    PROCEDURE = mpz_uminus
+);
+
+CREATE OPERATOR + (
+    RIGHTARG = mpz,
+    PROCEDURE = mpz_uplus
+);
+
+
+!! PYON
+
+def op(sym, fname, rarg=None, comm=None):
+    """Create an operator on `base_type`"""
+    if rarg == None: rarg = base_type
+    func('%s_%s' % (base_type, fname), base_type + " " + rarg)
+
+    print "CREATE OPERATOR %s (" % sym
+    print "    LEFTARG = %s," % base_type
+    print "    RIGHTARG = %s," % rarg
+    if comm: print "    COMMUTATOR = %s," % comm
+    print "    PROCEDURE = %s_%s" % (base_type, fname)
+    print ");"
+    print
+    print
+
+op('+', 'add', comm='+')
+op('-', 'sub')
+op('*', 'mul', comm='*')
+op('/', 'tdiv_q')
+op('%', 'tdiv_r')
+op('+/', 'cdiv_q')
+op('+%', 'cdiv_r')
+op('-/', 'fdiv_q')
+op('-%', 'fdiv_r')
+op('<<', 'mul_2exp', rarg='int4')
+op('>>', 'tdiv_q_2exp', rarg='int4')
+op('%>', 'tdiv_r_2exp', rarg='int4')
+op('+>>', 'cdiv_q_2exp', rarg='int4')
+op('+%>', 'cdiv_r_2exp', rarg='int4')
+op('->>', 'fdiv_q_2exp', rarg='int4')
+op('-%>', 'fdiv_r_2exp', rarg='int4')
+
+!! PYOFF
+
+
+--
+-- mpz comparisons
+--
+
+CREATE OR REPLACE FUNCTION mpz_eq(mpz, mpz)
+RETURNS boolean
+AS 'MODULE_PATHNAME', 'pmpz_eq'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OPERATOR = (
+    LEFTARG = mpz
+    , RIGHTARG = mpz
+    , PROCEDURE = mpz_eq
+    , COMMUTATOR = =
+    , NEGATOR = <>
+    , RESTRICT = eqsel
+    , JOIN = eqjoinsel
+    , HASHES
+    , MERGES
+);
+
+CREATE OR REPLACE FUNCTION mpz_ne(mpz, mpz)
+RETURNS boolean
+AS 'MODULE_PATHNAME', 'pmpz_ne'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OPERATOR <> (
+    LEFTARG = mpz
+    , RIGHTARG = mpz
+    , PROCEDURE = mpz_ne
+    , COMMUTATOR = <>
+    , NEGATOR = =
+    , RESTRICT = neqsel
+    , JOIN = neqjoinsel
+);
+
+!! PYON
+
+def bop(sym, fname, comm, neg):
+    """Create an operator on `base_type` returning a bool"""
+    func('%s_%s' % (base_type, fname), 
+        base_type + " " + base_type, argout='boolean')
+    fname1 = fname[0] + 't'
+
+    print "CREATE OPERATOR %s (" % sym
+    print "    LEFTARG =", base_type
+    print "    , RIGHTARG =", base_type
+    print "    , PROCEDURE = %s_%s" % (base_type, fname)
+    print "    , COMMUTATOR = %s" % comm
+    print "    , NEGATOR = %s" % neg
+    print "    , RESTRICT = scalar%ssel" % fname1
+    print "    , JOIN = scalar%sjoinsel" % fname1
+    print ");"
+    print
+    print
+
+bop('>', 'gt', comm='<', neg='<=')
+bop('>=', 'ge', comm='<=', neg='<')
+bop('<', 'lt', comm='>', neg='>=')
+bop('<=', 'le', comm='>=', neg='>')
+
+!! PYOFF
+
+
+--
+-- mpz indexes
+--
+
+CREATE OR REPLACE FUNCTION mpz_cmp(mpz, mpz)
+RETURNS integer
+AS 'MODULE_PATHNAME', 'pmpz_cmp'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OPERATOR CLASS mpz_btree_ops
+DEFAULT FOR TYPE mpz USING btree AS
+    OPERATOR    1   <   ,
+    OPERATOR    2   <=  ,
+    OPERATOR    3   =   ,
+    OPERATOR    4   >=  ,
+    OPERATOR    5   >   ,
+    FUNCTION    1   mpz_cmp(mpz, mpz)
+    ;
+
+-- TODO: OPERATOR FAMILY?
+
+
+--
+-- Aggregation functions
+--
+
+CREATE OR REPLACE FUNCTION mpza_in(cstring)
+RETURNS _mpza
+AS 'MODULE_PATHNAME', 'pmpza_in'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OR REPLACE FUNCTION mpza_out(_mpza)
+RETURNS cstring
+AS 'MODULE_PATHNAME', 'pmpza_out'
+LANGUAGE C IMMUTABLE STRICT;
+
+-- TODO: this type should be marked as "non-storable"
+CREATE TYPE _mpza (
+      INPUT = mpza_in
+    , OUTPUT = mpza_out
+    -- 12 is ok on 32 bit, but probably ininfluent anyway
+    -- as we never store this type
+    , INTERNALLENGTH = 16
+);
+
+
+CREATE OR REPLACE FUNCTION _mpz_from_mpza(_mpza)
+RETURNS mpz
+AS 'MODULE_PATHNAME', '_pmpz_from_pmpza'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OR REPLACE FUNCTION _mpz_agg_add(_mpza, mpz)
+RETURNS _mpza
+AS 'MODULE_PATHNAME', '_pmpz_agg_add'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE AGGREGATE sum (mpz)
+(
+      SFUNC = _mpz_agg_add
+    , STYPE = _mpza
+    , FINALFUNC = _mpz_from_mpza
+    , INITCOND = ''
+);
+
+CREATE OR REPLACE FUNCTION _mpz_agg_mul(_mpza, mpz)
+RETURNS _mpza
+AS 'MODULE_PATHNAME', '_pmpz_agg_mul'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE AGGREGATE prod (mpz)
+(
+      SFUNC = _mpz_agg_mul
+    , STYPE = _mpza
+    , FINALFUNC = _mpz_from_mpza
+    , INITCOND = ''
+);
+
+
+--
+-- Test functions
+--
+
+CREATE OR REPLACE FUNCTION mpz_test_dataset(int4, int4)
+RETURNS SETOF mpz
+AS 'MODULE_PATHNAME'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OR REPLACE FUNCTION numeric_test_dataset(int4, numeric)
+RETURNS SETOF numeric
+AS 'MODULE_PATHNAME'
+LANGUAGE C IMMUTABLE STRICT;
+
+
+
+
+--
+-- mpq user-defined type
+--
+
+!! PYON
+
+base_type = 'mpq'
+
+func('mpq_in', 'cstring', 'mpq')
+func('mpq_out', 'mpq', 'cstring')
+
+!! PYOFF
+
+CREATE TYPE mpq (
+      INPUT = mpq_in
+    , OUTPUT = mpq_out
+    , INTERNALLENGTH = VARIABLE
+    , STORAGE = EXTENDED
+    , CATEGORY = 'N'
+);
+
+
+!! PYON
+
+func('mpq', 'mpz mpz', 'mpq', cname='pmpq_mpz_mpz')
+func('mpq', 'int4 int4', 'mpq', cname='pmpq_int4_int4')
+func('num', 'mpq', 'mpz', cname='pmpq_num')
+func('den', 'mpq', 'mpz', cname='pmpq_den')
+
+castfrom('int2', implicit='I')
+castfrom('int4', implicit='I')
+castfrom('int8', implicit='I')
+castfrom('numeric', implicit='I')
+castfrom('mpz', implicit='I')
+
+!! PYOFF
+
+
+--
+-- mpq operators
+--
+
+!! PYON
+
+func('mpq_uminus', 'mpq')
+func('mpq_uplus', 'mpq')
+
+!! PYOFF
+
+CREATE OPERATOR - (
+    RIGHTARG = mpq,
+    PROCEDURE = mpq_uminus
+);
+
+CREATE OPERATOR + (
+    RIGHTARG = mpq,
+    PROCEDURE = mpq_uplus
+);
+
+
+!! PYON
+
+op('+', 'add', comm='+')
+op('-', 'sub')
+op('*', 'mul', comm='*')
+op('/', 'div')
+op('<<', 'mul_2exp', rarg='int4')
+op('>>', 'div_2exp', rarg='int4')
+
+!! PYOFF
+
