@@ -94,6 +94,13 @@ SELECT 0::bigint::mpz, (-9223372036854775808)::bigint::mpz, 9223372036854775807:
 0|-9223372036854775808|9223372036854775807
 SELECT 0::numeric::mpz, (-12345678901234567890)::numeric::mpz, 12345678901234567890::numeric::mpz;
 0|-12345678901234567890|12345678901234567890
+-- decimal are truncated
+SELECT 123.10::numeric::mpz, 123.90::numeric::mpz;
+123|123
+SELECT (-123.10::numeric)::mpz, (-123.90::numeric)::mpz;
+-123|-123
+SELECT 'NaN'::numeric::mpz;
+ERROR:  can't handle numeric value: NaN
 SELECT 0::mpz, 1::mpz, (-1)::mpz;       -- automatic casts
 0|1|-1
 SELECT 1000000::mpz, (-1000000)::mpz;

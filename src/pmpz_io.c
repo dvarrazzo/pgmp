@@ -23,6 +23,7 @@
 #include "pgmp-impl.h"
 
 #include "fmgr.h"
+#include "utils/builtins.h"     /* for numeric_out */
 
 #include <limits.h>
 
@@ -197,6 +198,32 @@ _pmpz_from_long(long in)
     mpz_t   z;
 
     mpz_init_set_si(z, in);
+
+    PG_RETURN_MPZ(z);
+}
+
+
+PGMP_PG_FUNCTION(pmpz_from_numeric)
+{
+    char    *str;
+    char    *p;
+    mpz_t   z;
+
+    /* convert the numeric into string. */
+    str = DatumGetCString(DirectFunctionCall1(numeric_out,
+        PG_GETARG_DATUM(0)));
+
+    /* truncate the string if it contains a decimal dot */
+    if ((p = strchr(str, '.'))) { *p = '\0'; }
+
+    if (0 != mpz_init_set_str(z, str, 10))
+    {
+        /* here str may have been cropped, but I expect this error
+         * only triggered by NaN, so not in case of regular number */
+        ereport(ERROR, (
+            errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+            errmsg("can't handle numeric value: %s", str)));
+    }
 
     PG_RETURN_MPZ(z);
 }

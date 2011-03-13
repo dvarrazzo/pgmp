@@ -95,6 +95,7 @@ def castfrom(typname, implicit=False):
 castfrom('int2', implicit='I')
 castfrom('int4', implicit='I')
 castfrom('int8', implicit='I')
+castfrom('numeric', implicit='A')
 
 def castto(typname, implicit=False):
     fname = "%s_to_%s" % (base_type, typname)
@@ -117,12 +118,6 @@ castto('int2', implicit='A')
 CREATE CAST (mpz AS numeric)
 WITH INOUT
 AS ASSIGNMENT;
-
-
--- TODO: stub - only good for ints
-CREATE CAST (numeric AS mpz)
-WITH INOUT
-AS IMPLICIT;
 
 
 --
