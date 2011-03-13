@@ -90,9 +90,8 @@ SELECT 1000000000000000000000000000000::mpq, (-1000000000000000000000000000000):
 1000000000000000000000000000000|-1000000000000000000000000000000
 SELECT 0.0::mpq, (-1234567890.12345)::mpq, 1234567890.12345::mpq;
 0|-24691357802469/20000|24691357802469/20000
--- TODO: can we live with this error?
 SELECT 'NaN'::decimal::mpq;
-ERROR:  invalid input syntax for mpq: "NaN"
+ERROR:  can't convert numeric value to mpq: "NaN"
 SELECT -1::mpq;       -- these take the unary minus to work
 -1
 SELECT -1000000::mpq;

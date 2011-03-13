@@ -222,7 +222,7 @@ PGMP_PG_FUNCTION(pmpz_from_numeric)
          * only triggered by NaN, so not in case of regular number */
         ereport(ERROR, (
             errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
-            errmsg("can't handle numeric value: %s", str)));
+            errmsg("can't convert numeric value to mpz: \"%s\"", str)));
     }
 
     PG_RETURN_MPZ(z);

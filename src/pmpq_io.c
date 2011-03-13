@@ -161,8 +161,8 @@ PGMP_PG_FUNCTION(pmpq_from_numeric)
 
 error:
     ereport(ERROR, (
-        errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
-        errmsg("invalid input syntax for mpq: \"%s\"", sn)));
+        errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+        errmsg("can't convert numeric value to mpq: \"%s\"", sn)));
 
     PG_RETURN_NULL();
 }
