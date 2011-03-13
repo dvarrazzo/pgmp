@@ -154,9 +154,9 @@ integer.
              Rounding towards -infinity           -1027::mpz -%>  3 5
     ======== ==================================== ================= =======
 
-For all the division-related operators :math:`n \op d`, :math:`q` and
-:math:`r` will satisfy :math:`n = q * d + r`, and :math:`r` will satisfy
-:math:`0 <= abs(r) < abs(d)`.
+For all the division-related operators :math:`n \oslash d`, :math:`q` and
+:math:`r` will satisfy :math:`n = q \cdot d + r`, and :math:`r` will satisfy
+:math:`0 \le abs(r) \lt abs(d)`.
 
 .. note::
     Only the truncating division and reminder (`!/` and `!%`) have the correct
