@@ -370,6 +370,7 @@ CREATE TYPE mpq (
 
 func('mpq', 'mpz mpz', 'mpq', cname='pmpq_mpz_mpz')
 func('mpq', 'int4 int4', 'mpq', cname='pmpq_int4_int4')
+func('mpq', 'numeric numeric', 'mpq', cname='pmpq_numeric_numeric')
 func('num', 'mpq', 'mpz', cname='pmpq_num')
 func('den', 'mpq', 'mpz', cname='pmpq_den')
 

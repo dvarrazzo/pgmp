@@ -109,6 +109,18 @@ SELECT mpq(10, 0);
 ERROR:  denominator can't be zero
 SELECT mpq(47563485764385764395874365986384, 874539847539845639485769837553465);
 15854495254795254798624788662128/291513282513281879828589945851155
+SELECT mpq(1230::numeric, 123::numeric);
+10
+SELECT mpq(123.45::numeric, 1::numeric);
+ERROR:  can't handle numeric value at numerator: 123.45
+HINT:  the mpq components should be integers
+SELECT mpq(1::numeric, 123.45::numeric);
+ERROR:  can't handle numeric value at denominator: 123.45
+HINT:  the mpq components should be integers
+SELECT mpq(123::numeric, 0::numeric);
+ERROR:  denominator can't be zero
+SELECT mpq(47563485764385764395874365986384::mpz, 874539847539845639485769837553465::mpz);
+15854495254795254798624788662128/291513282513281879828589945851155
 SELECT mpq('10'::mpz, '0'::mpz);
 ERROR:  denominator can't be zero
 SELECT num('4/5'::mpq);

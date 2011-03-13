@@ -24,6 +24,7 @@
 #include "pgmp-impl.h"
 
 #include "fmgr.h"
+#include "utils/builtins.h"     /* for numeric_out */
 
 #include <string.h>
 
@@ -118,8 +119,6 @@ PGMP_PG_FUNCTION(pmpq_from_int8)
 
 /* To convert from numeric we convert the numeric in str, then work on that */
 
-Datum numeric_out(PG_FUNCTION_ARGS);
-
 PGMP_PG_FUNCTION(pmpq_from_numeric)
 {
     mpq_t       q;
@@ -212,6 +211,36 @@ PGMP_PG_FUNCTION(pmpq_int4_int4)
     /* Put together the input and canonicalize */
     mpz_init_set_si(mpq_numref(q), (long)num);
     mpz_init_set_si(mpq_denref(q), (long)den);
+    ERROR_IF_DENOM_ZERO(mpq_denref(q));
+    mpq_canonicalize(q);
+
+    PG_RETURN_MPQ(q);
+}
+
+PGMP_PG_FUNCTION(pmpq_numeric_numeric)
+{
+    char        *sn;
+    char        *sd;
+    mpq_t       q;
+
+    sn = DatumGetCString(DirectFunctionCall1(numeric_out, PG_GETARG_DATUM(0)));
+    if (0 != mpz_init_set_str(mpq_numref(q), sn, 10))
+    {
+        ereport(ERROR, (
+            errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+            errmsg("can't handle numeric value at numerator: %s", sn),
+            errhint("the mpq components should be integers")));
+    }
+
+    sd = DatumGetCString(DirectFunctionCall1(numeric_out, PG_GETARG_DATUM(1)));
+    if (0 != mpz_init_set_str(mpq_denref(q), sd, 10))
+    {
+        ereport(ERROR, (
+            errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+            errmsg("can't handle numeric value at denominator: %s", sd),
+            errhint("the mpq components should be integers")));
+    }
+
     ERROR_IF_DENOM_ZERO(mpq_denref(q));
     mpq_canonicalize(q);
 
