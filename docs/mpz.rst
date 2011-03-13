@@ -50,12 +50,12 @@ operators. Indexes on `!mpz` columns can be created using the *btree* method.
 
 .. todo:: Handle base 0 in mpz(str, int)
 
-.. function:: text(mpz)
+.. function:: text(z)
 
-.. function:: text(mpz, base)
+.. function:: text(z, base)
 
-    Convert an *mpz* into a string. The form :samp:`{mpz}::text` is
-    equivalent to :samp:`text({mpz})`.
+    Convert the `!mpz` *z* into a string. The form :samp:`{z}::text` is
+    equivalent to :samp:`text({z})`.
 
     *base* may vary from 2 to 62 or from −2 to −36.  For base in the range
     2..36, digits and lower-case letters are used; for −2..−36, digits and
@@ -122,7 +122,7 @@ integer.
 
                 Rounding towards -infinity      -7::mpz -% 3::mpz   2
 
-    `/!`        Exact division (1)              21::mpz /! 7::mpz   3 
+    `/!`        Exact division (1)              21::mpz /! 7::mpz   3
     =========== =============================== =================== =======
 
 Notes:
@@ -186,7 +186,35 @@ For all the division-related operators :math:`n \oslash d`, :math:`q` and
 `!mpz` functions
 ----------------
 
-.. function:: abs(mpz)
+.. function:: abs(z)
 
-    Return the absolute value of *mpz*.
+    Return the absolute value of *z*.
+
+
+.. function:: divisible(n, d)
+
+.. function:: divisible_2exp(n, b)
+
+    Return `!true` if *n* is exactly divisible by *d*, or in the case of
+    `!divisible_2exp()` by :math:`2^b`.
+
+    :math:`n` is divisible by :math:`d` if there exists an integer :math:`q`
+    satisfying :math:`n = q \cdot d`.  Unlike the other division operators,
+    *d*\=0 is accepted and following the rule it can be seen that only 0
+    is considered divisible by 0.
+
+
+.. function:: congruent(n, c, d)
+
+.. function:: congruent_2exp(n, c, b)
+
+    Return `!true` if *n* is congruent to *c* modulo *d*, or in the case of
+    `!congruent_2exp()` modulo :math:`2^b`.
+
+    :math:`n` is congruent to :math:`c \mod d` if there exists an integer
+    :math:`q` satisfying :math:`n = c + q \cdot d`. Unlike the other division
+    operators, *d*\=0 is accepted and following the rule it can be seen that n
+    and c are considered congruent mod 0 only when exactly equal.
+
+    .. todo:: Predicates `divisible()` and `congruent()`
 
