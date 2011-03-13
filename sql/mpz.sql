@@ -188,6 +188,8 @@ SELECT  '7'::mpz +%  '0'::mpz;
 SELECT  '7'::mpz -/  '0'::mpz;
 SELECT  '7'::mpz -%  '0'::mpz;
 
+SELECT  '21'::mpz /! '7'::mpz;
+
 SELECT  '10000000000'::mpz << 10;
 SELECT  '10000000000'::mpz << 0;
 SELECT  '10000000000'::mpz << -1;

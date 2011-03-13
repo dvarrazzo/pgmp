@@ -121,7 +121,18 @@ integer.
     `!-%`       Division reminder               7::mpz -% 3::mpz    1
 
                 Rounding towards -infinity      -7::mpz -% 3::mpz   2
+
+    `/!`        Exact division (1)              21::mpz /! 7::mpz   3 
     =========== =============================== =================== =======
+
+Notes:
+
+(1)
+    The exact division operator (`!/!`) produce correct results only when it
+    is known in advance that :math:`d` divides :math:`n`.  The operator is
+    much faster than the other division operators, and is the best choice when
+    exact division is known to occur, for example reducing a rational to
+    lowest terms.
 
 
 .. table:: Division operators for powers of 2

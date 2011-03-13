@@ -124,6 +124,7 @@ PMPZ_OP_DIV(cdiv_q)
 PMPZ_OP_DIV(cdiv_r)
 PMPZ_OP_DIV(fdiv_q)
 PMPZ_OP_DIV(fdiv_r)
+PMPZ_OP_DIV(divexact)
 
 
 /* Functions defined on bit count */
