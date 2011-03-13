@@ -29,19 +29,6 @@
  * Unary minus, plus
  */
 
-PGMP_PG_FUNCTION(pmpz_uminus)
-{
-    const mpz_t     z1;
-    mpz_t           zf;
-
-    mpz_from_pmpz(z1, PG_GETARG_PMPZ(0));
-
-    mpz_init_set(zf, z1);
-    mpz_neg(zf, zf);
-
-    PG_RETURN_MPZ(zf);
-}
-
 PGMP_PG_FUNCTION(pmpz_uplus)
 {
     const pmpz      *pz1;
@@ -54,6 +41,27 @@ PGMP_PG_FUNCTION(pmpz_uplus)
 
     PG_RETURN_POINTER(res);
 }
+
+
+/* Template to generate unary functions */
+
+#define PMPZ_UN(op) \
+ \
+PGMP_PG_FUNCTION(pmpz_ ## op) \
+{ \
+    const mpz_t     z1; \
+    mpz_t           zf; \
+ \
+    mpz_from_pmpz(z1, PG_GETARG_PMPZ(0)); \
+ \
+    mpz_init_set(zf, z1); \
+    mpz_ ## op (zf, zf); \
+ \
+    PG_RETURN_MPZ(zf); \
+}
+
+PMPZ_UN(neg)
+PMPZ_UN(abs)
 
 
 /*

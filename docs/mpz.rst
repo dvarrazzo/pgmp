@@ -171,3 +171,11 @@ For all the division-related operators :math:`n \op d`, :math:`q` and
 .. todo::
     fast path on int64 for 64 bit backends? Maybe introduce a long data type?
 
+
+`!mpz` functions
+----------------
+
+.. function:: abs(mpz)
+
+    Return the absolute value of *mpz*.
+

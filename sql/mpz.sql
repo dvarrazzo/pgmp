@@ -60,6 +60,8 @@ SELECT text(10::mpz, 63);
 -- limited error
 SELECT ('xx' || repeat('1234567890', 10))::mpz;
 SELECT mpz('xx' || repeat('1234567890', 10), 42);
+
+
 --
 -- mpz cast
 --
@@ -124,6 +126,7 @@ SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz+1::mpz)::numeric;
 
 SELECT -('0'::mpz), +('0'::mpz), -('1'::mpz), +('1'::mpz);
 SELECT -('12345678901234567890'::mpz), +('12345678901234567890'::mpz);
+SELECT abs('-1234567890'::mpz), abs('1234567890'::mpz);
 
 SELECT '1'::mpz + '2'::mpz;
 SELECT '2'::mpz + '-4'::mpz;

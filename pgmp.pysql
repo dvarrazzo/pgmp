@@ -131,14 +131,15 @@ AS IMPLICIT;
 
 !! PYON
 
-func('mpz_uminus', 'mpz')
 func('mpz_uplus', 'mpz')
+func('mpz_neg', 'mpz')
+func('abs', 'mpz', cname='pmpz_abs')
 
 !! PYOFF
 
 CREATE OPERATOR - (
     RIGHTARG = mpz,
-    PROCEDURE = mpz_uminus
+    PROCEDURE = mpz_neg
 );
 
 CREATE OPERATOR + (
