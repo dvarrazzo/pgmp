@@ -56,15 +56,10 @@ PGMP_PG_FUNCTION(pmpz_in)
 
 PGMP_PG_FUNCTION(pmpz_in_base)
 {
-    text    *txt;
     int     base;
     char    *str;
     mpz_t   z;
 
-    /* we don't get this as a cstring, because there is no implicit cast
-     * from text, so mpz(expr, base) fails if expr is not a constant.
-     */
-    txt = PG_GETARG_TEXT_P(0);
     base = PG_GETARG_INT32(1);
 
     if (!(2 <= base && base <= 62))
@@ -75,10 +70,7 @@ PGMP_PG_FUNCTION(pmpz_in_base)
             errhint("base should be between 2 and 62")));
     }
 
-    /* convert the input text into a null-terminated string */
-    str = (char *)palloc(VARSIZE(txt) + 1);
-    memcpy(str, VARDATA(txt), VARSIZE(txt));
-    str[VARSIZE(txt)] = '\0';
+    str = TextDatumGetCString(PG_GETARG_POINTER(0));
 
     if (0 != mpz_init_set_str(z, str, base))
     {
