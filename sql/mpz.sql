@@ -219,6 +219,13 @@ SELECT  '1027'::mpz -%>   3;
 SELECT '-1027'::mpz -%>   3;
 SELECT  '1027'::mpz -%>  -3;
 
+-- power operator/functions
+SELECT 2::mpz ^ 10;
+SELECT 2::mpz ^ 0;
+SELECT 2::mpz ^ -1;
+SELECT pow(2::mpz, 10);
+SELECT pow(2::mpz, 0);
+SELECT pow(2::mpz, -1);
 
 --
 -- mpz ordering operators

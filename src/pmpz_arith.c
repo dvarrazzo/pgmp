@@ -127,9 +127,11 @@ PMPZ_OP_DIV(fdiv_r)
 PMPZ_OP_DIV(divexact)
 
 
-/* Functions defined on bit count */
+/* Functions defined on unsigned long */
 
-#define PMPZ_BIT(op) \
+/* TODO: this function could take a INT64 argument */
+
+#define PMPZ_OP_UL(op) \
  \
 PGMP_PG_FUNCTION(pmpz_ ## op) \
 { \
@@ -152,13 +154,23 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     PG_RETURN_MPZ(zf); \
 }
 
-PMPZ_BIT(mul_2exp)
-PMPZ_BIT(tdiv_q_2exp)
-PMPZ_BIT(tdiv_r_2exp)
-PMPZ_BIT(cdiv_q_2exp)
-PMPZ_BIT(cdiv_r_2exp)
-PMPZ_BIT(fdiv_q_2exp)
-PMPZ_BIT(fdiv_r_2exp)
+PMPZ_OP_UL(pow_ui)
+
+
+/* Functions defined on bit count
+ *
+ * mp_bitcnt_t is defined as unsigned long.
+ */
+
+#define PMPZ_OP_BITCNT PMPZ_OP_UL
+
+PMPZ_OP_BITCNT(mul_2exp)
+PMPZ_OP_BITCNT(tdiv_q_2exp)
+PMPZ_OP_BITCNT(tdiv_r_2exp)
+PMPZ_OP_BITCNT(cdiv_q_2exp)
+PMPZ_OP_BITCNT(cdiv_r_2exp)
+PMPZ_OP_BITCNT(fdiv_q_2exp)
+PMPZ_OP_BITCNT(fdiv_r_2exp)
 
 
 /*

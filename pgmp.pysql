@@ -177,7 +177,15 @@ op('+%>', 'cdiv_r_2exp', rarg='int4')
 op('->>', 'fdiv_q_2exp', rarg='int4')
 op('-%>', 'fdiv_r_2exp', rarg='int4')
 
+func('pow', 'mpz int4', cname='pmpz_pow_ui')
+
 !! PYOFF
+
+CREATE OPERATOR ^ (
+    LEFTARG = mpz,
+    RIGHTARG = int4,
+    PROCEDURE = pow
+);
 
 
 --
