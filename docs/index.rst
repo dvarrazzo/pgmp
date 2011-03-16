@@ -4,19 +4,24 @@
 PostgreSQL Multiple Precision Arithmetic
 ========================================
 
-This extension adds support in PostgreSQL_ for the data types and
-functions avaliable in the GMP_ library for arbitrary precision
-arithmetic.
+pgmp is a PostgreSQL_ extension to add the GMP_ data types and functions
+directly into the database.
+
+The extension is currently under active development and the file format is not
+guaranteed to be stable yet. The target for the first release is to support
+integers (`mpz`) and rational (`mpq`) data types.
 
 .. _PostgreSQL: http://www.postgresql.org
 .. _GMP: http://www.gmplib.org
 
-The GMP structures are available as PostgreSQL data types and all the
-functions exposed in the library are available from SQL.
-
-How people could have possibly lived without general precision floating point
-and rational numbers into their databases is something I really can't
+How people could have possibly lived without million digits numbers
+and rationals into their databases is something I really can't
 understand...
+
+- Homepage: http://pgmp.projects.postgresql.org/
+- Source repository: https://github.com/dvarrazzo/pgmp/
+- Discussion group: http://groups.google.com/group/postgresql-gmp
+- PgFoundry project: http://pgfoundry.org/projects/pgmp/
 
 
 Status
@@ -25,9 +30,8 @@ Status
 The extension is under active development and not stable yet: we can't
 guarantee the disk format will not change.
 
-
-Contents
---------
+Documentation
+-------------
 
 .. toctree::
    :maxdepth: 2
