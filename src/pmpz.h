@@ -28,7 +28,7 @@
 typedef struct
 {
     char        vl_len_[4];     /* varlena header */
-    int         size;           /* number of limbs */
+    unsigned    mdata;          /* version number, sign */
     mp_limb_t   data[1];        /* limbs */
 
 } pmpz;
@@ -38,6 +38,19 @@ typedef struct
     ((pmpz*)DatumGetPointer(PG_DETOAST_DATUM(PG_GETARG_DATUM(x))))
 #define PG_RETURN_MPZ(z) \
     PG_RETURN_POINTER(pmpz_from_mpz(z))
+
+/* Allow versioning of the data in the database.
+ * Versions 0-7 allowed... hope to not change my mind more than 8 times */
+#define PMPZ_VERSION_MASK   0x07
+#define PMPZ_SIGN_MASK      0x80
+
+#define PMPZ_VERSION(mz) (((mz)->mdata) & PMPZ_VERSION_MASK)
+#define PMPZ_SET_VERSION(mdata,v) \
+    (((mdata) & ~PMPZ_VERSION_MASK) | ((v) & PMPZ_VERSION_MASK))
+
+#define PMPZ_SET_NEGATIVE(mdata) ((mdata) | PMPZ_SIGN_MASK)
+#define PMPZ_SET_POSITIVE(mdata) ((mdata) & ~PMPZ_SIGN_MASK)
+#define PMPZ_NEGATIVE(mz) (((mz)->mdata) & PMPZ_SIGN_MASK)
 
 pmpz * pmpz_from_mpz(mpz_srcptr z);
 void mpz_from_pmpz(mpz_srcptr z, const pmpz *pz);
