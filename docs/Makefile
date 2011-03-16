@@ -18,13 +18,18 @@ SPHINXBUILD   = $(ENV_BIN)/sphinx-build
 PAPER         =
 BUILDDIR      = .
 
-.PHONY: env clean html
+.PHONY: env clean html upload
 
 default: html
 
 html:
 	PYTHONPATH=$(ENV_LIB) $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) \
 		. $(BUILDDIR)/html
+
+upload:
+	tar cjf - -C html . \
+	| ssh dvarrazzo@pgfoundry.org \
+		tar xjvf - -C /home/pgfoundry.org/groups/pgmp/htdocs
 
 # The environment is currently required to build the documentation.
 # It is not clean by 'make clean'
