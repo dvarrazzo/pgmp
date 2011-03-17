@@ -23,6 +23,8 @@
 #include "postgres.h"
 #include "fmgr.h"
 
+#include "pgmp-impl.h"
+
 PG_MODULE_MAGIC;
 
 void    _PG_init(void);
@@ -59,24 +61,35 @@ _PG_fini(void)
 
 /*
  * GMP custom allocation functions using PostgreSQL memory management.
+ *
+ * In order to store data into the database, the structure must be contiguous
+ * in memory. GMP instead allocated the limbs dynamically. This means that to
+ * convert from mpz_p to the varlena a memcpy would be required.
+ *
+ * But we don't like memcpy... So we allocate enough space to add the varlena
+ * header and we return an offsetted pointer to GMP, so that we can always
+ * scrubble a varlena header in front of the limbs and just ask the database
+ * to store the result.
  */
 
 static void *
-_pgmp_alloc(size_t alloc_size)
+_pgmp_alloc(size_t size)
 {
-    return palloc(alloc_size);
+    return PGMP_MAX_HDRSIZE + (char *)palloc(size + PGMP_MAX_HDRSIZE);
 }
 
 static void *
 _pgmp_realloc(void *ptr, size_t old_size, size_t new_size)
 {
-    return repalloc(ptr, new_size);
+    return PGMP_MAX_HDRSIZE + (char *)repalloc(
+        (char *)ptr - PGMP_MAX_HDRSIZE,
+        new_size + PGMP_MAX_HDRSIZE);
 }
 
 static void
 _pgmp_free(void *ptr, size_t size)
 {
-    pfree(ptr);
+    pfree((char *)ptr - PGMP_MAX_HDRSIZE);
 }
 
 

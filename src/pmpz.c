@@ -30,13 +30,19 @@ extern const mp_limb_t _pgmp_limb_0;
 
 
 /*
- * Create a new pmpz structure from the content of a mpz
+ * Create a pmpz structure from the content of a mpz.
+ *
+ * The function relies on the limbs being allocated using the GMP custom
+ * allocator: such allocator leaves PGMP_MAX_HDRSIZE bytes *before* the
+ * returned pointer. We scrubble that area prepending the pmpz header.
  */
 pmpz *
 pmpz_from_mpz(mpz_srcptr z)
 {
     pmpz *res;
     int size = SIZ(z);
+
+    res = (pmpz *)((char *)LIMBS(z) - PMPZ_HDRSIZE);
 
     if (LIKELY(0 != size))
     {
@@ -52,15 +58,14 @@ pmpz_from_mpz(mpz_srcptr z)
             sign = PMPZ_SIGN_MASK;
         }
 
-        res = (pmpz *)palloc(PMPZ_HDRSIZE + slimbs);
         SET_VARSIZE(res, PMPZ_HDRSIZE + slimbs);
         res->mdata = sign;          /* implicit version: 0 */
-        memcpy(&(res->data), LIMBS(z), slimbs);
     }
     else
     {
-        res = (pmpz *)palloc0(PMPZ_HDRSIZE);
+        /* In the zero representation there are no limbs */
         SET_VARSIZE(res, PMPZ_HDRSIZE);
+        res->mdata = 0;             /* version: 0 */
     }
 
     return res;

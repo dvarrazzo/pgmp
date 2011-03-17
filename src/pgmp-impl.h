@@ -23,6 +23,13 @@
 #define __PGMP_IMPL_H__
 
 
+/* Space to leave before the pointers returned by the GMP custom allocator.
+ *
+ * The space is used to store the varlena and structure header before the gmp
+ * limbs, so it must be at least as big as the bigger of such headers.
+ */
+#define PGMP_MAX_HDRSIZE 8
+
 #define MPZ_IS_ZERO(z) (SIZ(z) == 0)
 
 /*

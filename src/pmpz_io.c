@@ -90,16 +90,24 @@ PGMP_PG_FUNCTION(pmpz_in_base)
 PGMP_PG_FUNCTION(pmpz_out)
 {
     const mpz_t     z;
+    char            *buf;
 
     mpz_from_pmpz(z, PG_GETARG_PMPZ(0));
 
-    PG_RETURN_CSTRING(mpz_get_str(NULL, 10, z));
+    /* We must allocate the output buffer ourselves because the buffer
+     * returned by mpz_get_str actually starts a few bytes before (because of
+     * the custom GMP allocator); Postgres will try to free the pointer we
+     * return in printtup() so with the offsetted pointer a segfault is
+     * granted. */
+    buf = palloc(mpz_sizeinbase(z, 10) + 2);        /* add sign and null */
+    PG_RETURN_CSTRING(mpz_get_str(buf, 10, z));
 }
 
 PGMP_PG_FUNCTION(pmpz_out_base)
 {
     const mpz_t     z;
     int             base;
+    char            *buf;
 
     mpz_from_pmpz(z, PG_GETARG_PMPZ(0));
     base = PG_GETARG_INT32(1);
@@ -112,7 +120,9 @@ PGMP_PG_FUNCTION(pmpz_out_base)
             errhint("base should be between -36 and 62 and cant'be -1 or 1")));
     }
 
-    PG_RETURN_CSTRING(mpz_get_str(NULL, base, z));
+    /* Allocate the output buffer manually - see mpmz_out to know why */
+    buf = palloc(mpz_sizeinbase(z, base) + 2);      /* add sign and null */
+    PG_RETURN_CSTRING(mpz_get_str(buf, base, z));
 }
 
 

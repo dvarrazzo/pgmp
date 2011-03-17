@@ -59,13 +59,17 @@ PGMP_PG_FUNCTION(pmpq_out)
 {
     const pmpq      *pz;
     const mpq_t     q;
-    char            *res;
+    char            *buf;
 
     pz = PG_GETARG_PMPQ(0);
     mpq_from_pmpq(q, pz);
 
-    res = mpq_get_str(NULL, 10, q);
-    PG_RETURN_CSTRING(res);
+    /* Allocate the output buffer manually - see mpmz_out to know why */
+    buf = palloc(3             /* add sign, slash and null */
+        + mpz_sizeinbase(mpq_numref(q), 10)
+        + mpz_sizeinbase(mpq_denref(q), 10));
+
+    PG_RETURN_CSTRING(mpq_get_str(buf, 10, q));
 }
 
 

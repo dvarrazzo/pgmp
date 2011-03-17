@@ -33,7 +33,9 @@ typedef struct
 
 } pmpz;
 
+/* Must be not larger than PGMP_MAX_HDRSIZE */
 #define PMPZ_HDRSIZE   MAXALIGN(offsetof(pmpz,data))
+
 #define PG_GETARG_PMPZ(x) \
     ((pmpz*)DatumGetPointer(PG_DETOAST_DATUM(PG_GETARG_DATUM(x))))
 #define PG_RETURN_MPZ(z) \
