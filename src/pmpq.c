@@ -51,15 +51,33 @@ pmpq_from_mpq(mpq_ptr q)
         int     nalloc      = ABS(nsize);
         int     dsize       = SIZ(mpq_denref(q));
 
-        LIMBS(num) = _mpz_realloc(num, nalloc + dsize);
-        res = (pmpq *)((char *)LIMBS(num) - PMPQ_HDRSIZE);
+        if (nalloc >= dsize)
+        {
+            LIMBS(num) = _mpz_realloc(num, nalloc + dsize);
+            res = (pmpq *)((char *)LIMBS(num) - PMPQ_HDRSIZE);
+            SET_VARSIZE(res,
+                PMPQ_HDRSIZE + (nalloc + dsize) * sizeof(mp_limb_t));
 
-        /* copy the denom after the numer */
-        memcpy(res->data + nalloc, LIMBS(den), dsize * sizeof(mp_limb_t));
+            /* copy the denom after the numer */
+            memcpy(res->data + nalloc, LIMBS(den), dsize * sizeof(mp_limb_t));
 
-        /* Set the number of limbs and implicitly version 0, then the sign */
-        SET_VARSIZE(res, PMPQ_HDRSIZE + (nalloc + dsize) * sizeof(mp_limb_t));
-        res->mdata = PMPQ_SET_SIZE_NUMER(0, nalloc);
+            /* Set the number of limbs and order and implicitly version 0 */
+            res->mdata = PMPQ_SET_SIZE_FIRST(PMPQ_SET_NUMER_FIRST(0), nalloc);
+        }
+        else {
+            LIMBS(den) = _mpz_realloc(den, nalloc + dsize);
+            res = (pmpq *)((char *)LIMBS(den) - PMPQ_HDRSIZE);
+            SET_VARSIZE(res,
+                PMPQ_HDRSIZE + (nalloc + dsize) * sizeof(mp_limb_t));
+
+            /* copy the numer after the denom */
+            memcpy(res->data + dsize, LIMBS(num), nalloc * sizeof(mp_limb_t));
+
+            /* Set the number of limbs and order and implicitly version 0 */
+            res->mdata = PMPQ_SET_SIZE_FIRST(PMPQ_SET_DENOM_FIRST(0), dsize);
+        }
+
+        /* Set the sign */
         if (nsize < 0) { res->mdata = PMPQ_SET_NEGATIVE(res->mdata); }
     }
     else
@@ -93,13 +111,23 @@ mpq_from_pmpq(mpq_srcptr q, const pmpq *pq)
 
     if (0 != PMPQ_NLIMBS(pq))
     {
-        /* We have data from numer and denom into the datum */
-        ALLOC(num) = SIZ(num) = PMPQ_SIZE_NUMER(pq);
-        LIMBS(num) = (mp_limb_t *)pq->data;
-        if (PMPQ_NEGATIVE(pq)) { SIZ(num) = -SIZ(num); }
+        mpz_ptr fst, snd;
 
-        ALLOC(den) = SIZ(den) = PMPQ_SIZE_DENOM(pq);
-        LIMBS(den) = (mp_limb_t *)pq->data + ALLOC(num);
+        if (PMPQ_NUMER_FIRST(pq)) {
+            fst = num; snd = den;
+        }
+        else {
+            fst = den; snd = num;
+        }
+
+        /* We have data from numer and denom into the datum */
+        ALLOC(fst) = SIZ(fst) = PMPQ_SIZE_FIRST(pq);
+        LIMBS(fst) = (mp_limb_t *)pq->data;
+
+        ALLOC(snd) = SIZ(snd) = PMPQ_SIZE_SECOND(pq);
+        LIMBS(snd) = (mp_limb_t *)pq->data + ALLOC(fst);
+
+        if (PMPQ_NEGATIVE(pq)) { SIZ(num) = -SIZ(num); }
     }
     else {
         /* in the datum there is not 1/0,
