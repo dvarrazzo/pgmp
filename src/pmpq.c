@@ -109,6 +109,12 @@ mpq_from_pmpq(mpq_srcptr q, const pmpq *pq)
     mpz_ptr     num     = mpq_numref(wq);
     mpz_ptr     den     = mpq_denref(wq);
 
+    if (UNLIKELY(0 != (PMPQ_VERSION(pq)))) {
+        ereport(ERROR, (
+            errcode(ERRCODE_DATA_EXCEPTION),
+            errmsg("unsupported mpq version: %d", PMPQ_VERSION(pq))));
+    }
+
     if (0 != PMPQ_NLIMBS(pq))
     {
         mpz_ptr fst, snd;
