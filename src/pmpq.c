@@ -31,35 +31,42 @@ extern const mp_limb_t _pgmp_limb_1;
 
 
 /*
- * Create a new pmpq structure from the content of a mpq
+ * Create a pmpq structure from the content of a mpq
+ *
+ * The function is not const as the numerator will be realloc'd to make room
+ * to the denom limbs after it. For this reason this function must never
+ * receive directly data read from the database.
  */
 pmpq *
-pmpq_from_mpq(mpq_srcptr q)
+pmpq_from_mpq(mpq_ptr q)
 {
-    pmpq *res;
-    int nsize = SIZ(mpq_numref(q));
+    pmpq        *res;
+    mpz_ptr     num     = mpq_numref(q);
+    mpz_ptr     den     = mpq_denref(q);
+    int         nsize   = SIZ(num);
 
     if (LIKELY(0 != nsize))
     {
-        int nalloc = ABS(nsize);
-        int dsize = SIZ(mpq_denref(q));
+        /* Make enough room after the numer to store the denom limbs */
+        int     nalloc      = ABS(nsize);
+        int     dsize       = SIZ(mpq_denref(q));
 
-        res = (pmpq *)palloc(
-            PMPQ_HDRSIZE + (nalloc + dsize) * sizeof(mp_limb_t));
-        res->num_size = nsize;
-        res->den_size = dsize;
+        LIMBS(num) = _mpz_realloc(num, nalloc + dsize);
+        res = (pmpq *)((char *)LIMBS(num) - PMPQ_HDRSIZE);
 
-        SET_VARSIZE(res,
-            PMPQ_HDRSIZE + (nalloc + dsize) * sizeof(mp_limb_t));
-        memcpy(&(res->data), LIMBS(mpq_numref(q)),
-            nalloc * sizeof(mp_limb_t));
-        memcpy(&(res->data) + nalloc, LIMBS(mpq_denref(q)),
-            dsize * sizeof(mp_limb_t));
+        /* copy the denom after the numer */
+        memcpy(res->data + nalloc, LIMBS(den), dsize * sizeof(mp_limb_t));
+
+        /* Set the number of limbs and implicitly version 0, then the sign */
+        SET_VARSIZE(res, PMPQ_HDRSIZE + (nalloc + dsize) * sizeof(mp_limb_t));
+        res->mdata = PMPQ_SET_SIZE_NUMER(0, nalloc);
+        if (nsize < 0) { res->mdata = PMPQ_SET_NEGATIVE(res->mdata); }
     }
     else
     {
-        res = (pmpq *)palloc0(PMPQ_HDRSIZE);
+        res = (pmpq *)((char *)LIMBS(num) - PMPQ_HDRSIZE);
         SET_VARSIZE(res, PMPQ_HDRSIZE);
+        res->mdata = 0;
     }
 
     return res;
@@ -80,30 +87,30 @@ void
 mpq_from_pmpq(mpq_srcptr q, const pmpq *pq)
 {
     /* discard the const qualifier */
-    mpq_ptr wq = (mpq_ptr)q;
+    mpq_ptr     wq      = (mpq_ptr)q;
+    mpz_ptr     num     = mpq_numref(wq);
+    mpz_ptr     den     = mpq_denref(wq);
 
-    if (pq->num_size != 0) {
-        int nalloc = ABS(pq->num_size);
-
+    if (0 != PMPQ_NLIMBS(pq))
+    {
         /* We have data from numer and denom into the datum */
-        ALLOC(mpq_numref(wq)) = nalloc;
-        SIZ(mpq_numref(wq)) = pq->num_size;
-        LIMBS(mpq_numref(wq)) = (mp_limb_t *)pq->data;
+        ALLOC(num) = SIZ(num) = PMPQ_SIZE_NUMER(pq);
+        LIMBS(num) = (mp_limb_t *)pq->data;
+        if (PMPQ_NEGATIVE(pq)) { SIZ(num) = -SIZ(num); }
 
-        ALLOC(mpq_denref(wq)) = pq->den_size;
-        SIZ(mpq_denref(wq)) = pq->den_size;
-        LIMBS(mpq_denref(wq)) = (mp_limb_t *)pq->data + nalloc;
+        ALLOC(den) = SIZ(den) = PMPQ_SIZE_DENOM(pq);
+        LIMBS(den) = (mp_limb_t *)pq->data + ALLOC(num);
     }
     else {
         /* in the datum there is not 1/0,
          * so let's just refer to some static const */
-        ALLOC(mpq_numref(wq)) = 1;
-        SIZ(mpq_numref(wq)) = 0;
-        LIMBS(mpq_numref(wq)) = (mp_limb_t *)(&_pgmp_limb_0);
+        ALLOC(num) = 1;
+        SIZ(num) = 0;
+        LIMBS(num) = (mp_limb_t *)(&_pgmp_limb_0);
 
-        ALLOC(mpq_denref(wq)) = 1;
-        SIZ(mpq_denref(wq)) = 1;
-        LIMBS(mpq_denref(wq)) = (mp_limb_t *)(&_pgmp_limb_1);
+        ALLOC(den) = 1;
+        SIZ(den) = 1;
+        LIMBS(den) = (mp_limb_t *)(&_pgmp_limb_1);
     }
 }
 
