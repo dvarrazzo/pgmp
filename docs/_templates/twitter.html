@@ -1,0 +1,29 @@
+{#
+  Sphinx sidebar template: twitter box
+#}
+
+{%- if pagename == 'index' %}
+<h3 style="margin-top: 1.5em">Latest</h3>
+
+<ul id="twitter_update_list"></ul>
+<a href="http://twitter.com/postgresql_gmp" id="twitter-link">Follow us on Twitter</a>
+
+<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>
+<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/postgresql_gmp.json?callback=twitterCallback2&amp;count=5"></script>
+<style type="text/css">
+  #twitter_update_list li > span {
+    background-color: #EEEEEC;
+    border: 1px solid #ddd;
+    color: #2e3436;
+    display: block;
+    xmargin-bottom: 0.4em;
+    padding: 1px 1px 1px 3px;
+  }
+  #twitter_update_list li > a {
+    display: block;
+    text-align: right;
+    padding: 0;
+    margin-bottom: 3px;
+  }
+</style>
+{%- endif %}

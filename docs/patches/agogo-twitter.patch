@@ -1,0 +1,15 @@
+# HG changeset patch
+# Parent ce4bb37a14091d0fa968256d3cbce85ef322e272
+diff --git a/sphinx/themes/agogo/layout.html b/sphinx/themes/agogo/layout.html
+--- a/sphinx/themes/agogo/layout.html
++++ b/sphinx/themes/agogo/layout.html
+@@ -57,6 +57,9 @@
+             {{ _('Enter search terms or a module, class or function name.') }}
+           </p>
+           {%- endblock %}
++          {%- block twitter %}
++          {%- include "twitter.html" %}
++          {%- endblock %}
+         </div>
+         <div class="clearer"></div>
+       </div>
