@@ -427,3 +427,14 @@ SELECT numeric_test_dataset(5, '123456'::numeric);
 123456
 123456
 123456
+--
+-- mpz functions tests
+--
+SELECT mpz_sqrt(25::mpz);
+5
+SELECT mpz_sqrt(('1' || repeat('0',100))::mpz);
+100000000000000000000000000000000000000000000000000
+SELECT mpz_root(27::mpz, 3);
+3
+SELECT mpz_root(('1' || repeat('0',100))::mpz, 3);
+2154434690031883721759293566519350

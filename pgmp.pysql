@@ -273,6 +273,14 @@ DEFAULT FOR TYPE mpz USING btree AS
 
 -- TODO: OPERATOR FAMILY?
 
+-- mpz functions
+
+!! PYON
+
+func('mpz_sqrt', 'mpz', 'mpz', cname='pmpz_sqrt')
+func('mpz_root', 'mpz int4', 'mpz', cname='pmpz_root')
+
+!! PYOFF
 
 --
 -- Aggregation functions

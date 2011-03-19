@@ -283,3 +283,12 @@ SELECT prod(z) FROM mpzagg;
 
 SELECT mpz_test_dataset(5, 20);
 SELECT numeric_test_dataset(5, '123456'::numeric);
+
+--
+-- mpz functions tests
+--
+SELECT mpz_sqrt(25::mpz);
+SELECT mpz_sqrt(('1' || repeat('0',100))::mpz);
+
+SELECT mpz_root(27::mpz, 3);
+SELECT mpz_root(('1' || repeat('0',100))::mpz, 3);
