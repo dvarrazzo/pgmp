@@ -300,4 +300,7 @@ SELECT mpz_root(27::mpz, 0);
 SELECT mpz_root(-27::mpz, 3);
 SELECT mpz_root(27::mpz, -1);
 
-
+SELECT mpz_nextprime(5::mpz);
+SELECT mpz_nextprime(10::mpz);
+SELECT mpz_nextprime(100::mpz);
+SELECT mpz_nextprime(1000::mpz);

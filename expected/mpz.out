@@ -452,3 +452,11 @@ SELECT mpz_root(-27::mpz, 3);
 ERROR:  argument can't be negative
 SELECT mpz_root(27::mpz, -1);
 ERROR:  argument must be positive
+SELECT mpz_nextprime(5::mpz);
+7
+SELECT mpz_nextprime(10::mpz);
+11
+SELECT mpz_nextprime(100::mpz);
+101
+SELECT mpz_nextprime(1000::mpz);
+1009
