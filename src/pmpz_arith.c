@@ -68,9 +68,13 @@ PMPZ_UN(abs)
  * Binary operators
  */
 
-/* Template to generate regular binary operators */
+/* Operators defined (mpz, mpz) -> mpz.
+ *
+ * CHECK2 is a check performed on the 2nd argument. Available checks are
+ * defined below.
+ */
 
-#define PMPZ_OP(op) \
+#define PMPZ_OP(op, CHECK2) \
  \
 PGMP_PG_FUNCTION(pmpz_ ## op) \
 { \
@@ -80,6 +84,7 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
  \
     mpz_from_pmpz(z1, PG_GETARG_PMPZ(0)); \
     mpz_from_pmpz(z2, PG_GETARG_PMPZ(1)); \
+    CHECK2(z2); \
  \
     mpz_init(zf); \
     mpz_ ## op (zf, z1, z2); \
@@ -87,44 +92,30 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     PG_RETURN_MPZ(zf); \
 }
 
-PMPZ_OP(add)
-PMPZ_OP(sub)
-PMPZ_OP(mul)
+/* possible values for CHECK2 param */
 
+#define PMPZ_NO_CHECK(arg)
 
-/* Template to generate binary operators that may divide by zero */
-
-#define PMPZ_OP_DIV(op) \
- \
-PGMP_PG_FUNCTION(pmpz_ ## op) \
-{ \
-    const mpz_t     z1; \
-    const mpz_t     z2; \
-    mpz_t           zf; \
- \
-    mpz_from_pmpz(z2, PG_GETARG_PMPZ(1)); \
-    if (UNLIKELY(MPZ_IS_ZERO(z2))) \
+#define PMPZ_DIV0_CHECK(arg) \
+    if (UNLIKELY(MPZ_IS_ZERO(arg))) \
     { \
         ereport(ERROR, ( \
             errcode(ERRCODE_DIVISION_BY_ZERO), \
             errmsg("division by zero"))); \
-    } \
- \
-    mpz_from_pmpz(z1, PG_GETARG_PMPZ(0)); \
- \
-    mpz_init(zf); \
-    mpz_ ## op (zf, z1, z2); \
- \
-    PG_RETURN_MPZ(zf); \
-}
+    }
 
-PMPZ_OP_DIV(tdiv_q)
-PMPZ_OP_DIV(tdiv_r)
-PMPZ_OP_DIV(cdiv_q)
-PMPZ_OP_DIV(cdiv_r)
-PMPZ_OP_DIV(fdiv_q)
-PMPZ_OP_DIV(fdiv_r)
-PMPZ_OP_DIV(divexact)
+/* Operators definitions */
+
+PMPZ_OP(add, PMPZ_NO_CHECK)
+PMPZ_OP(sub, PMPZ_NO_CHECK)
+PMPZ_OP(mul, PMPZ_NO_CHECK)
+PMPZ_OP(tdiv_q, PMPZ_DIV0_CHECK)
+PMPZ_OP(tdiv_r, PMPZ_DIV0_CHECK)
+PMPZ_OP(cdiv_q, PMPZ_DIV0_CHECK)
+PMPZ_OP(cdiv_r, PMPZ_DIV0_CHECK)
+PMPZ_OP(fdiv_q, PMPZ_DIV0_CHECK)
+PMPZ_OP(fdiv_r, PMPZ_DIV0_CHECK)
+PMPZ_OP(divexact, PMPZ_DIV0_CHECK)
 
 
 /* Functions defined on unsigned long */
