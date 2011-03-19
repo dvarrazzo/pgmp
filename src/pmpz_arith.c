@@ -54,8 +54,8 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
  \
     mpz_from_pmpz(z1, PG_GETARG_PMPZ(0)); \
  \
-    mpz_init_set(zf, z1); \
-    mpz_ ## op (zf, zf); \
+    mpz_init(zf); \
+    mpz_ ## op (zf, z1); \
  \
     PG_RETURN_MPZ(zf); \
 }
