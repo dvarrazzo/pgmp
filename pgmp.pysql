@@ -279,6 +279,8 @@ DEFAULT FOR TYPE mpz USING btree AS
 
 func('mpz_sqrt', 'mpz', 'mpz', cname='pmpz_sqrt')
 func('mpz_root', 'mpz int4', 'mpz', cname='pmpz_root')
+func('mpz_perfect_power', 'mpz', 'bool', cname='pmpz_perfect_power')
+func('mpz_perfect_square', 'mpz', 'bool', cname='pmpz_perfect_square')
 func('mpz_nextprime', 'mpz')
 
 !! PYOFF

@@ -25,6 +25,7 @@
 #include "fmgr.h"
 
 
+
 /*
  * Unary minus, plus
  */
@@ -189,4 +190,27 @@ PMPZ_CMP(gt, >)
 PMPZ_CMP(ge, >=)
 PMPZ_CMP(lt, <)
 PMPZ_CMP(le, <=)
+
+
+/*
+ * Unary predicates
+ */
+
+PGMP_PG_FUNCTION(pmpz_perfect_power)
+{
+    const mpz_t     z1;
+
+    mpz_from_pmpz(z1, PG_GETARG_PMPZ(0));
+
+    PG_RETURN_BOOL(mpz_perfect_power_p(z1));
+}
+
+PGMP_PG_FUNCTION(pmpz_perfect_square)
+{
+    const mpz_t     z1;
+
+    mpz_from_pmpz(z1, PG_GETARG_PMPZ(0));
+
+    PG_RETURN_BOOL(mpz_perfect_square_p(z1));
+}
 
