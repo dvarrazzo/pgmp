@@ -452,6 +452,22 @@ SELECT mpz_root(-27::mpz, 3);
 ERROR:  argument can't be negative
 SELECT mpz_root(27::mpz, -1);
 ERROR:  argument must be positive
+select * from mpz_rootrem(1000::mpz,2) as rootrem;
+31|39
+select * from mpz_rootrem(1000::mpz,9) as rootrem;
+2|488
+select * from mpz_rootrem(('1' || repeat('0',100))::mpz,2);
+100000000000000000000000000000000000000000000000000|0
+select * from mpz_rootrem(('1' || repeat('0',100))::mpz,5);
+100000000000000000000|0
+select column1 as root, column2 as rem from (select * from mpz_rootrem(('1' || repeat('0',100))::mpz,2)) as rootrem;
+100000000000000000000000000000000000000000000000000|0
+select column1*2 as root, column2 as rem from (select * from mpz_rootrem(('1' || repeat('0',100))::mpz,2)) as rootrem;
+200000000000000000000000000000000000000000000000000|0
+select column1*2 as root, column2 as rem from (select * from mpz_rootrem(('1' || repeat('0',100))::mpz,50)) as rootrem;
+200|0
+select column1*2 as root, column2 as rem from (select * from mpz_rootrem(('1' || repeat('0',100))::mpz+5,50)) as rootrem;
+200|5
 select mpz_perfect_power(26::mpz);
 f
 select mpz_perfect_power(27::mpz);
