@@ -307,6 +307,12 @@ select * from mpz_rootrem(('1' || repeat('0',100))::mpz,5);
 select root from mpz_rootrem(1000::mpz, 2);
 select rem from mpz_rootrem(1000::mpz, 2);
 
+select * from mpz_sqrtrem(1000::mpz) as rootrem;
+select * from mpz_sqrtrem(('1' || repeat('0',100))::mpz);
+select column1 as root, column2 as rem from (select * from mpz_sqrtrem(('1' || repeat('0',100))::mpz)) as rootrem;
+select column1*2 as root, column2 as rem from (select * from mpz_sqrtrem(('1' || repeat('0',100))::mpz)) as rootrem;
+select column1*2 as root, column2 as rem from (select * from mpz_sqrtrem(('1' || repeat('0',100))::mpz+5)) as rootrem;
+
 select mpz_perfect_power(26::mpz);
 select mpz_perfect_power(27::mpz);
 select mpz_perfect_power(65535::mpz);

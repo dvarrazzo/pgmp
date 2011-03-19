@@ -235,3 +235,18 @@ PGMP_PG_FUNCTION(pmpz_rootrem)
     PG_RETURN_MPZ_MPZ(zroot, zrem);
 }
 
+PGMP_PG_FUNCTION(pmpz_sqrtrem)
+{
+    const mpz_t     z1;
+    mpz_t           zroot;
+    mpz_t           zrem;
+
+    mpz_from_pmpz(z1, PG_GETARG_PMPZ(0));
+
+    mpz_init(zroot);
+    mpz_init(zrem);
+    mpz_sqrtrem(zroot, zrem, z1);
+
+    PG_RETURN_MPZ_MPZ(zroot, zrem);
+}
+
