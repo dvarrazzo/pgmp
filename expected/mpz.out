@@ -460,3 +460,7 @@ SELECT mpz_nextprime(100::mpz);
 101
 SELECT mpz_nextprime(1000::mpz);
 1009
+SELECT mpz_nextprime(0::mpz);
+2
+SELECT mpz_nextprime(-8::mpz);
+2

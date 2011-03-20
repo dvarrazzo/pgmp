@@ -304,3 +304,5 @@ SELECT mpz_nextprime(5::mpz);
 SELECT mpz_nextprime(10::mpz);
 SELECT mpz_nextprime(100::mpz);
 SELECT mpz_nextprime(1000::mpz);
+SELECT mpz_nextprime(0::mpz);
+SELECT mpz_nextprime(-8::mpz);
