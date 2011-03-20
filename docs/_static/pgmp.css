@@ -20,3 +20,9 @@ table.docutils td, table.docutils th {
 table.docutils th {
      background-color; #eeeeec;
 }
+
+/* Less space into the toc nested lists */
+div.toctree-wrapper ul li ul {
+    margin-top: 0.25em;
+}
+
