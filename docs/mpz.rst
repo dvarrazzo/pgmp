@@ -79,6 +79,14 @@ argument always use an integer as right argument.
 A few operators may use optimized algorithms when one of the arguments is an
 integer.
 
+.. note::
+    GMP defines many structures in terms of `!long` or `!unsigned long`, whose
+    definitions may vary across platforms. PostgreSQL instead offers data
+    types with a defined number of bytes (e.g. `!int4`, `!int8`). For this
+    reason, functions taking an integer as argument are defined as `!int8`,
+    but they may actually fail if the server is 32 bit and the argument don't
+    fit into an `!int4`.
+
 .. table:: Arithmetic operators
 
     =========== =============================== =================== ===========
@@ -173,7 +181,7 @@ Notes:
 
 For all the division-related operators :math:`n \oslash d`, :math:`q` and
 :math:`r` will satisfy :math:`n = q \cdot d + r`, and :math:`r` will satisfy
-:math:`0 \le abs(r) \lt abs(d)`.
+:math:`0 \le |r| \lt |d|`.
 
 .. note::
     Only the truncating division and reminder (`!/` and `!%`) have the correct
@@ -232,7 +240,8 @@ Exponentiation Functions
 
     Return *base* raised to *exp*.
 
-    *exp* must be an `!integer`, not a `!mpz`.
+    *exp* is defined as `!int8` but must fit into a `!long` as defined on the
+    server.
 
     The function is an alias for the `!^` operator.
 
