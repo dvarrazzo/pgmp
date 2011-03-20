@@ -36,10 +36,34 @@ typedef struct
 /* Must be not larger than PGMP_MAX_HDRSIZE */
 #define PMPZ_HDRSIZE   MAXALIGN(offsetof(pmpz,data))
 
+
+/* Macros to convert mpz arguments and return values */
+
 #define PG_GETARG_PMPZ(x) \
     ((pmpz*)DatumGetPointer(PG_DETOAST_DATUM(PG_GETARG_DATUM(x))))
 #define PG_RETURN_MPZ(z) \
     PG_RETURN_POINTER(pmpz_from_mpz(z))
+
+#define PG_RETURN_MPZ_MPZ(z1,z2) \
+{ \
+    TupleDesc       _tupdesc; \
+    Datum           _result[2]; \
+    bool            _isnull[2] = {0,0}; \
+ \
+    if (get_call_result_type(fcinfo, NULL, &_tupdesc) != TYPEFUNC_COMPOSITE) \
+        ereport(ERROR, \
+            (errcode(ERRCODE_FEATURE_NOT_SUPPORTED), \
+             errmsg("function returning composite called in context " \
+                    "that cannot accept type composite"))); \
+ \
+    _tupdesc = BlessTupleDesc(_tupdesc); \
+ \
+    _result[0] = (Datum)pmpz_from_mpz(zroot); \
+    _result[1] = (Datum)pmpz_from_mpz(zrem); \
+ \
+    return HeapTupleGetDatum(heap_form_tuple(_tupdesc, _result, _isnull)); \
+} \
+
 
 /* Allow versioning of the data in the database.
  * Versions 0-7 allowed... hope to not change my mind more than 8 times */

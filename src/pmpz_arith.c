@@ -220,12 +220,7 @@ PGMP_PG_FUNCTION(pmpz_rootrem)
     const mpz_t     z1;
     mpz_t           zroot;
     mpz_t           zrem;
-    unsigned long   n;
-    TupleDesc       tupdesc;
-    AttInMetadata  *attinmeta;
-    char          **values;
-    HeapTuple       tuple;
-    Datum           result;
+    int32           n;
 
     mpz_from_pmpz(z1, PG_GETARG_PMPZ(0));
     PMPZ_CHECK_NONEG(z1);
@@ -235,42 +230,8 @@ PGMP_PG_FUNCTION(pmpz_rootrem)
 
     mpz_init(zroot);
     mpz_init(zrem);
-    mpz_rootrem (zroot, zrem, z1, n);
+    mpz_rootrem (zroot, zrem, z1, (unsigned long)n);
 
-    /* Build a tuple descriptor for our result type */
-    if (get_call_result_type(fcinfo, NULL, &tupdesc) != TYPEFUNC_COMPOSITE)
-        ereport(ERROR,
-            (errcode(ERRCODE_FEATURE_NOT_SUPPORTED),
-             errmsg("function returning composite called in context that cannot accept type composite")));
-
-    /*
-     * generate attribute metadata needed later to produce tuples
-     */
-    attinmeta = TupleDescGetAttInMetadata(tupdesc);
-
-    /*
-     * Prepare a values array for building the returned tuple.
-     * This should be an array of C strings which will
-     * be processed later by the type input functions.
-     */
-    values = (char **) palloc(2 * sizeof(char *));
-    values[0] = (char *) palloc(mpz_sizeinbase(zroot, 10) + 2);
-    values[1] = (char *) palloc(mpz_sizeinbase(zrem, 10) + 2);
-
-    mpz_get_str(values[0], 10, zroot);
-    mpz_get_str(values[1], 10, zrem);
-
-    /* build a tuple */
-    tuple = BuildTupleFromCStrings(attinmeta, values);
-
-    /* make the tuple into a datum */
-    result = HeapTupleGetDatum(tuple);
-
-    /* clean up (this is not really necessary) */
-    pfree(values[0]);
-    pfree(values[1]);
-    pfree(values);
-
-    PG_RETURN_DATUM(result);
+    PG_RETURN_MPZ_MPZ(zroot, zrem);
 }
 
