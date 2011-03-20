@@ -30,8 +30,6 @@
  */
 #define PGMP_MAX_HDRSIZE 8
 
-#define MPZ_IS_ZERO(z) (SIZ(z) == 0)
-
 /*
  * Macros equivalent to the ones defimed in gmp-impl.h
  */

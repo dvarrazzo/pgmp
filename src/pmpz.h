@@ -54,8 +54,14 @@ typedef struct
 #define PMPZ_SET_POSITIVE(mdata) ((mdata) & ~PMPZ_SIGN_MASK)
 #define PMPZ_NEGATIVE(mz) (((mz)->mdata) & PMPZ_SIGN_MASK)
 
+
+/* Definition useful for internal use in mpz-related modules */
+
 pmpz * pmpz_from_mpz(mpz_srcptr z);
 void mpz_from_pmpz(mpz_srcptr z, const pmpz *pz);
+
+#define MPZ_IS_ZERO(z) (SIZ(z) == 0)
+
 
 #endif  /* __PMPZ_H__ */
 
