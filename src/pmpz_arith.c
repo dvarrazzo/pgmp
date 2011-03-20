@@ -121,22 +121,22 @@ PMPZ_OP(divexact,   PMPZ_CHECK_DIV0)
 PGMP_PG_FUNCTION(pmpz_ ## op) \
 { \
     const mpz_t     z; \
-    long            b; \
+    unsigned long   b; \
     mpz_t           zf; \
  \
     mpz_from_pmpz(z, PG_GETARG_PMPZ(0)); \
     CHECK1(z); \
     \
-    b = PG_GETARG_INT32(1); \
+    PGMP_GETARG_ULONG(b, 1); \
     CHECK2(b); \
  \
     mpz_init(zf); \
-    mpz_ ## op (zf, z, (unsigned long)b); \
+    mpz_ ## op (zf, z, b); \
  \
     PG_RETURN_MPZ(zf); \
 }
 
-PMPZ_OP_UL(pow_ui,  PMPZ_NO_CHECK,      PMPZ_CHECK_LONG_NONEG)
+PMPZ_OP_UL(pow_ui,  PMPZ_NO_CHECK,      PMPZ_NO_CHECK)
 PMPZ_OP_UL(root,    PMPZ_CHECK_NONEG,   PMPZ_CHECK_LONG_POS)
 
 
@@ -147,13 +147,13 @@ PMPZ_OP_UL(root,    PMPZ_CHECK_NONEG,   PMPZ_CHECK_LONG_POS)
 
 #define PMPZ_OP_BITCNT PMPZ_OP_UL
 
-PMPZ_OP_BITCNT(mul_2exp,        PMPZ_NO_CHECK,  PMPZ_CHECK_LONG_NONEG)
-PMPZ_OP_BITCNT(tdiv_q_2exp,     PMPZ_NO_CHECK,  PMPZ_CHECK_LONG_NONEG)
-PMPZ_OP_BITCNT(tdiv_r_2exp,     PMPZ_NO_CHECK,  PMPZ_CHECK_LONG_NONEG)
-PMPZ_OP_BITCNT(cdiv_q_2exp,     PMPZ_NO_CHECK,  PMPZ_CHECK_LONG_NONEG)
-PMPZ_OP_BITCNT(cdiv_r_2exp,     PMPZ_NO_CHECK,  PMPZ_CHECK_LONG_NONEG)
-PMPZ_OP_BITCNT(fdiv_q_2exp,     PMPZ_NO_CHECK,  PMPZ_CHECK_LONG_NONEG)
-PMPZ_OP_BITCNT(fdiv_r_2exp,     PMPZ_NO_CHECK,  PMPZ_CHECK_LONG_NONEG)
+PMPZ_OP_BITCNT(mul_2exp,        PMPZ_NO_CHECK,  PMPZ_NO_CHECK)
+PMPZ_OP_BITCNT(tdiv_q_2exp,     PMPZ_NO_CHECK,  PMPZ_NO_CHECK)
+PMPZ_OP_BITCNT(tdiv_r_2exp,     PMPZ_NO_CHECK,  PMPZ_NO_CHECK)
+PMPZ_OP_BITCNT(cdiv_q_2exp,     PMPZ_NO_CHECK,  PMPZ_NO_CHECK)
+PMPZ_OP_BITCNT(cdiv_r_2exp,     PMPZ_NO_CHECK,  PMPZ_NO_CHECK)
+PMPZ_OP_BITCNT(fdiv_q_2exp,     PMPZ_NO_CHECK,  PMPZ_NO_CHECK)
+PMPZ_OP_BITCNT(fdiv_r_2exp,     PMPZ_NO_CHECK,  PMPZ_NO_CHECK)
 
 
 /*
@@ -220,17 +220,17 @@ PGMP_PG_FUNCTION(pmpz_rootrem)
     const mpz_t     z1;
     mpz_t           zroot;
     mpz_t           zrem;
-    int32           n;
+    unsigned long   n;
 
     mpz_from_pmpz(z1, PG_GETARG_PMPZ(0));
     PMPZ_CHECK_NONEG(z1);
 
-    n = PG_GETARG_INT32(1);
+    PGMP_GETARG_ULONG(n, 1);
     PMPZ_CHECK_LONG_POS(n);
 
     mpz_init(zroot);
     mpz_init(zrem);
-    mpz_rootrem (zroot, zrem, z1, (unsigned long)n);
+    mpz_rootrem (zroot, zrem, z1, n);
 
     PG_RETURN_MPZ_MPZ(zroot, zrem);
 }

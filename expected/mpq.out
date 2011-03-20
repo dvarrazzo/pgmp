@@ -176,8 +176,8 @@ ERROR:  division by zero
 SELECT '4/5'::mpq << 4;
 64/5
 SELECT '4/5'::mpq << -1;
-ERROR:  op2 can't be negative
+ERROR:  argument can't be negative
 SELECT '4/5'::mpq >> 4;
 1/20
 SELECT '4/5'::mpq >> -1;
-ERROR:  op2 can't be negative
+ERROR:  argument can't be negative

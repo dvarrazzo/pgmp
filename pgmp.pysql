@@ -169,21 +169,21 @@ op('+%', 'cdiv_r')
 op('-/', 'fdiv_q')
 op('-%', 'fdiv_r')
 op('/!', 'divexact')
-op('<<', 'mul_2exp', rarg='int4')
-op('>>', 'tdiv_q_2exp', rarg='int4')
-op('%>', 'tdiv_r_2exp', rarg='int4')
-op('+>>', 'cdiv_q_2exp', rarg='int4')
-op('+%>', 'cdiv_r_2exp', rarg='int4')
-op('->>', 'fdiv_q_2exp', rarg='int4')
-op('-%>', 'fdiv_r_2exp', rarg='int4')
+op('<<', 'mul_2exp', rarg='int8')
+op('>>', 'tdiv_q_2exp', rarg='int8')
+op('%>', 'tdiv_r_2exp', rarg='int8')
+op('+>>', 'cdiv_q_2exp', rarg='int8')
+op('+%>', 'cdiv_r_2exp', rarg='int8')
+op('->>', 'fdiv_q_2exp', rarg='int8')
+op('-%>', 'fdiv_r_2exp', rarg='int8')
 
-func('pow', 'mpz int4', cname='pmpz_pow_ui')
+func('pow', 'mpz int8', cname='pmpz_pow_ui')
 
 !! PYOFF
 
 CREATE OPERATOR ^ (
     LEFTARG = mpz,
-    RIGHTARG = int4,
+    RIGHTARG = int8,
     PROCEDURE = pow
 );
 
@@ -278,14 +278,14 @@ DEFAULT FOR TYPE mpz USING btree AS
 !! PYON
 
 func('sqrt', 'mpz', 'mpz', cname='pmpz_sqrt')
-func('root', 'mpz int4', 'mpz', cname='pmpz_root')
+func('root', 'mpz int8', 'mpz', cname='pmpz_root')
 func('perfect_power', 'mpz', 'bool', cname='pmpz_perfect_power')
 func('perfect_square', 'mpz', 'bool', cname='pmpz_perfect_square')
 func('nextprime', 'mpz', cname='pmpz_nextprime')
 
 !! PYOFF
 
-CREATE OR REPLACE FUNCTION rootrem(mpz, int4, out root mpz, out rem mpz)
+CREATE OR REPLACE FUNCTION rootrem(mpz, int8, out root mpz, out rem mpz)
 RETURNS RECORD
 AS 'MODULE_PATHNAME', 'pmpz_rootrem'
 LANGUAGE C IMMUTABLE STRICT;
@@ -435,8 +435,8 @@ op('+', 'add', comm='+')
 op('-', 'sub')
 op('*', 'mul', comm='*')
 op('/', 'div')
-op('<<', 'mul_2exp', rarg='int4')
-op('>>', 'div_2exp', rarg='int4')
+op('<<', 'mul_2exp', rarg='int8')
+op('>>', 'div_2exp', rarg='int8')
 
 !! PYOFF
 

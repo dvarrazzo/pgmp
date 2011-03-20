@@ -451,7 +451,7 @@ ERROR:  argument must be positive
 SELECT root(-27::mpz, 3);
 ERROR:  argument can't be negative
 SELECT root(27::mpz, -1);
-ERROR:  argument must be positive
+ERROR:  argument can't be negative
 select * from rootrem(1000::mpz,2) as rootrem;
 31|39
 select * from rootrem(1000::mpz,9) as rootrem;

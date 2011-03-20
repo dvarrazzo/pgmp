@@ -88,6 +88,58 @@ Datum name(PG_FUNCTION_ARGS); \
 Datum name(PG_FUNCTION_ARGS)
 
 
+/* Macros to get a long/ulong argument in wrappers.
+ *
+ * The argument SQL type should be int8. The macros may raise exception if the
+ * input doesn't fit in a long/ulong as defined on the server.
+ */
+#if PGMP_LONG_32
+
+#define PGMP_GETARG_LONG(tgt,narg) \
+{ \
+    int64 _tmp = PG_GETARG_INT64(narg); \
+    if (!(LONG_MIN <= _tmp && _tmp <= LONG_MAX)) { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
+            errmsg("argument too large for a long: %lld", _tmp) )); \
+    } \
+    tgt = (long)_tmp; \
+} while (0)
+
+#define PGMP_GETARG_ULONG(tgt,narg) \
+{ \
+    int64 _tmp = PG_GETARG_INT64(narg); \
+    if (_tmp > ULONG_MAX) { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
+            errmsg("argument too large for an unsigned long: %lld", _tmp) )); \
+    } \
+    if (_tmp < 0) { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
+            errmsg("argument can't be negative") )); \
+    } \
+    tgt = (unsigned long)_tmp; \
+} while (0)
+
+#elif PGMP_LONG_64
+
+#define PGMP_GETARG_LONG(tgt,narg) \
+    tgt = (long)PG_GETARG_INT64(narg);
+
+#define PGMP_GETARG_ULONG(tgt,narg) \
+{ \
+    int64 _tmp = PG_GETARG_INT64(narg); \
+    if (_tmp < 0) { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
+            errmsg("argument can't be negative: %ld", _tmp) )); \
+    } \
+    tgt = (unsigned long)_tmp; \
+} while (0)
+
+#endif
+
 #endif  /* __PGMP_IMPL_H__ */
 
 

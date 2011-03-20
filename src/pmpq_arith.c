@@ -120,20 +120,14 @@ PMPQ_OP_DIV(div)
 PGMP_PG_FUNCTION(pmpq_ ## op) \
 { \
     const mpq_t     q; \
-    long            b; \
+    unsigned long   b; \
     mpq_t           qf; \
  \
     mpq_from_pmpq(q, PG_GETARG_PMPQ(0)); \
-    b = PG_GETARG_INT32(1); \
- \
-    if (UNLIKELY(b < 0)) { \
-        ereport(ERROR, ( \
-            errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
-            errmsg("op2 can't be negative") )); \
-    } \
+    PGMP_GETARG_ULONG(b, 1); \
  \
     mpq_init(qf); \
-    mpq_ ## op (qf, q, (unsigned long)b); \
+    mpq_ ## op (qf, q, b); \
  \
     PG_RETURN_MPQ(qf); \
 }
