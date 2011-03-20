@@ -63,5 +63,19 @@ void mpz_from_pmpz(mpz_srcptr z, const pmpz *pz);
 #define MPZ_IS_ZERO(z) (SIZ(z) == 0)
 
 
+/* Macros to be used in functions wrappers to limit the arguments domain */
+
+#define PMPZ_NO_CHECK(arg)
+
+#define PMPZ_CHECK_DIV0(arg) \
+{ \
+    if (UNLIKELY(MPZ_IS_ZERO(arg))) \
+    { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_DIVISION_BY_ZERO), \
+            errmsg("division by zero"))); \
+    } \
+} while (0)
+
 #endif  /* __PMPZ_H__ */
 

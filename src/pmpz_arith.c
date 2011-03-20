@@ -91,30 +91,19 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     PG_RETURN_MPZ(zf); \
 }
 
-/* possible values for CHECK2 param */
-
-#define PMPZ_NO_CHECK(arg)
-
-#define PMPZ_DIV0_CHECK(arg) \
-    if (UNLIKELY(MPZ_IS_ZERO(arg))) \
-    { \
-        ereport(ERROR, ( \
-            errcode(ERRCODE_DIVISION_BY_ZERO), \
-            errmsg("division by zero"))); \
-    }
 
 /* Operators definitions */
 
-PMPZ_OP(add, PMPZ_NO_CHECK)
-PMPZ_OP(sub, PMPZ_NO_CHECK)
-PMPZ_OP(mul, PMPZ_NO_CHECK)
-PMPZ_OP(tdiv_q, PMPZ_DIV0_CHECK)
-PMPZ_OP(tdiv_r, PMPZ_DIV0_CHECK)
-PMPZ_OP(cdiv_q, PMPZ_DIV0_CHECK)
-PMPZ_OP(cdiv_r, PMPZ_DIV0_CHECK)
-PMPZ_OP(fdiv_q, PMPZ_DIV0_CHECK)
-PMPZ_OP(fdiv_r, PMPZ_DIV0_CHECK)
-PMPZ_OP(divexact, PMPZ_DIV0_CHECK)
+PMPZ_OP(add,        PMPZ_NO_CHECK)
+PMPZ_OP(sub,        PMPZ_NO_CHECK)
+PMPZ_OP(mul,        PMPZ_NO_CHECK)
+PMPZ_OP(tdiv_q,     PMPZ_CHECK_DIV0)
+PMPZ_OP(tdiv_r,     PMPZ_CHECK_DIV0)
+PMPZ_OP(cdiv_q,     PMPZ_CHECK_DIV0)
+PMPZ_OP(cdiv_r,     PMPZ_CHECK_DIV0)
+PMPZ_OP(fdiv_q,     PMPZ_CHECK_DIV0)
+PMPZ_OP(fdiv_r,     PMPZ_CHECK_DIV0)
+PMPZ_OP(divexact,   PMPZ_CHECK_DIV0)
 
 
 /* Functions defined on unsigned long */
