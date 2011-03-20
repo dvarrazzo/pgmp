@@ -290,7 +290,7 @@ RETURNS RECORD
 AS 'MODULE_PATHNAME', 'pmpz_rootrem'
 LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OR REPLACE FUNCTION mpz_sqrtrem(mpz, out mpz, out mpz)
+CREATE OR REPLACE FUNCTION mpz_sqrtrem(mpz, out root mpz, out rem mpz)
 RETURNS RECORD
 AS 'MODULE_PATHNAME', 'pmpz_sqrtrem'
 LANGUAGE C IMMUTABLE STRICT;
