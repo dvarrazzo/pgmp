@@ -269,3 +269,59 @@ Exponentiation Functions
 
 .. todo:: `powm()`, `powm_sec()`.
 
+
+Root Extraction Functions
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. function:: root(op, n)
+
+    Return the truncated integer part of the *n*\th root of *op*.
+
+    *n* is defined as `!int8` but must fit into a `!long` as defined on the
+    server.
+
+.. function:: rootrem(op, n)
+
+    Return a tuple of 2 elements with the truncated integer part of the *n*\th
+    root of *op* and the remainder (*i.e.* *op* - *root* ^ *n*).
+
+    .. code-block:: sql
+
+        =# select * from rootrem(28, 3);
+         root | rem
+        ------+-----
+         3    | 1
+
+.. function:: sqrt(op)
+
+    Return the truncated integer part of the square root of *op*.
+
+.. function:: sqrtrem(op)
+
+    Return a tuple of 2 elements with the truncated integer part of the square
+    root of *op* and the remainder (*i.e.* *op* - *root* \* *root*).
+
+    .. code-block:: sql
+
+        =# select * from sqrtrem(83);
+         root | rem
+        ------+-----
+         9    | 2
+
+.. function:: perfect_power(op)
+
+    Return ``true`` if *op* is a perfect power, *i.e.*, if there exist
+    integers :math:`a` and :math:`b`, with :math:`b>1`, such that *op* equals
+    :math:`a^b`.
+
+    Under this definition both 0 and 1 are considered to be perfect powers.
+    Negative values of op are accepted, but of course can only be odd perfect
+    powers.
+
+.. function:: perfect_square(op)
+
+    Return ``true`` if *op* is a perfect square, *i.e.*, if the square root of
+    *op* is an integer. Under this definition both 0 and 1 are considered to
+    be perfect squares.
+
+
