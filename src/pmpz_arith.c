@@ -45,7 +45,7 @@ PGMP_PG_FUNCTION(pmpz_uplus)
 
 /* Template to generate unary functions */
 
-#define PMPZ_UN(op) \
+#define PMPZ_UN(op, CHECK) \
  \
 PGMP_PG_FUNCTION(pmpz_ ## op) \
 { \
@@ -53,6 +53,7 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     mpz_t           zf; \
  \
     mpz_from_pmpz(z1, PG_GETARG_PMPZ(0)); \
+    CHECK(z1); \
  \
     mpz_init(zf); \
     mpz_ ## op (zf, z1); \
@@ -60,8 +61,10 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     PG_RETURN_MPZ(zf); \
 }
 
-PMPZ_UN(neg)
-PMPZ_UN(abs)
+PMPZ_UN(neg,    PMPZ_NO_CHECK)
+PMPZ_UN(abs,    PMPZ_NO_CHECK)
+PMPZ_UN(sqrt,   PMPZ_CHECK_NONEG)
+
 
 /*
  * Binary operators
@@ -110,7 +113,7 @@ PMPZ_OP(divexact,   PMPZ_CHECK_DIV0)
 
 /* TODO: this function could take a INT64 argument */
 
-#define PMPZ_OP_UL(op) \
+#define PMPZ_OP_UL(op, CHECK1, CHECK2) \
  \
 PGMP_PG_FUNCTION(pmpz_ ## op) \
 { \
@@ -119,13 +122,10 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     mpz_t           zf; \
  \
     mpz_from_pmpz(z, PG_GETARG_PMPZ(0)); \
+    CHECK1(z); \
+    \
     b = PG_GETARG_INT32(1); \
- \
-    if (UNLIKELY(b < 0)) { \
-        ereport(ERROR, ( \
-            errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
-            errmsg("op2 can't be negative") )); \
-    } \
+    CHECK2(b); \
  \
     mpz_init(zf); \
     mpz_ ## op (zf, z, (unsigned long)b); \
@@ -133,7 +133,8 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     PG_RETURN_MPZ(zf); \
 }
 
-PMPZ_OP_UL(pow_ui)
+PMPZ_OP_UL(pow_ui,  PMPZ_NO_CHECK,      PMPZ_CHECK_LONG_NONEG)
+PMPZ_OP_UL(root,    PMPZ_CHECK_NONEG,   PMPZ_CHECK_LONG_POS)
 
 
 /* Functions defined on bit count
@@ -143,13 +144,13 @@ PMPZ_OP_UL(pow_ui)
 
 #define PMPZ_OP_BITCNT PMPZ_OP_UL
 
-PMPZ_OP_BITCNT(mul_2exp)
-PMPZ_OP_BITCNT(tdiv_q_2exp)
-PMPZ_OP_BITCNT(tdiv_r_2exp)
-PMPZ_OP_BITCNT(cdiv_q_2exp)
-PMPZ_OP_BITCNT(cdiv_r_2exp)
-PMPZ_OP_BITCNT(fdiv_q_2exp)
-PMPZ_OP_BITCNT(fdiv_r_2exp)
+PMPZ_OP_BITCNT(mul_2exp,        PMPZ_NO_CHECK,  PMPZ_CHECK_LONG_NONEG)
+PMPZ_OP_BITCNT(tdiv_q_2exp,     PMPZ_NO_CHECK,  PMPZ_CHECK_LONG_NONEG)
+PMPZ_OP_BITCNT(tdiv_r_2exp,     PMPZ_NO_CHECK,  PMPZ_CHECK_LONG_NONEG)
+PMPZ_OP_BITCNT(cdiv_q_2exp,     PMPZ_NO_CHECK,  PMPZ_CHECK_LONG_NONEG)
+PMPZ_OP_BITCNT(cdiv_r_2exp,     PMPZ_NO_CHECK,  PMPZ_CHECK_LONG_NONEG)
+PMPZ_OP_BITCNT(fdiv_q_2exp,     PMPZ_NO_CHECK,  PMPZ_CHECK_LONG_NONEG)
+PMPZ_OP_BITCNT(fdiv_r_2exp,     PMPZ_NO_CHECK,  PMPZ_CHECK_LONG_NONEG)
 
 
 /*
@@ -187,41 +188,4 @@ PMPZ_CMP(gt, >)
 PMPZ_CMP(ge, >=)
 PMPZ_CMP(lt, <)
 PMPZ_CMP(le, <=)
-
-
-/*
- * Mathematics functions
- */
-PGMP_PG_FUNCTION(pmpz_sqrt)
-{
-    const mpz_t     z1;
-    mpz_t           zf;
-
-    mpz_from_pmpz(z1, PG_GETARG_PMPZ(0));
-
-    mpz_init_set(zf, z1);
-    mpz_sqrt (zf, zf);
-
-    PG_RETURN_MPZ(zf);
-}
-
-PGMP_PG_FUNCTION(pmpz_root)
-{
-    const mpz_t     z1;
-    mpz_t           zf;
-    unsigned long   root;
-
-#if LONG_MAX == INT64_MAX
-    root = PG_GETARG_UINT64(1);
-#else
-    root = PG_GETARG_UINT32(1);
-#endif
-
-    mpz_from_pmpz(z1, PG_GETARG_PMPZ(0));
-
-    mpz_init_set(zf, z1);
-    mpz_root (zf, zf, root);
-
-    PG_RETURN_MPZ(zf);
-}
 

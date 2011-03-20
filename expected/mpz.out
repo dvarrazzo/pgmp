@@ -296,56 +296,56 @@ SELECT  '10000000000'::mpz << 10;
 SELECT  '10000000000'::mpz << 0;
 10000000000
 SELECT  '10000000000'::mpz << -1;
-ERROR:  op2 can't be negative
+ERROR:  argument can't be negative
 SELECT  '1027'::mpz >>   3;
 128
 SELECT '-1027'::mpz >>   3;
 -128
 SELECT  '1027'::mpz >>  -3;
-ERROR:  op2 can't be negative
+ERROR:  argument can't be negative
 SELECT  '1027'::mpz %>   3;
 3
 SELECT '-1027'::mpz %>   3;
 -3
 SELECT  '1027'::mpz %>  -3;
-ERROR:  op2 can't be negative
+ERROR:  argument can't be negative
 SELECT  '1027'::mpz +>>   3;
 129
 SELECT '-1027'::mpz +>>   3;
 -128
 SELECT  '1027'::mpz +>>  -3;
-ERROR:  op2 can't be negative
+ERROR:  argument can't be negative
 SELECT  '1027'::mpz +%>   3;
 -5
 SELECT '-1027'::mpz +%>   3;
 -3
 SELECT  '1027'::mpz +%>  -3;
-ERROR:  op2 can't be negative
+ERROR:  argument can't be negative
 SELECT  '1027'::mpz ->>   3;
 128
 SELECT '-1027'::mpz ->>   3;
 -129
 SELECT  '1027'::mpz ->>  -3;
-ERROR:  op2 can't be negative
+ERROR:  argument can't be negative
 SELECT  '1027'::mpz -%>   3;
 3
 SELECT '-1027'::mpz -%>   3;
 5
 SELECT  '1027'::mpz -%>  -3;
-ERROR:  op2 can't be negative
+ERROR:  argument can't be negative
 -- power operator/functions
 SELECT 2::mpz ^ 10;
 1024
 SELECT 2::mpz ^ 0;
 1
 SELECT 2::mpz ^ -1;
-ERROR:  op2 can't be negative
+ERROR:  argument can't be negative
 SELECT pow(2::mpz, 10);
 1024
 SELECT pow(2::mpz, 0);
 1
 SELECT pow(2::mpz, -1);
-ERROR:  op2 can't be negative
+ERROR:  argument can't be negative
 --
 -- mpz ordering operators
 --
@@ -434,7 +434,21 @@ SELECT mpz_sqrt(25::mpz);
 5
 SELECT mpz_sqrt(('1' || repeat('0',100))::mpz);
 100000000000000000000000000000000000000000000000000
+SELECT mpz_sqrt(0::mpz);
+0
+SELECT mpz_sqrt(-1::mpz);
+ERROR:  argument can't be negative
 SELECT mpz_root(27::mpz, 3);
 3
 SELECT mpz_root(('1' || repeat('0',100))::mpz, 3);
 2154434690031883721759293566519350
+SELECT mpz_root(0::mpz, 3);
+0
+SELECT mpz_root(27::mpz, 1);
+27
+SELECT mpz_root(27::mpz, 0);
+ERROR:  argument must be positive
+SELECT mpz_root(-27::mpz, 3);
+ERROR:  argument can't be negative
+SELECT mpz_root(27::mpz, -1);
+ERROR:  argument must be positive

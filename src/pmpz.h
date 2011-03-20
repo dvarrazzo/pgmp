@@ -77,5 +77,33 @@ void mpz_from_pmpz(mpz_srcptr z, const pmpz *pz);
     } \
 } while (0)
 
+#define PMPZ_CHECK_NONEG(arg) \
+{ \
+    if (UNLIKELY(SIZ(arg) < 0)) \
+    { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
+            errmsg("argument can't be negative"))); \
+    } \
+} while (0)
+
+#define PMPZ_CHECK_LONG_POS(arg) \
+{ \
+    if (UNLIKELY((arg) <= 0)) { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
+            errmsg("argument must be positive") )); \
+    } \
+} while (0)
+
+#define PMPZ_CHECK_LONG_NONEG(arg) \
+{ \
+    if (UNLIKELY((arg) < 0)) { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
+            errmsg("argument can't be negative") )); \
+    } \
+} while (0)
+
 #endif  /* __PMPZ_H__ */
 

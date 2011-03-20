@@ -289,6 +289,15 @@ SELECT numeric_test_dataset(5, '123456'::numeric);
 --
 SELECT mpz_sqrt(25::mpz);
 SELECT mpz_sqrt(('1' || repeat('0',100))::mpz);
+SELECT mpz_sqrt(0::mpz);
+SELECT mpz_sqrt(-1::mpz);
 
 SELECT mpz_root(27::mpz, 3);
 SELECT mpz_root(('1' || repeat('0',100))::mpz, 3);
+SELECT mpz_root(0::mpz, 3);
+SELECT mpz_root(27::mpz, 1);
+SELECT mpz_root(27::mpz, 0);
+SELECT mpz_root(-27::mpz, 3);
+SELECT mpz_root(27::mpz, -1);
+
+
