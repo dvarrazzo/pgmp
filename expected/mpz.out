@@ -460,14 +460,10 @@ select * from mpz_rootrem(('1' || repeat('0',100))::mpz,2);
 100000000000000000000000000000000000000000000000000|0
 select * from mpz_rootrem(('1' || repeat('0',100))::mpz,5);
 100000000000000000000|0
-select column1 as root, column2 as rem from (select * from mpz_rootrem(('1' || repeat('0',100))::mpz,2)) as rootrem;
-100000000000000000000000000000000000000000000000000|0
-select column1*2 as root, column2 as rem from (select * from mpz_rootrem(('1' || repeat('0',100))::mpz,2)) as rootrem;
-200000000000000000000000000000000000000000000000000|0
-select column1*2 as root, column2 as rem from (select * from mpz_rootrem(('1' || repeat('0',100))::mpz,50)) as rootrem;
-200|0
-select column1*2 as root, column2 as rem from (select * from mpz_rootrem(('1' || repeat('0',100))::mpz+5,50)) as rootrem;
-200|5
+select root from mpz_rootrem(1000::mpz, 2);
+31
+select rem from mpz_rootrem(1000::mpz, 2);
+39
 select mpz_perfect_power(26::mpz);
 f
 select mpz_perfect_power(27::mpz);

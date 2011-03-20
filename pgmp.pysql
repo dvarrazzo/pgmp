@@ -285,7 +285,7 @@ func('mpz_nextprime', 'mpz')
 
 !! PYOFF
 
-CREATE OR REPLACE FUNCTION mpz_rootrem(mpz, int4, out mpz, out mpz)
+CREATE OR REPLACE FUNCTION mpz_rootrem(mpz, int4, out root mpz, out rem mpz)
 RETURNS RECORD
 AS 'MODULE_PATHNAME', 'pmpz_rootrem'
 LANGUAGE C IMMUTABLE STRICT;
