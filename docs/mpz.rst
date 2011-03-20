@@ -325,3 +325,16 @@ Root Extraction Functions
     be perfect squares.
 
 
+Logical and Bit Manipulation Functions
+--------------------------------------
+
+.. table:: Logical Operators
+
+    ======== ======================== =================================== ===================
+    Operator Description              Example                             Return
+    ======== ======================== =================================== ===================
+    `!&`     Bitwise and              `!'0b10001'::mpz & '0b01001'::mpz`  `!'0b1'::mpz`
+    `!|`     Bitwise inclusive-or     `!'0b10001'::mpz | '0b01001'::mpz`  `!'0b11001'::mpz`
+    `!#`     Bitwise exclusive-or     `!'0b10001'::mpz # '0b01001'::mpz`  `!'0b11000'::mpz`
+    `!-~`    One's complement         `!-~'0b10001'::mpz`                 `!'-0b10010'::mpz`
+    ======== ======================== =================================== ===================

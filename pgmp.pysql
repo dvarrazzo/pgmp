@@ -179,12 +179,23 @@ op('-%>', 'fdiv_r_2exp', rarg='int8')
 
 func('pow', 'mpz int8', cname='pmpz_pow_ui')
 
+op('&', 'and')
+op('|', 'ior')
+op('#', 'xor')
+
+func('mpz_com', 'mpz', 'mpz')
+
 !! PYOFF
 
 CREATE OPERATOR ^ (
     LEFTARG = mpz,
     RIGHTARG = int8,
     PROCEDURE = pow
+);
+
+CREATE OPERATOR -~ (
+    RIGHTARG = mpz,
+    PROCEDURE = mpz_com
 );
 
 
