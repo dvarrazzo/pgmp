@@ -510,6 +510,15 @@ select perfect_square(('1' || repeat('0',10000))::mpz);
 t
 select perfect_square(('1' || repeat('0',10000))::mpz+1::mpz);
 f
+--
+-- Number Theoretic Functions
+--
+SELECT probab_prime(5::mpz, 2);
+2
+SELECT probab_prime(10::mpz, 2);
+0
+SELECT probab_prime(17::mpz, 2);
+2
 SELECT nextprime(5::mpz);
 7
 SELECT nextprime(10::mpz);
@@ -522,6 +531,70 @@ SELECT nextprime(0::mpz);
 2
 SELECT nextprime(-8::mpz);
 2
+SELECT gcd(3::mpz, 15::mpz);
+3
+SELECT gcd(17::mpz, 15::mpz);
+1
+SELECT gcd(12345::mpz, 54321::mpz);
+3
+SELECT gcd(10000000::mpz, 10000::mpz);
+10000
+SELECT g, s, t FROM gcdext(6::mpz, 15::mpz);
+3|-2|1
+SELECT lcm(3::mpz, 15::mpz);
+15
+SELECT lcm(17::mpz, 15::mpz);
+255
+SELECT lcm(12345::mpz, 54321::mpz);
+223530915
+SELECT invert(1::mpz,2::mpz);
+1
+SELECT invert(1::mpz,3::mpz);
+1
+SELECT invert(2::mpz,3::mpz);
+2
+SELECT invert(20::mpz,3::mpz);
+2
+SELECT invert(30::mpz,3::mpz);
+
+select jacobi(2::mpz, 3::mpz);
+-1
+select jacobi(5::mpz, 3::mpz);
+-1
+select jacobi(5::mpz, 10::mpz);
+0
+select jacobi(5::mpz, 20::mpz);
+0
+select jacobi(5::mpz, 200::mpz);
+0
+select legendre(2::mpz, 3::mpz);
+-1
+select legendre(5::mpz, 3::mpz);
+-1
+select legendre(5::mpz, 10::mpz);
+0
+select legendre(5::mpz, 20::mpz);
+0
+select legendre(5::mpz, 200::mpz);
+0
+select kronecker(2::mpz, 3::mpz);
+-1
+select kronecker(5::mpz, 3::mpz);
+-1
+select kronecker(5::mpz, 10::mpz);
+0
+select kronecker(5::mpz, 20::mpz);
+0
+select kronecker(5::mpz, 200::mpz);
+0
+select remove(40::mpz, 5::mpz); 
+8
+select remove(43::mpz, 5::mpz); 
+43
+select remove(48::mpz, 6::mpz); 
+8
+select remove(48::mpz, 3::mpz); 
+16
 --
 -- Logic and bit fiddling functions and operators
 --

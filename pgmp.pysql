@@ -299,7 +299,6 @@ func('sqrt', 'mpz', 'mpz')
 func('root', 'mpz int8', 'mpz')
 func('perfect_power', 'mpz', 'bool', cname='pmpz_perfect_power')
 func('perfect_square', 'mpz', 'bool', cname='pmpz_perfect_square')
-func('nextprime', 'mpz')
 
 !! PYOFF
 
@@ -312,6 +311,30 @@ CREATE OR REPLACE FUNCTION sqrtrem(mpz, out root mpz, out rem mpz)
 RETURNS RECORD
 AS 'MODULE_PATHNAME', 'pmpz_sqrtrem'
 LANGUAGE C IMMUTABLE STRICT;
+
+--
+-- Number Theoretic Functions
+--
+
+!! PYON
+
+func('probab_prime', 'mpz int4', 'int4', cname='pmpz_probab_prime_p')
+func('nextprime', 'mpz')
+func('gcd', 'mpz mpz', 'mpz')
+func('lcm', 'mpz mpz', 'mpz')
+func('invert', 'mpz mpz', 'mpz')
+func('jacobi', 'mpz mpz', 'int4')
+func('legendre', 'mpz mpz', 'int4')
+func('kronecker', 'mpz mpz', 'int4')
+func('remove', 'mpz mpz', 'mpz')
+
+!! PYOFF
+
+CREATE OR REPLACE FUNCTION gcdext(mpz, mpz, out g mpz, out s mpz, out t mpz)
+RETURNS RECORD
+AS 'MODULE_PATHNAME', 'pmpz_gcdext'
+LANGUAGE C IMMUTABLE STRICT;
+
 
 --
 -- Aggregation functions

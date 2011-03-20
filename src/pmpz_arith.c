@@ -112,6 +112,9 @@ PMPZ_OP(divexact,   PMPZ_CHECK_DIV0)
 PMPZ_OP(and,        PMPZ_NO_CHECK)
 PMPZ_OP(ior,        PMPZ_NO_CHECK)
 PMPZ_OP(xor,        PMPZ_NO_CHECK)
+PMPZ_OP(gcd,        PMPZ_NO_CHECK)
+PMPZ_OP(lcm,        PMPZ_NO_CHECK)
+PMPZ_OP(remove,     PMPZ_NO_CHECK)      /* TODO: return value not returned */
 
 
 /* Functions defined on unsigned long */
