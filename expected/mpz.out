@@ -430,95 +430,95 @@ SELECT numeric_test_dataset(5, '123456'::numeric);
 --
 -- mpz functions tests
 --
-SELECT mpz_sqrt(25::mpz);
+SELECT sqrt(25::mpz);
 5
-SELECT mpz_sqrt(('1' || repeat('0',100))::mpz);
+SELECT sqrt(('1' || repeat('0',100))::mpz);
 100000000000000000000000000000000000000000000000000
-SELECT mpz_sqrt(0::mpz);
+SELECT sqrt(0::mpz);
 0
-SELECT mpz_sqrt(-1::mpz);
+SELECT sqrt(-1::mpz);
 ERROR:  argument can't be negative
-SELECT mpz_root(27::mpz, 3);
+SELECT root(27::mpz, 3);
 3
-SELECT mpz_root(('1' || repeat('0',100))::mpz, 3);
+SELECT root(('1' || repeat('0',100))::mpz, 3);
 2154434690031883721759293566519350
-SELECT mpz_root(0::mpz, 3);
+SELECT root(0::mpz, 3);
 0
-SELECT mpz_root(27::mpz, 1);
+SELECT root(27::mpz, 1);
 27
-SELECT mpz_root(27::mpz, 0);
+SELECT root(27::mpz, 0);
 ERROR:  argument must be positive
-SELECT mpz_root(-27::mpz, 3);
+SELECT root(-27::mpz, 3);
 ERROR:  argument can't be negative
-SELECT mpz_root(27::mpz, -1);
+SELECT root(27::mpz, -1);
 ERROR:  argument must be positive
-select * from mpz_rootrem(1000::mpz,2) as rootrem;
+select * from rootrem(1000::mpz,2) as rootrem;
 31|39
-select * from mpz_rootrem(1000::mpz,9) as rootrem;
+select * from rootrem(1000::mpz,9) as rootrem;
 2|488
-select * from mpz_rootrem(('1' || repeat('0',100))::mpz,2);
+select * from rootrem(('1' || repeat('0',100))::mpz,2);
 100000000000000000000000000000000000000000000000000|0
-select * from mpz_rootrem(('1' || repeat('0',100))::mpz,5);
+select * from rootrem(('1' || repeat('0',100))::mpz,5);
 100000000000000000000|0
-select root from mpz_rootrem(1000::mpz, 2);
+select root from rootrem(1000::mpz, 2);
 31
-select rem from mpz_rootrem(1000::mpz, 2);
+select rem from rootrem(1000::mpz, 2);
 39
-select * from mpz_sqrtrem(1000::mpz) as rootrem;
+select * from sqrtrem(1000::mpz) as rootrem;
 31|39
-select * from mpz_sqrtrem(('1' || repeat('0',100))::mpz);
+select * from sqrtrem(('1' || repeat('0',100))::mpz);
 100000000000000000000000000000000000000000000000000|0
-select root from mpz_sqrtrem(1000::mpz);
+select root from sqrtrem(1000::mpz);
 31
-select rem from mpz_sqrtrem(1000::mpz);
+select rem from sqrtrem(1000::mpz);
 39
-select mpz_perfect_power(26::mpz);
+select perfect_power(26::mpz);
 f
-select mpz_perfect_power(27::mpz);
+select perfect_power(27::mpz);
 t
-select mpz_perfect_power(65535::mpz);
+select perfect_power(65535::mpz);
 f
-select mpz_perfect_power(65536::mpz);
+select perfect_power(65536::mpz);
 t
-select mpz_perfect_power(-65536::mpz);
+select perfect_power(-65536::mpz);
 f
-select mpz_perfect_power(-65535::mpz);
+select perfect_power(-65535::mpz);
 f
-select mpz_perfect_power(('1' || repeat('0',100))::mpz);
+select perfect_power(('1' || repeat('0',100))::mpz);
 t
-select mpz_perfect_power(('1' || repeat('0',10000))::mpz);
+select perfect_power(('1' || repeat('0',10000))::mpz);
 t
-select mpz_perfect_power(('1' || repeat('0',10001))::mpz);
+select perfect_power(('1' || repeat('0',10001))::mpz);
 t
-select mpz_perfect_power(('1' || repeat('0',10000))::mpz+1::mpz);
+select perfect_power(('1' || repeat('0',10000))::mpz+1::mpz);
 f
-select mpz_perfect_square(0::mpz);
+select perfect_square(0::mpz);
 t
-select mpz_perfect_square(1::mpz);
+select perfect_square(1::mpz);
 t
-select mpz_perfect_square(-1::mpz);
+select perfect_square(-1::mpz);
 f
-select mpz_perfect_square(26::mpz);
+select perfect_square(26::mpz);
 f
-select mpz_perfect_square(27::mpz);
+select perfect_square(27::mpz);
 f
-select mpz_perfect_square(16777215::mpz);
+select perfect_square(16777215::mpz);
 f
-select mpz_perfect_square(16777216::mpz);
+select perfect_square(16777216::mpz);
 t
-select mpz_perfect_square(('1' || repeat('0',10000))::mpz);
+select perfect_square(('1' || repeat('0',10000))::mpz);
 t
-select mpz_perfect_square(('1' || repeat('0',10000))::mpz+1::mpz);
+select perfect_square(('1' || repeat('0',10000))::mpz+1::mpz);
 f
-SELECT mpz_nextprime(5::mpz);
+SELECT nextprime(5::mpz);
 7
-SELECT mpz_nextprime(10::mpz);
+SELECT nextprime(10::mpz);
 11
-SELECT mpz_nextprime(100::mpz);
+SELECT nextprime(100::mpz);
 101
-SELECT mpz_nextprime(1000::mpz);
+SELECT nextprime(1000::mpz);
 1009
-SELECT mpz_nextprime(0::mpz);
+SELECT nextprime(0::mpz);
 2
-SELECT mpz_nextprime(-8::mpz);
+SELECT nextprime(-8::mpz);
 2
