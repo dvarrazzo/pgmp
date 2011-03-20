@@ -23,6 +23,30 @@
 #define __PGMP_IMPL_H__
 
 
+#include <limits.h>         /* for LONG_MAX etc. */
+
+
+/* Ensure we know what platform are we working on.
+ *
+ * GMP defines many structures and functions in term of long/ulong, while
+ * Postgres always uses data types with an explicit number of bytes (int32,
+ * int64 etc). Ensure we know what to do when passing arguments around.
+ */
+#if LONG_MAX == INT32_MAX
+#define PGMP_LONG_32 1
+#define PGMP_LONG_64 0
+#endif
+
+#if LONG_MAX == INT64_MAX
+#define PGMP_LONG_32 0
+#define PGMP_LONG_64 1
+#endif
+
+#if !(PGMP_LONG_32 || PGMP_LONG_64)
+#error Expected platform where long is either 32 or 64 bits
+#endif
+
+
 /* Space to leave before the pointers returned by the GMP custom allocator.
  *
  * The space is used to store the varlena and structure header before the gmp

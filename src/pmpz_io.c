@@ -25,8 +25,6 @@
 #include "fmgr.h"
 #include "utils/builtins.h"     /* for numeric_out */
 
-#include <limits.h>
-
 
 /*
  * Input/Output functions
@@ -148,11 +146,11 @@ PGMP_PG_FUNCTION(pmpz_from_int8)
 {
     int64   in = PG_GETARG_INT64(0);
 
-#if LONG_MAX == INT64_MAX
+#if PGMP_LONG_64
 
     return _pmpz_from_long(in);
 
-#elif LONG_MAX == INT32_MAX
+#elif PGMP_LONG_32
 
     int         neg = 0;
     uint32      lo;
@@ -275,21 +273,21 @@ PGMP_PG_FUNCTION(pmpz_to_int8)
     const mpz_t     z;
     int64           out;
 
-#if LONG_MAX == INT32_MAX
+#if PGMP_LONG_32
     mp_limb_t       msLimb=0;
 #endif
 
     pz = PG_GETARG_PMPZ(0);
     mpz_from_pmpz(z, pz);
 
-#if LONG_MAX == INT64_MAX
+#if PGMP_LONG_64
 
     if (!mpz_fits_slong_p(z)) {
         goto errorNotInt8Value;
     }
     out = mpz_get_si(z);
 
-#elif LONG_MAX == INT32_MAX
+#elif PGMP_LONG_32
 
     if (mpz_size(z) > 2) {
         goto errorNotInt8Value;
