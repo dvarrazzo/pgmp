@@ -76,6 +76,12 @@ void mpq_from_pmpq(mpq_srcptr q, const pmpq *pq);
 
 /* macro to report division by zero on denominator */
 
+/* TODO: this macro should be somewhere I can import from,
+ * I'd prefer avoiding to import pmpz.h here */
+#ifndef MPZ_IS_ZERO
+#define MPZ_IS_ZERO(z) (SIZ(z) == 0)
+#endif
+
 #define ERROR_IF_DENOM_ZERO(arg) \
  \
     { \
