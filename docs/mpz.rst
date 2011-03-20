@@ -69,8 +69,8 @@ operators. Indexes on `!mpz` columns can be created using the *btree* method.
 .. todo:: write a wrap() function
 
 
-`!mpz` operators
-----------------
+Arithmetic Operators and Functions
+----------------------------------
 
 These operators can either work on `!mpz` arguments or take an integer
 argument that will be implicitly converted.  Operators taking a :math:`2^n`
@@ -92,13 +92,13 @@ integer.
     =========== =============================== =================== ===========
     Operator    Description                     Example             Return
     =========== =============================== =================== ===========
-    `!-`        Unary minus                     \- 5::mpz           -5
-    `!+`        Unary plus                      \+ 5::mpz           5
-    `!+`        Addition                        2::mpz + 3::mpz     5
-    `!-`        Subtraction                     2::mpz - 3::mpz     -1
-    `!*`        Multiplication                  7::mpz * 3::mpz     21
-    `!<<`       Multiplication by :math:`2^n`   3::mpz << 2         12
-    `!^`        Power (1)                       3::mpz ^ 2          9
+    `!-`        Unary minus                     `!- 5::mpz`         -5
+    `!+`        Unary plus                      `!+ 5::mpz`         5
+    `!+`        Addition                        `!2::mpz + 3::mpz`  5
+    `!-`        Subtraction                     `!2::mpz - 3::mpz`  -1
+    `!*`        Multiplication                  `!7::mpz * 3::mpz`  21
+    `!<<`       Multiplication by :math:`2^n`   `!3::mpz << 2`      12
+    `!^`        Power (1)                       `!3::mpz ^ 2`       9
     =========== =============================== =================== ===========
 
 Notes:
@@ -107,37 +107,45 @@ Notes:
     See also the `exponentiation functions`_.
 
 
+.. function:: abs(z)
+
+    Return the absolute value of *z*.
+
+
+Division Operators and Functions
+--------------------------------
+
 .. table:: Division operators
 
-    =========== =============================== =================== =======
-    Operator    Description                     Example             Return
-    =========== =============================== =================== =======
-    `!/`        Division quotient               7::mpz / 3::mpz     2
+    =========== =============================== ==================== =======
+    Operator    Description                     Example              Return
+    =========== =============================== ==================== =======
+    `!/`        Division quotient               `!7::mpz / 3::mpz`   2
 
-                Rounding towards zero           -7::mpz / 3::mpz    -2
+                Rounding towards zero           `!-7::mpz / 3::mpz`  -2
 
-    `!%`        Division reminder               7::mpz % 3::mpz     1
+    `!%`        Division reminder               `!7::mpz % 3::mpz`   1
 
-                Rounding towards zero           -7::mpz % 3::mpz    -1
+                Rounding towards zero           `!-7::mpz % 3::mpz`  -1
 
-    `+/`        Division quotient               7::mpz +/ 3::mpz    3
+    `+/`        Division quotient               `!7::mpz +/ 3::mpz`  3
 
-                Rounding towards +infinity      -7::mpz +/ 3::mpz   -2
+                Rounding towards +infinity      `!-7::mpz +/ 3::mpz` -2
 
-    `+%`        Division reminder               7::mpz +% 3::mpz    -2
+    `+%`        Division reminder               `!7::mpz +% 3::mpz`  -2
 
-                Rounding towards +infinity      -7::mpz +% 3::mpz   -1
+                Rounding towards +infinity      `!-7::mpz +% 3::mpz` -1
 
-    `!-/`       Division quotient               7::mpz -/ 3::mpz    2
+    `!-/`       Division quotient               `!7::mpz -/ 3::mpz`  2
 
-                Rounding towards -infinity      -7::mpz -/ 3::mpz   -3
+                Rounding towards -infinity      `!-7::mpz -/ 3::mpz` -3
 
-    `!-%`       Division reminder               7::mpz -% 3::mpz    1
+    `!-%`       Division reminder               `!7::mpz -% 3::mpz`  1
 
-                Rounding towards -infinity      -7::mpz -% 3::mpz   2
+                Rounding towards -infinity      `!-7::mpz -% 3::mpz` 2
 
-    `/!`        Exact division (1)              21::mpz /! 7::mpz   3
-    =========== =============================== =================== =======
+    `/!`        Exact division (1)              `!21::mpz /! 7::mpz` 3
+    =========== =============================== ==================== =======
 
 Notes:
 
@@ -151,33 +159,33 @@ Notes:
 
 .. table:: Division operators for powers of 2
 
-    ======== ==================================== ================= =======
-    Operator Description                          Example           Return
-    ======== ==================================== ================= =======
-    `!>>`    Quotient of division by :math:`2^n`  1027::mpz >> 3    128
+    ======== ==================================== =================== =======
+    Operator Description                          Example             Return
+    ======== ==================================== =================== =======
+    `!>>`    Quotient of division by :math:`2^n`  `!1027::mpz >> 3`   128
 
-             Rounding towards zero                -1027::mpz >> 3   -128
+             Rounding towards zero                `!-1027::mpz >> 3`  -128
 
-    `!%>`    Remainder of division by :math:`2^n` 1027::mpz %>  3   3
+    `!%>`    Remainder of division by :math:`2^n` `!1027::mpz %> 3`   3
 
-             Rounding towards zero                -1027::mpz %>  3  -3
+             Rounding towards zero                `!-1027::mpz %> 3`  -3
 
-    `!+>>`   Quotient of division by :math:`2^n`  1027::mpz +>> 3   129
+    `!+>>`   Quotient of division by :math:`2^n`  `!1027::mpz +>> 3`  129
 
-             Rounding towards +infinity           -1027::mpz +>> 3  -128
+             Rounding towards +infinity           `!-1027::mpz +>> 3` -128
 
-    `!+%>`   Remainder of division by :math:`2^n` 1027::mpz +%>  3  -5
+    `!+%>`   Remainder of division by :math:`2^n` `!1027::mpz +%> 3`  -5
 
-             Rounding towards +infinity           -1027::mpz +%>  3 -3
+             Rounding towards +infinity           `!-1027::mpz +%> 3` -3
 
-    `!->>`   Quotient of division by :math:`2^n`  1027::mpz ->> 3   128
+    `!->>`   Quotient of division by :math:`2^n`  `!1027::mpz ->> 3`  128
 
-             Rounding towards -infinity           -1027::mpz ->> 3  -129
+             Rounding towards -infinity           `!-1027::mpz ->> 3` -129
 
-    `!-%>`   Remainder of division by :math:`2^n` 1027::mpz -%>  3  3
+    `!-%>`   Remainder of division by :math:`2^n` `!1027::mpz -%> 3`  3
 
-             Rounding towards -infinity           -1027::mpz -%>  3 5
-    ======== ==================================== ================= =======
+             Rounding towards -infinity           `!-1027::mpz -%> 3` 5
+    ======== ==================================== =================== =======
 
 For all the division-related operators :math:`n \oslash d`, :math:`q` and
 :math:`r` will satisfy :math:`n = q \cdot d + r`, and :math:`r` will satisfy
@@ -189,20 +197,6 @@ For all the division-related operators :math:`n \oslash d`, :math:`q` and
     See `the PostgreSQL precedence table`__ for further details.
 
     .. __: http://www.postgresql.org/docs/9.0/static/sql-syntax-lexical.html#SQL-PRECEDENCE-TABLE
-
-
-.. todo:: integer fast path
-
-.. todo::
-    fast path on int64 for 64 bit backends? Maybe introduce a long data type?
-
-
-`!mpz` functions
-----------------
-
-.. function:: abs(z)
-
-    Return the absolute value of *z*.
 
 
 .. function:: divisible(n, d)
@@ -233,8 +227,14 @@ For all the division-related operators :math:`n \oslash d`, :math:`q` and
     .. todo:: functions `divisible()` and `congruent()`
 
 
+.. todo:: integer fast path
+
+.. todo::
+    fast path on int64 for 64 bit backends? Maybe introduce a long data type?
+
+
 Exponentiation Functions
-^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------
 
 .. function:: pow(base, exp)
 
@@ -271,7 +271,7 @@ Exponentiation Functions
 
 
 Root Extraction Functions
-^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------
 
 .. function:: root(op, n)
 
