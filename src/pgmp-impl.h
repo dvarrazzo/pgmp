@@ -133,7 +133,7 @@ Datum name(PG_FUNCTION_ARGS)
     if (_tmp < 0) { \
         ereport(ERROR, ( \
             errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
-            errmsg("argument can't be negative: %ld", _tmp) )); \
+            errmsg("argument can't be negative") )); \
     } \
     tgt = (unsigned long)_tmp; \
 } while (0)
