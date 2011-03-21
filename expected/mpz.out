@@ -528,5 +528,5 @@ SELECT text('0b10001'::mpz | '0b01001'::mpz, 2);
 11001
 SELECT text('0b10001'::mpz # '0b01001'::mpz, 2);
 11000
-SELECT text(-~'0b10001'::mpz, 2);
--10010
+SELECT com(10::mpz);
+-11

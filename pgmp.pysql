@@ -183,7 +183,7 @@ op('&', 'and')
 op('|', 'ior')
 op('#', 'xor')
 
-func('mpz_com', 'mpz', 'mpz')
+func('com', 'mpz', 'mpz', cname='pmpz_com')
 
 !! PYOFF
 
@@ -191,11 +191,6 @@ CREATE OPERATOR ^ (
     LEFTARG = mpz,
     RIGHTARG = int8,
     PROCEDURE = pow
-);
-
-CREATE OPERATOR -~ (
-    RIGHTARG = mpz,
-    PROCEDURE = mpz_com
 );
 
 

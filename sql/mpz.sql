@@ -344,5 +344,5 @@ SELECT nextprime(-8::mpz);
 SELECT text('0b10001'::mpz & '0b01001'::mpz, 2);
 SELECT text('0b10001'::mpz | '0b01001'::mpz, 2);
 SELECT text('0b10001'::mpz # '0b01001'::mpz, 2);
-SELECT text(-~'0b10001'::mpz, 2);
+SELECT com(10::mpz);
 

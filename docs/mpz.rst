@@ -328,6 +328,10 @@ Root Extraction Functions
 Logical and Bit Manipulation Functions
 --------------------------------------
 
+These functions behave as if twos complement arithmetic were used (although
+sign-magnitude is the actual implementation). The least significant bit is
+number 0.
+
 .. table:: Logical Operators
 
     ======== ======================== =================================== ===================
@@ -336,5 +340,9 @@ Logical and Bit Manipulation Functions
     `!&`     Bitwise and              `!'0b10001'::mpz & '0b01001'::mpz`  `!'0b1'::mpz`
     `!|`     Bitwise inclusive-or     `!'0b10001'::mpz | '0b01001'::mpz`  `!'0b11001'::mpz`
     `!#`     Bitwise exclusive-or     `!'0b10001'::mpz # '0b01001'::mpz`  `!'0b11000'::mpz`
-    `!-~`    One's complement         `!-~'0b10001'::mpz`                 `!'-0b10010'::mpz`
     ======== ======================== =================================== ===================
+
+.. function:: com(op)
+
+    Return the ones' complement of *op*.
+
