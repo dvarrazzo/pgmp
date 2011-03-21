@@ -58,8 +58,8 @@ typedef struct
  \
     _tupdesc = BlessTupleDesc(_tupdesc); \
  \
-    _result[0] = (Datum)pmpz_from_mpz(zroot); \
-    _result[1] = (Datum)pmpz_from_mpz(zrem); \
+    _result[0] = (Datum)pmpz_from_mpz(z1); \
+    _result[1] = (Datum)pmpz_from_mpz(z2); \
  \
     return HeapTupleGetDatum(heap_form_tuple(_tupdesc, _result, _isnull)); \
 } \
