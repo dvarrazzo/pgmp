@@ -118,8 +118,6 @@ PMPZ_OP(xor,        PMPZ_NO_CHECK)
 
 /* Functions defined on unsigned long */
 
-/* TODO: this function could take a INT64 argument */
-
 #define PMPZ_OP_UL(op, CHECK1, CHECK2) \
  \
 PGMP_PG_FUNCTION(pmpz_ ## op) \
