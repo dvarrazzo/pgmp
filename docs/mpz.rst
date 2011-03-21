@@ -84,8 +84,8 @@ integer.
     definitions may vary across platforms. PostgreSQL instead offers data
     types with a defined number of bytes (e.g. `!int4`, `!int8`). For this
     reason, functions taking an integer as argument are defined as `!int8`,
-    but they may actually fail if the server is 32 bit and the argument don't
-    fit into an `!int4`.
+    but they may actually fail if the server is 32 bit and the argument
+    doesn't fit into an `!int4`.
 
 .. table:: Arithmetic operators
 
@@ -150,7 +150,7 @@ Division Operators and Functions
 Notes:
 
 (1)
-    The exact division operator (`!/!`) produce correct results only when it
+    The exact division operator (`!/!`) produces correct results only when it
     is known in advance that :math:`d` divides :math:`n`.  The operator is
     much faster than the other division operators, and is the best choice when
     exact division is known to occur, for example reducing a rational to
