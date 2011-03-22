@@ -57,12 +57,10 @@ PGMP_PG_FUNCTION(pmpq_in)
 
 PGMP_PG_FUNCTION(pmpq_out)
 {
-    const pmpq      *pz;
     const mpq_t     q;
     char            *buf;
 
-    pz = PGMP_GETARG_PMPQ(0);
-    mpq_from_pmpq(q, pz);
+    PGMP_GETARG_MPQ(q, 0);
 
     /* Allocate the output buffer manually - see mpmz_out to know why */
     buf = palloc(3             /* add sign, slash and null */
@@ -180,7 +178,7 @@ PGMP_PG_FUNCTION(pmpq_from_mpz)
     mpz_t           tmp;
 
     /* Make a copy of the num as MPQ will try to realloc on it */
-    mpz_from_pmpz(tmp, PGMP_GETARG_PMPZ(0));
+    PGMP_GETARG_MPZ(tmp, 0);
     mpz_init_set(mpq_numref(q), tmp);
     mpz_init_set_si(mpq_denref(q), 1L);
 
@@ -200,8 +198,8 @@ PGMP_PG_FUNCTION(pmpq_mpz_mpz)
 
     /* We must take a copy of num and den because they may be modified by
      * canonicalize */
-    mpz_from_pmpz(num, PGMP_GETARG_PMPZ(0));
-    mpz_from_pmpz(den, PGMP_GETARG_PMPZ(1));
+    PGMP_GETARG_MPZ(num, 0);
+    PGMP_GETARG_MPZ(den, 1);
     ERROR_IF_DENOM_ZERO(den);
 
     /* Put together the input and canonicalize */
@@ -261,7 +259,7 @@ PGMP_PG_FUNCTION(pmpq_num)
 {
     const mpq_t     q;
 
-    mpq_from_pmpq(q, PGMP_GETARG_PMPQ(0));
+    PGMP_GETARG_MPQ(q, 0);
 
     PGMP_RETURN_MPZ(mpq_numref(q));
 }
@@ -270,7 +268,7 @@ PGMP_PG_FUNCTION(pmpq_den)
 {
     const mpq_t     q;
 
-    mpq_from_pmpq(q, PGMP_GETARG_PMPQ(0));
+    PGMP_GETARG_MPQ(q, 0);
 
     PGMP_RETURN_MPZ(mpq_denref(q));
 }

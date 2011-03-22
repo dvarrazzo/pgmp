@@ -65,10 +65,18 @@ typedef struct
 #define PMPQ_SET_SIZE_FIRST(mdata,s) \
     (((mdata) & ~PMPQ_SIZE_FIRST_MASK) | ((s) & PMPQ_SIZE_FIRST_MASK))
 
+
+/* Macros to convert mpz arguments and return values */
+
 #define PGMP_GETARG_PMPQ(x) \
     ((pmpq*)DatumGetPointer(PG_DETOAST_DATUM(PG_GETARG_DATUM(x))))
+
+#define PGMP_GETARG_MPQ(q,n) \
+    mpq_from_pmpq(q, PGMP_GETARG_PMPQ(n));
+
 #define PGMP_RETURN_MPQ(q) \
     PG_RETURN_POINTER(pmpq_from_mpq(q))
+
 
 pmpq * pmpq_from_mpq(mpq_ptr q);
 void mpq_from_pmpq(mpq_srcptr q, const pmpq *pq);

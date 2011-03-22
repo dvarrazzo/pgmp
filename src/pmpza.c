@@ -119,7 +119,7 @@ PGMP_PG_FUNCTION(_pmpz_agg_ ## op) \
     } \
  \
     a = (mpz_t *)PG_GETARG_POINTER(0); \
-    mpz_from_pmpz(z, PGMP_GETARG_PMPZ(1)); \
+    PGMP_GETARG_MPZ(z, 1); \
  \
     oldctx = MemoryContextSwitchTo(aggctx); \
     if (LIKELY(LIMBS(*a))) { \

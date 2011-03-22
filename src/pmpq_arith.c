@@ -33,7 +33,7 @@ PGMP_PG_FUNCTION(pmpq_uminus)
     const mpq_t     q1;
     mpq_t           qf;
 
-    mpq_from_pmpq(q1, PGMP_GETARG_PMPQ(0));
+    PGMP_GETARG_MPQ(q1, 0);
 
     mpz_init_set(mpq_numref(qf), mpq_numref(q1));
     mpz_init_set(mpq_denref(qf), mpq_denref(q1));
@@ -70,8 +70,8 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
     const mpq_t     q2; \
     mpq_t           qf; \
  \
-    mpq_from_pmpq(q1, PGMP_GETARG_PMPQ(0)); \
-    mpq_from_pmpq(q2, PGMP_GETARG_PMPQ(1)); \
+    PGMP_GETARG_MPQ(q1, 0); \
+    PGMP_GETARG_MPQ(q2, 1); \
  \
     mpq_init(qf); \
     mpq_ ## op (qf, q1, q2); \
@@ -94,7 +94,7 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
     const mpq_t     q2; \
     mpq_t           qf; \
  \
-    mpq_from_pmpq(q2, PGMP_GETARG_PMPQ(1)); \
+    PGMP_GETARG_MPQ(q2, 1); \
     if (UNLIKELY(MPZ_IS_ZERO(mpq_numref(q2)))) \
     { \
         ereport(ERROR, ( \
@@ -102,7 +102,7 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
             errmsg("division by zero"))); \
     } \
  \
-    mpq_from_pmpq(q1, PGMP_GETARG_PMPQ(0)); \
+    PGMP_GETARG_MPQ(q1, 0); \
  \
     mpq_init(qf); \
     mpq_ ## op (qf, q1, q2); \
@@ -123,7 +123,7 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
     unsigned long   b; \
     mpq_t           qf; \
  \
-    mpq_from_pmpq(q, PGMP_GETARG_PMPQ(0)); \
+    PGMP_GETARG_MPQ(q, 0); \
     PGMP_GETARG_ULONG(b, 1); \
  \
     mpq_init(qf); \

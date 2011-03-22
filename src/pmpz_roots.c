@@ -32,7 +32,7 @@ PGMP_PG_FUNCTION(pmpz_perfect_power)
 {
     const mpz_t     z1;
 
-    mpz_from_pmpz(z1, PGMP_GETARG_PMPZ(0));
+    PGMP_GETARG_MPZ(z1, 0);
 
     PG_RETURN_BOOL(mpz_perfect_power_p(z1));
 }
@@ -41,7 +41,7 @@ PGMP_PG_FUNCTION(pmpz_perfect_square)
 {
     const mpz_t     z1;
 
-    mpz_from_pmpz(z1, PGMP_GETARG_PMPZ(0));
+    PGMP_GETARG_MPZ(z1, 0);
 
     PG_RETURN_BOOL(mpz_perfect_square_p(z1));
 }
@@ -53,7 +53,7 @@ PGMP_PG_FUNCTION(pmpz_rootrem)
     mpz_t           zrem;
     unsigned long   n;
 
-    mpz_from_pmpz(z1, PGMP_GETARG_PMPZ(0));
+    PGMP_GETARG_MPZ(z1, 0);
     PMPZ_CHECK_NONEG(z1);
 
     PGMP_GETARG_ULONG(n, 1);
@@ -72,7 +72,7 @@ PGMP_PG_FUNCTION(pmpz_sqrtrem)
     mpz_t           zroot;
     mpz_t           zrem;
 
-    mpz_from_pmpz(z1, PGMP_GETARG_PMPZ(0));
+    PGMP_GETARG_MPZ(z1, 0);
 
     mpz_init(zroot);
     mpz_init(zrem);

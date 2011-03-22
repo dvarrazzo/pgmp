@@ -38,7 +38,7 @@
 #define PGMP_GETARG_BITCNT(tgt,n) \
 { \
     mpz_t _tmp; \
-    mpz_from_pmpz(_tmp, PGMP_GETARG_PMPZ(n)); \
+    PGMP_GETARG_MPZ(_tmp, n); \
  \
     if (!(mpz_fits_ulong_p(_tmp))) { \
         ereport(ERROR, ( \
@@ -75,7 +75,7 @@ PGMP_PG_FUNCTION(pmpz_popcount)
     const mpz_t     z;
     mp_bitcnt_t     ret;
 
-    mpz_from_pmpz(z, PGMP_GETARG_PMPZ(0));
+    PGMP_GETARG_MPZ(z, 0);
     ret = mpz_popcount(z);
 
     PGMP_RETURN_BITCNT(ret);
@@ -87,8 +87,8 @@ PGMP_PG_FUNCTION(pmpz_hamdist)
     const mpz_t     z2;
     mp_bitcnt_t     ret;
 
-    mpz_from_pmpz(z1, PGMP_GETARG_PMPZ(0));
-    mpz_from_pmpz(z2, PGMP_GETARG_PMPZ(1));
+    PGMP_GETARG_MPZ(z1, 0);
+    PGMP_GETARG_MPZ(z2, 1);
     ret = mpz_hamdist(z1, z2);
 
     PGMP_RETURN_BITCNT(ret);
@@ -102,7 +102,7 @@ PGMP_PG_FUNCTION(pmpz_ ## f) \
     const mpz_t     z; \
     mp_bitcnt_t     start; \
  \
-    mpz_from_pmpz(z, PGMP_GETARG_PMPZ(0)); \
+    PGMP_GETARG_MPZ(z, 0); \
     PGMP_GETARG_BITCNT(start, 1); \
  \
     PGMP_RETURN_BITCNT(mpz_ ## f(z, start)); \
@@ -122,7 +122,7 @@ PGMP_PG_FUNCTION(pmpz_ ## f) \
     mp_bitcnt_t     idx; \
     mpz_t           ret; \
  \
-    mpz_from_pmpz(z, PGMP_GETARG_PMPZ(0)); \
+    PGMP_GETARG_MPZ(z, 0); \
     PGMP_GETARG_BITCNT(idx, 1); \
  \
     mpz_init_set(ret, z); \
@@ -141,7 +141,7 @@ PGMP_PG_FUNCTION(pmpz_tstbit)
     mp_bitcnt_t     idx;
     int32           ret;
 
-    mpz_from_pmpz(z, PGMP_GETARG_PMPZ(0));
+    PGMP_GETARG_MPZ(z, 0);
     PGMP_GETARG_BITCNT(idx, 1);
 
     ret = mpz_tstbit(z, idx);

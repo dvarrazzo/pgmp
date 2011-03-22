@@ -90,7 +90,7 @@ PGMP_PG_FUNCTION(pmpz_out)
     const mpz_t     z;
     char            *buf;
 
-    mpz_from_pmpz(z, PGMP_GETARG_PMPZ(0));
+    PGMP_GETARG_MPZ(z, 0);
 
     /* We must allocate the output buffer ourselves because the buffer
      * returned by mpz_get_str actually starts a few bytes before (because of
@@ -107,7 +107,7 @@ PGMP_PG_FUNCTION(pmpz_out_base)
     int             base;
     char            *buf;
 
-    mpz_from_pmpz(z, PGMP_GETARG_PMPZ(0));
+    PGMP_GETARG_MPZ(z, 0);
     base = PG_GETARG_INT32(1);
 
     if (!(-36 <= base && base <= 62) || base == -1 || base == 1)
@@ -231,45 +231,40 @@ PGMP_PG_FUNCTION(pmpz_from_numeric)
 
 PGMP_PG_FUNCTION(pmpz_to_int4)
 {
-    const pmpz      *pz;
-    const mpz_t     q;
+    const mpz_t     z;
     int32           out;
 
-    pz = PGMP_GETARG_PMPZ(0);
-    mpz_from_pmpz(q, pz);
+    PGMP_GETARG_MPZ(z, 0);
 
-    if (!mpz_fits_sint_p(q)) {
+    if (!mpz_fits_sint_p(z)) {
         ereport(ERROR,
                 (errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
                  errmsg("numeric value too big to be converted in integer data type")));
     }
 
-    out = mpz_get_si(q);
+    out = mpz_get_si(z);
     PG_RETURN_INT32(out);
 }
 
 PGMP_PG_FUNCTION(pmpz_to_int2)
 {
-    const pmpz      *pz;
-    const mpz_t     q;
+    const mpz_t     z;
     int16           out;
 
-    pz = PGMP_GETARG_PMPZ(0);
-    mpz_from_pmpz(q, pz);
+    PGMP_GETARG_MPZ(z, 0);
 
-    if (!mpz_fits_sshort_p(q)) {
+    if (!mpz_fits_sshort_p(z)) {
         ereport(ERROR,
                 (errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
                  errmsg("numeric value too big to be converted in smallint data type")));
     }
 
-    out = mpz_get_si(q);
+    out = mpz_get_si(z);
     PG_RETURN_INT16(out);
 }
 
 PGMP_PG_FUNCTION(pmpz_to_int8)
 {
-    const pmpz      *pz;
     const mpz_t     z;
     int64           out;
 
@@ -277,8 +272,7 @@ PGMP_PG_FUNCTION(pmpz_to_int8)
     mp_limb_t       msLimb=0;
 #endif
 
-    pz = PGMP_GETARG_PMPZ(0);
-    mpz_from_pmpz(z, pz);
+    PGMP_GETARG_MPZ(z, 0);
 
 #if PGMP_LONG_64
 

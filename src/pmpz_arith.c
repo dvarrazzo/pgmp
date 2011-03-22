@@ -52,7 +52,7 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     const mpz_t     z1; \
     mpz_t           zf; \
  \
-    mpz_from_pmpz(z1, PGMP_GETARG_PMPZ(0)); \
+    PGMP_GETARG_MPZ(z1, 0); \
     CHECK(z1); \
  \
     mpz_init(zf); \
@@ -86,8 +86,8 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     const mpz_t     z2; \
     mpz_t           zf; \
  \
-    mpz_from_pmpz(z1, PGMP_GETARG_PMPZ(0)); \
-    mpz_from_pmpz(z2, PGMP_GETARG_PMPZ(1)); \
+    PGMP_GETARG_MPZ(z1, 0); \
+    PGMP_GETARG_MPZ(z2, 1); \
     CHECK2(z2); \
  \
     mpz_init(zf); \
@@ -124,7 +124,7 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     unsigned long   b; \
     mpz_t           zf; \
  \
-    mpz_from_pmpz(z, PGMP_GETARG_PMPZ(0)); \
+    PGMP_GETARG_MPZ(z, 0); \
     CHECK1(z); \
     \
     PGMP_GETARG_ULONG(b, 1); \
@@ -165,8 +165,8 @@ PGMP_PG_FUNCTION(pmpz_cmp)
     const mpz_t     z1;
     const mpz_t     z2;
 
-    mpz_from_pmpz(z1, PGMP_GETARG_PMPZ(0));
-    mpz_from_pmpz(z2, PGMP_GETARG_PMPZ(1));
+    PGMP_GETARG_MPZ(z1, 0);
+    PGMP_GETARG_MPZ(z2, 1);
 
     PG_RETURN_INT32(mpz_cmp(z1, z2));
 }
@@ -179,8 +179,8 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     const mpz_t     z1; \
     const mpz_t     z2; \
  \
-    mpz_from_pmpz(z1, PGMP_GETARG_PMPZ(0)); \
-    mpz_from_pmpz(z2, PGMP_GETARG_PMPZ(1)); \
+    PGMP_GETARG_MPZ(z1, 0); \
+    PGMP_GETARG_MPZ(z2, 1); \
  \
     PG_RETURN_BOOL(mpz_cmp(z1, z2) rel 0); \
 }
