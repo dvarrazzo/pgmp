@@ -27,13 +27,18 @@ SET search_path = public;
 
 !! PYON
 
+base_type = 'mpz'
+
 def func(sqlname, argin, argout=None, cname=None):
     """Create a SQL function from a C function"""
     if not argout: argout = base_type
     print "CREATE OR REPLACE FUNCTION %s(%s)" \
         % (sqlname, ", ".join(argin.split()))
     print "RETURNS", argout
-    if not cname: cname = "p" + sqlname
+    if not cname:
+        pre = base_type + '_'
+        cname = (sqlname.startswith(pre)
+            and "p" + sqlname or 'p' + pre + sqlname)
     print "AS 'MODULE_PATHNAME', '%s'" % cname
     print "LANGUAGE C IMMUTABLE STRICT;"
     print
@@ -45,8 +50,6 @@ def func(sqlname, argin, argout=None, cname=None):
 --
 
 !! PYON
-
-base_type = 'mpz'
 
 func('mpz_in', 'cstring', 'mpz')
 func('mpz_out', 'mpz', 'cstring')
@@ -128,7 +131,7 @@ AS ASSIGNMENT;
 
 func('mpz_uplus', 'mpz')
 func('mpz_neg', 'mpz')
-func('abs', 'mpz', cname='pmpz_abs')
+func('abs', 'mpz')
 
 !! PYOFF
 
@@ -183,7 +186,7 @@ op('&', 'and')
 op('|', 'ior')
 op('#', 'xor')
 
-func('com', 'mpz', 'mpz', cname='pmpz_com')
+func('com', 'mpz', 'mpz')
 
 !! PYOFF
 
@@ -283,11 +286,11 @@ DEFAULT FOR TYPE mpz USING btree AS
 
 !! PYON
 
-func('sqrt', 'mpz', 'mpz', cname='pmpz_sqrt')
-func('root', 'mpz int8', 'mpz', cname='pmpz_root')
+func('sqrt', 'mpz', 'mpz')
+func('root', 'mpz int8', 'mpz')
 func('perfect_power', 'mpz', 'bool', cname='pmpz_perfect_power')
 func('perfect_square', 'mpz', 'bool', cname='pmpz_perfect_square')
-func('nextprime', 'mpz', cname='pmpz_nextprime')
+func('nextprime', 'mpz')
 
 !! PYOFF
 
@@ -401,8 +404,8 @@ CREATE TYPE mpq (
 func('mpq', 'mpz mpz', 'mpq', cname='pmpq_mpz_mpz')
 func('mpq', 'int4 int4', 'mpq', cname='pmpq_int4_int4')
 func('mpq', 'numeric numeric', 'mpq', cname='pmpq_numeric_numeric')
-func('num', 'mpq', 'mpz', cname='pmpq_num')
-func('den', 'mpq', 'mpz', cname='pmpq_den')
+func('num', 'mpq', 'mpz')
+func('den', 'mpq', 'mpz')
 
 castfrom('int2', implicit='I')
 castfrom('int4', implicit='I')
