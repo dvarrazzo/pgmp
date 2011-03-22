@@ -33,13 +33,13 @@ PGMP_PG_FUNCTION(pmpq_uminus)
     const mpq_t     q1;
     mpq_t           qf;
 
-    mpq_from_pmpq(q1, PG_GETARG_PMPQ(0));
+    mpq_from_pmpq(q1, PGMP_GETARG_PMPQ(0));
 
     mpz_init_set(mpq_numref(qf), mpq_numref(q1));
     mpz_init_set(mpq_denref(qf), mpq_denref(q1));
     mpz_neg(mpq_numref(qf), mpq_numref(qf));
 
-    PG_RETURN_MPQ(qf);
+    PGMP_RETURN_MPQ(qf);
 }
 
 PGMP_PG_FUNCTION(pmpq_uplus)
@@ -47,7 +47,7 @@ PGMP_PG_FUNCTION(pmpq_uplus)
     const pmpq      *pq1;
     pmpq            *res;
 
-    pq1 = PG_GETARG_PMPQ(0);
+    pq1 = PGMP_GETARG_PMPQ(0);
 
 	res = (pmpq *)palloc(VARSIZE(pq1));
 	memcpy(res, pq1, VARSIZE(pq1));
@@ -70,13 +70,13 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
     const mpq_t     q2; \
     mpq_t           qf; \
  \
-    mpq_from_pmpq(q1, PG_GETARG_PMPQ(0)); \
-    mpq_from_pmpq(q2, PG_GETARG_PMPQ(1)); \
+    mpq_from_pmpq(q1, PGMP_GETARG_PMPQ(0)); \
+    mpq_from_pmpq(q2, PGMP_GETARG_PMPQ(1)); \
  \
     mpq_init(qf); \
     mpq_ ## op (qf, q1, q2); \
  \
-    PG_RETURN_MPQ(qf); \
+    PGMP_RETURN_MPQ(qf); \
 }
 
 PMPQ_OP(add)
@@ -94,7 +94,7 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
     const mpq_t     q2; \
     mpq_t           qf; \
  \
-    mpq_from_pmpq(q2, PG_GETARG_PMPQ(1)); \
+    mpq_from_pmpq(q2, PGMP_GETARG_PMPQ(1)); \
     if (UNLIKELY(MPZ_IS_ZERO(mpq_numref(q2)))) \
     { \
         ereport(ERROR, ( \
@@ -102,12 +102,12 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
             errmsg("division by zero"))); \
     } \
  \
-    mpq_from_pmpq(q1, PG_GETARG_PMPQ(0)); \
+    mpq_from_pmpq(q1, PGMP_GETARG_PMPQ(0)); \
  \
     mpq_init(qf); \
     mpq_ ## op (qf, q1, q2); \
  \
-    PG_RETURN_MPQ(qf); \
+    PGMP_RETURN_MPQ(qf); \
 }
 
 PMPQ_OP_DIV(div)
@@ -123,13 +123,13 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
     unsigned long   b; \
     mpq_t           qf; \
  \
-    mpq_from_pmpq(q, PG_GETARG_PMPQ(0)); \
+    mpq_from_pmpq(q, PGMP_GETARG_PMPQ(0)); \
     PGMP_GETARG_ULONG(b, 1); \
  \
     mpq_init(qf); \
     mpq_ ## op (qf, q, b); \
  \
-    PG_RETURN_MPQ(qf); \
+    PGMP_RETURN_MPQ(qf); \
 }
 
 

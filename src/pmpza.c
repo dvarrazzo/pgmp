@@ -91,7 +91,7 @@ PGMP_PG_FUNCTION(_pmpz_from_pmpza)
     a = (mpz_t *)PG_GETARG_POINTER(0);
 
     if (LIKELY(LIMBS(*a))) {
-        PG_RETURN_MPZ(*a);
+        PGMP_RETURN_MPZ(*a);
     }
     else {                      /* uninitialized */
         PG_RETURN_NULL();
@@ -119,7 +119,7 @@ PGMP_PG_FUNCTION(_pmpz_agg_ ## op) \
     } \
  \
     a = (mpz_t *)PG_GETARG_POINTER(0); \
-    mpz_from_pmpz(z, PG_GETARG_PMPZ(1)); \
+    mpz_from_pmpz(z, PGMP_GETARG_PMPZ(1)); \
  \
     oldctx = MemoryContextSwitchTo(aggctx); \
     if (LIKELY(LIMBS(*a))) { \

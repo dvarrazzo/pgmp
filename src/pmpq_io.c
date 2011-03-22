@@ -52,7 +52,7 @@ PGMP_PG_FUNCTION(pmpq_in)
     ERROR_IF_DENOM_ZERO(mpq_denref(q));
 
     mpq_canonicalize(q);
-    PG_RETURN_MPQ(q);
+    PGMP_RETURN_MPQ(q);
 }
 
 PGMP_PG_FUNCTION(pmpq_out)
@@ -61,7 +61,7 @@ PGMP_PG_FUNCTION(pmpq_out)
     const mpq_t     q;
     char            *buf;
 
-    pz = PG_GETARG_PMPQ(0);
+    pz = PGMP_GETARG_PMPQ(0);
     mpq_from_pmpq(q, pz);
 
     /* Allocate the output buffer manually - see mpmz_out to know why */
@@ -99,7 +99,7 @@ _pmpq_from_long(long in)
     mpz_init_set_si(mpq_numref(q), in);
     mpz_init_set_si(mpq_denref(q), 1L);
 
-    PG_RETURN_MPQ(q);
+    PGMP_RETURN_MPQ(q);
 }
 
 
@@ -120,7 +120,7 @@ PGMP_PG_FUNCTION(pmpq_from_int8)
     mpz_init_set(mpq_numref(q), tmp);
     mpz_init_set_si(mpq_denref(q), 1L);
 
-    PG_RETURN_MPQ(q);
+    PGMP_RETURN_MPQ(q);
 }
 
 
@@ -164,7 +164,7 @@ PGMP_PG_FUNCTION(pmpq_from_numeric)
         mpz_init_set_si(mpq_denref(q), 1L);
     }
 
-    PG_RETURN_MPQ(q);
+    PGMP_RETURN_MPQ(q);
 
 error:
     ereport(ERROR, (
@@ -180,11 +180,11 @@ PGMP_PG_FUNCTION(pmpq_from_mpz)
     mpz_t           tmp;
 
     /* Make a copy of the num as MPQ will try to realloc on it */
-    mpz_from_pmpz(tmp, PG_GETARG_PMPZ(0));
+    mpz_from_pmpz(tmp, PGMP_GETARG_PMPZ(0));
     mpz_init_set(mpq_numref(q), tmp);
     mpz_init_set_si(mpq_denref(q), 1L);
 
-    PG_RETURN_MPQ(q);
+    PGMP_RETURN_MPQ(q);
 }
 
 
@@ -200,8 +200,8 @@ PGMP_PG_FUNCTION(pmpq_mpz_mpz)
 
     /* We must take a copy of num and den because they may be modified by
      * canonicalize */
-    mpz_from_pmpz(num, PG_GETARG_PMPZ(0));
-    mpz_from_pmpz(den, PG_GETARG_PMPZ(1));
+    mpz_from_pmpz(num, PGMP_GETARG_PMPZ(0));
+    mpz_from_pmpz(den, PGMP_GETARG_PMPZ(1));
     ERROR_IF_DENOM_ZERO(den);
 
     /* Put together the input and canonicalize */
@@ -209,7 +209,7 @@ PGMP_PG_FUNCTION(pmpq_mpz_mpz)
     mpz_init_set(mpq_denref(q), den);
     mpq_canonicalize(q);
 
-    PG_RETURN_MPQ(q);
+    PGMP_RETURN_MPQ(q);
 }
 
 PGMP_PG_FUNCTION(pmpq_int4_int4)
@@ -224,7 +224,7 @@ PGMP_PG_FUNCTION(pmpq_int4_int4)
     ERROR_IF_DENOM_ZERO(mpq_denref(q));
     mpq_canonicalize(q);
 
-    PG_RETURN_MPQ(q);
+    PGMP_RETURN_MPQ(q);
 }
 
 PGMP_PG_FUNCTION(pmpq_numeric_numeric)
@@ -254,25 +254,25 @@ PGMP_PG_FUNCTION(pmpq_numeric_numeric)
     ERROR_IF_DENOM_ZERO(mpq_denref(q));
     mpq_canonicalize(q);
 
-    PG_RETURN_MPQ(q);
+    PGMP_RETURN_MPQ(q);
 }
 
 PGMP_PG_FUNCTION(pmpq_num)
 {
     const mpq_t     q;
 
-    mpq_from_pmpq(q, PG_GETARG_PMPQ(0));
+    mpq_from_pmpq(q, PGMP_GETARG_PMPQ(0));
 
-    PG_RETURN_MPZ(mpq_numref(q));
+    PGMP_RETURN_MPZ(mpq_numref(q));
 }
 
 PGMP_PG_FUNCTION(pmpq_den)
 {
     const mpq_t     q;
 
-    mpq_from_pmpq(q, PG_GETARG_PMPQ(0));
+    mpq_from_pmpq(q, PGMP_GETARG_PMPQ(0));
 
-    PG_RETURN_MPZ(mpq_denref(q));
+    PGMP_RETURN_MPZ(mpq_denref(q));
 }
 
 

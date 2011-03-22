@@ -65,9 +65,9 @@ typedef struct
 #define PMPQ_SET_SIZE_FIRST(mdata,s) \
     (((mdata) & ~PMPQ_SIZE_FIRST_MASK) | ((s) & PMPQ_SIZE_FIRST_MASK))
 
-#define PG_GETARG_PMPQ(x) \
+#define PGMP_GETARG_PMPQ(x) \
     ((pmpq*)DatumGetPointer(PG_DETOAST_DATUM(PG_GETARG_DATUM(x))))
-#define PG_RETURN_MPQ(q) \
+#define PGMP_RETURN_MPQ(q) \
     PG_RETURN_POINTER(pmpq_from_mpq(q))
 
 pmpq * pmpq_from_mpq(mpq_ptr q);

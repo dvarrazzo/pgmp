@@ -49,7 +49,7 @@ PGMP_PG_FUNCTION(pmpz_in)
                 maxchars, str, ell)));
     }
 
-    PG_RETURN_MPZ(z);
+    PGMP_RETURN_MPZ(z);
 }
 
 PGMP_PG_FUNCTION(pmpz_in_base)
@@ -82,7 +82,7 @@ PGMP_PG_FUNCTION(pmpz_in_base)
                 base, 50, str, ell)));
     }
 
-    PG_RETURN_MPZ(z);
+    PGMP_RETURN_MPZ(z);
 }
 
 PGMP_PG_FUNCTION(pmpz_out)
@@ -90,7 +90,7 @@ PGMP_PG_FUNCTION(pmpz_out)
     const mpz_t     z;
     char            *buf;
 
-    mpz_from_pmpz(z, PG_GETARG_PMPZ(0));
+    mpz_from_pmpz(z, PGMP_GETARG_PMPZ(0));
 
     /* We must allocate the output buffer ourselves because the buffer
      * returned by mpz_get_str actually starts a few bytes before (because of
@@ -107,7 +107,7 @@ PGMP_PG_FUNCTION(pmpz_out_base)
     int             base;
     char            *buf;
 
-    mpz_from_pmpz(z, PG_GETARG_PMPZ(0));
+    mpz_from_pmpz(z, PGMP_GETARG_PMPZ(0));
     base = PG_GETARG_INT32(1);
 
     if (!(-36 <= base && base <= 62) || base == -1 || base == 1)
@@ -187,7 +187,7 @@ PGMP_PG_FUNCTION(pmpz_from_int8)
         mpz_neg(z, z);
     }
 
-    PG_RETURN_MPZ(z);
+    PGMP_RETURN_MPZ(z);
 
 #endif
 }
@@ -199,7 +199,7 @@ _pmpz_from_long(long in)
 
     mpz_init_set_si(z, in);
 
-    PG_RETURN_MPZ(z);
+    PGMP_RETURN_MPZ(z);
 }
 
 
@@ -225,7 +225,7 @@ PGMP_PG_FUNCTION(pmpz_from_numeric)
             errmsg("can't convert numeric value to mpz: \"%s\"", str)));
     }
 
-    PG_RETURN_MPZ(z);
+    PGMP_RETURN_MPZ(z);
 }
 
 
@@ -235,7 +235,7 @@ PGMP_PG_FUNCTION(pmpz_to_int4)
     const mpz_t     q;
     int32           out;
 
-    pz = PG_GETARG_PMPZ(0);
+    pz = PGMP_GETARG_PMPZ(0);
     mpz_from_pmpz(q, pz);
 
     if (!mpz_fits_sint_p(q)) {
@@ -254,7 +254,7 @@ PGMP_PG_FUNCTION(pmpz_to_int2)
     const mpz_t     q;
     int16           out;
 
-    pz = PG_GETARG_PMPZ(0);
+    pz = PGMP_GETARG_PMPZ(0);
     mpz_from_pmpz(q, pz);
 
     if (!mpz_fits_sshort_p(q)) {
@@ -277,7 +277,7 @@ PGMP_PG_FUNCTION(pmpz_to_int8)
     mp_limb_t       msLimb=0;
 #endif
 
-    pz = PG_GETARG_PMPZ(0);
+    pz = PGMP_GETARG_PMPZ(0);
     mpz_from_pmpz(z, pz);
 
 #if PGMP_LONG_64

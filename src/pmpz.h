@@ -39,12 +39,12 @@ typedef struct
 
 /* Macros to convert mpz arguments and return values */
 
-#define PG_GETARG_PMPZ(x) \
+#define PGMP_GETARG_PMPZ(x) \
     ((pmpz*)DatumGetPointer(PG_DETOAST_DATUM(PG_GETARG_DATUM(x))))
-#define PG_RETURN_MPZ(z) \
+#define PGMP_RETURN_MPZ(z) \
     PG_RETURN_POINTER(pmpz_from_mpz(z))
 
-#define PG_RETURN_MPZ_MPZ(z1,z2) \
+#define PGMP_RETURN_MPZ_MPZ(z1,z2) \
 { \
     TupleDesc       _tupdesc; \
     Datum           _result[2]; \
