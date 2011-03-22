@@ -342,7 +342,71 @@ number 0.
     `!#`     Bitwise exclusive-or     `!'0b10001'::mpz # '0b01001'::mpz`  `!'0b11000'::mpz`
     ======== ======================== =================================== ===================
 
+
 .. function:: com(op)
 
     Return the ones' complement of *op*.
+
+
+.. function:: popcount(op)
+
+    If op>=0, return the population count of *op*, which is the number of 1
+    bits in the binary representation. If op<0, the number of 1s is infinite,
+    and the return value is the largest possible, represented by
+    `gmp_max_bitcnt()`.
+
+
+.. function:: hamdist(op1, op2)
+
+    If *op1* and *op2* are both >=0 or both <0, return the `Hamming
+    distance`__
+    between the two operands, which is the number of bit positions where *op1*
+    and *op2* have different bit values. If one operand is >=0 and the other <0
+    then the number of bits different is infinite, and the return value is the
+    largest possible, represented by `gmp_max_bitcnt()`.
+
+    .. __: http://en.wikipedia.org/wiki/Hamming_distance
+
+
+.. function:: scan0(op, starting_bit)
+
+.. function:: scan1(op, starting_bit)
+
+    Scan *op*, starting from bit *starting_bit*, towards more significant
+    bits, until the first 0 or 1 bit (respectively) is found. Return the index
+    of the found bit.
+
+    If the bit at *starting_bit* is already what's sought, then *starting_bit*
+    is returned.
+
+    If there's no bit found, then the largest possible bit count is returned
+    (represented by `gmp_max_bitcnt()`). This will happen in `!mpz_scan0()`
+    past the end of a negative number, or `!mpz_scan1()` past the end of a
+    nonnegative number.
+
+
+.. function:: setbit(op, bit_index)
+
+    Return *op* with bit *bit_index* set.
+
+.. function:: clrbit(op, bit_index)
+
+    Return *op* with bit *bit_index* cleared.
+
+.. function:: combit(op, bit_index)
+
+    Return *op* with bit *bit_index* complemented.
+
+.. function:: tstbit(op, bit_index)
+
+    Test bit *bit_index* in *op* and return 0 or 1 accordingly.
+
+
+.. function:: gmp_max_bitcnt()
+
+    Return the maximum value possible for the bit count as accepted or
+    returned by functions dealing with bits.
+
+    The value is the maximum `!unsigned long` defined on the server, so it can
+    be :math:`2^{32}-1` or :math:`2^{64}-1` according to the server platform.
 

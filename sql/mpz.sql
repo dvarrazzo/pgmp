@@ -341,8 +341,43 @@ SELECT nextprime(1000::mpz);
 SELECT nextprime(0::mpz);
 SELECT nextprime(-8::mpz);
 
+
+--
+-- Logic and bit fiddling functions and operators
+--
+
 SELECT text('0b10001'::mpz & '0b01001'::mpz, 2);
 SELECT text('0b10001'::mpz | '0b01001'::mpz, 2);
 SELECT text('0b10001'::mpz # '0b01001'::mpz, 2);
 SELECT com(10::mpz);
-
+SELECT popcount('0b101010'::mpz);
+SELECT popcount(0::mpz);
+SELECT popcount(-1::mpz) = gmp_max_bitcnt();
+SELECT hamdist('0b101010'::mpz, '0b101100'::mpz);
+SELECT hamdist(0::mpz, -1::mpz) = gmp_max_bitcnt();
+SELECT scan0('0b110110'::mpz, 1);
+SELECT scan0('0b110110'::mpz, 3);
+SELECT scan0(-1::mpz, 2) = gmp_max_bitcnt();
+SELECT scan0(0::mpz, -1);
+SELECT scan0(0::mpz, (2^64)::numeric::mpz);
+SELECT scan1('0b110110'::mpz, 1);
+SELECT scan1('0b110110'::mpz, 3);
+SELECT scan1(1::mpz, 2) = gmp_max_bitcnt();
+SELECT scan1(0::mpz, -1);
+SELECT scan1(0::mpz, (2^64)::numeric::mpz);
+SELECT text(setbit('0b1010'::mpz, 0), 2);
+SELECT text(setbit('0b1010'::mpz, 1), 2);
+SELECT setbit(0::mpz, -1);
+SELECT setbit(0::mpz, (2^64)::numeric::mpz);
+SELECT text(clrbit('0b1010'::mpz, 0), 2);
+SELECT text(clrbit('0b1010'::mpz, 1), 2);
+SELECT clrbit(0::mpz, -1);
+SELECT clrbit(0::mpz, (2^64)::numeric::mpz);
+SELECT text(combit('0b1010'::mpz, 0), 2);
+SELECT text(combit('0b1010'::mpz, 1), 2);
+SELECT combit(0::mpz, -1);
+SELECT combit(0::mpz, (2^64)::numeric::mpz);
+SELECT tstbit('0b1010'::mpz, 0);
+SELECT tstbit('0b1010'::mpz, 1);
+SELECT tstbit(0::mpz, -1);
+SELECT tstbit(0::mpz, (2^64)::numeric::mpz);

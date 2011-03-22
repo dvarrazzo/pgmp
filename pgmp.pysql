@@ -187,6 +187,15 @@ op('|', 'ior')
 op('#', 'xor')
 
 func('com', 'mpz', 'mpz')
+func('popcount', 'mpz', 'mpz')
+func('hamdist', 'mpz mpz', 'mpz')
+func('scan0', 'mpz mpz', 'mpz')
+func('scan1', 'mpz mpz', 'mpz')
+func('setbit', 'mpz mpz', 'mpz')
+func('clrbit', 'mpz mpz', 'mpz')
+func('combit', 'mpz mpz', 'mpz')
+func('tstbit', 'mpz mpz', 'int4')
+func('gmp_max_bitcnt', '', 'mpz', cname='pgmp_max_bitcnt')
 
 !! PYOFF
 
