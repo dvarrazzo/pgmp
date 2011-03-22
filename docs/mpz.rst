@@ -325,6 +325,109 @@ Root Extraction Functions
     be perfect squares.
 
 
+Number Theoretic Functions
+--------------------------
+
+.. function:: probab_prime(n, reps)
+
+    Determine whether *n* is prime. Return 2 if *n* is definitely prime,
+    return 1 if *n* is probably prime (without being certain), or return 0 if
+    *n* is definitely composite.
+
+    This function does some trial divisions, then some `Miller-Rabin
+    probabilistic primality tests`__. *reps* controls how many such tests are
+    done, 5 to 10 is a reasonable number, more will reduce the chances of a
+    composite being returned as “probably prime”.
+
+    .. __: http://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
+
+    Miller-Rabin and similar tests can be more properly called compositeness
+    tests. Numbers which fail are known to be composite but those which pass
+    might be prime or might be composite. Only a few composites pass, hence
+    those which pass are considered probably prime.
+
+    .. seealso:: `Primality test
+        <http://en.wikipedia.org/wiki/Primality_test>`__
+
+
+.. function:: nextprime(op)
+
+    Return the next prime greater than *op*.
+
+    This function uses a probabilistic algorithm to identify primes. For
+    practical purposes it's adequate, the chance of a composite passing will
+    be extremely small.
+
+
+.. function:: gcd(a, b)
+
+    Return the greatest common divisor of *a* and *b*. The result is
+    always positive even if one or both input operands are negative.
+
+
+.. function:: gcdext(a, b)
+
+    Return the greatest common divisor *g* of *a* and *b*, and in addition
+    coefficients *s* and *t* satisfying :math:`a \cdot s + b \cdot t = g`. The
+    value *g* is always positive, even if one or both of *a* and *b* are
+    negative. The values *s* and *t* are chosen such that :math:`|s| \le |b|
+    \hspace{0em}` and :math:`|t| \le |a| \hspace{0em}`.
+
+    ..
+        The \hspace{} are there to avoid the vim rest syntax highlighter to
+        get crazy.
+
+    .. code-block:: sql
+
+        =# select * from  gcdext(6, 15);
+         g | s  | t
+        ---+----+---
+         3 | -2 | 1
+
+
+.. function:: lcm(a, b)
+
+    Return the least common multiple of *a* and *b*. The value returned is
+    always positive, irrespective of the signs of *a* and *b*. The return
+    will be zero if either *a* or *b* is zero.
+
+
+.. function:: invert(a, b)
+
+    Return the inverse of *a* modulo *b* if exists. The return value *r*
+    will satisfy :math:`0 \le r \lt b`. If an inverse doesn't exist return
+    `!NULL`.
+
+
+.. function:: jacobi(a, b)
+
+    Calculate the `Jacobi symbol`__ :math:`(\frac{a}{b})`. This is defined
+    only for *b* odd.
+
+    .. __: http://en.wikipedia.org/wiki/Jacobi_symbol
+
+
+.. function:: legendre(a, p)
+
+    Calculate the `Legendre symbol`__ :math:`(\frac{a}{p})`.  This is defined
+    only for *p* an odd positive prime, and for such *p* it's identical to the
+    Jacobi symbol.
+
+    .. __: http://en.wikipedia.org/wiki/Legendre_symbol
+
+
+.. function:: kronecker(a, b)
+
+    Calculate the Jacobi symbol :math:`(\frac{a}{b})` with the Kronecker
+    extension :math:`(\frac{a}{2})=(\frac{2}{a})` when *a* odd, or
+    :math:`(\frac{a}{2})=0` when *a* even.
+
+    .. seealso::
+        Section 1.4.2, Henri Cohen, "A Course in Computational Algebraic
+        Number Theory", Graduate Texts in Mathematics number 138,
+        Springer-Verlag, 1993. http://www.math.u-bordeaux.fr/~cohen/
+
+
 Logical and Bit Manipulation Functions
 --------------------------------------
 
