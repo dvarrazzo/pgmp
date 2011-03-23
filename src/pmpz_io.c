@@ -25,6 +25,8 @@
 #include "fmgr.h"
 #include "utils/builtins.h"     /* for numeric_out */
 
+#include <math.h>               /* for isinf, isnan */
+
 
 /*
  * Input/Output functions
@@ -222,10 +224,7 @@ _pmpz_from_double(double in)
 {
     mpz_t   z;
 
-    if (in == get_float8_infinity() ||
-        in == -get_float8_infinity() ||
-        isnan(in))
-    {
+    if (isinf(in) || isnan(in)) {
         ereport(ERROR, (
             errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
             errmsg("can't convert float value to mpz: \"%f\"", in)));
