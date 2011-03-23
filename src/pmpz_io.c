@@ -60,7 +60,7 @@ PGMP_PG_FUNCTION(pmpz_in_base)
 
     base = PG_GETARG_INT32(1);
 
-    if (!(2 <= base && base <= 62))
+    if (!(base == 0 || (2 <= base && base <= 62)))
     {
         ereport(ERROR, (
             errcode(ERRCODE_INVALID_PARAMETER_VALUE),

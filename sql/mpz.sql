@@ -48,6 +48,7 @@ SELECT '0x10'::mpz, '010'::mpz, '0b10'::mpz;
 SELECT mpz('10'), mpz('10', 16), mpz('10', 2), mpz('10', 62);
 SELECT mpz('10', 1);
 SELECT mpz('10', 63);
+SELECT mpz('10', 0), mpz('0x10', 0), mpz('010', 0), mpz('0b10', 0);
 
 SELECT text(10::mpz);
 SELECT text(255::mpz, 16);

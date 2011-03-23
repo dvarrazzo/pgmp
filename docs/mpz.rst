@@ -46,7 +46,6 @@ operators. Indexes on `!mpz` columns can be created using the *btree* method.
 
 .. todo:: I should write a psql pygmets lexer
 
-.. todo:: Handle base 0 in mpz(str, int)
 
 .. function:: text(z)
 
