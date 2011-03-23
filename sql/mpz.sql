@@ -219,7 +219,26 @@ SELECT  '1027'::mpz -%>   3;
 SELECT '-1027'::mpz -%>   3;
 SELECT  '1027'::mpz -%>  -3;
 
+SELECT q, r from tdiv_qr( 7::mpz,  3::mpz);
+SELECT q, r from tdiv_qr(-7::mpz,  3::mpz);
+SELECT q, r from tdiv_qr( 7::mpz, -3::mpz);
+SELECT q, r from tdiv_qr(-7::mpz, -3::mpz);
+SELECT q, r from tdiv_qr( 7::mpz,  0::mpz);
+
+SELECT q, r from cdiv_qr( 7::mpz,  3::mpz);
+SELECT q, r from cdiv_qr(-7::mpz,  3::mpz);
+SELECT q, r from cdiv_qr( 7::mpz, -3::mpz);
+SELECT q, r from cdiv_qr(-7::mpz, -3::mpz);
+SELECT q, r from cdiv_qr( 7::mpz,  0::mpz);
+
+SELECT q, r from fdiv_qr( 7::mpz,  3::mpz);
+SELECT q, r from fdiv_qr(-7::mpz,  3::mpz);
+SELECT q, r from fdiv_qr( 7::mpz, -3::mpz);
+SELECT q, r from fdiv_qr(-7::mpz, -3::mpz);
+SELECT q, r from fdiv_qr( 7::mpz,  0::mpz);
+
 -- power operator/functions
+
 SELECT 2::mpz ^ 10;
 SELECT 2::mpz ^ 0;
 SELECT 2::mpz ^ -1;

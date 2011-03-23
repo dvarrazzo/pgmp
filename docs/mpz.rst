@@ -199,6 +199,25 @@ For all the division-related operators :math:`n \oslash d`, :math:`q` and
     .. __: http://www.postgresql.org/docs/9.0/static/sql-syntax-lexical.html#SQL-PRECEDENCE-TABLE
 
 
+.. function:: tdiv_qr(n, d)
+
+    Return a tuple containing quotient *q* and remainder *r* of the division,
+    rounding towards 0.
+
+
+.. function:: cdiv_qr(n, d)
+
+    Return a tuple containing quotient *q* and remainder *r* of the division,
+    rounding towards +infinity (ceil).
+
+
+.. function:: fdiv_qr(n, d)
+
+    Return a tuple containing quotient *q* and remainder *r* of the division,
+    rounding towards -infinity (floor).
+
+
+
 .. function:: divisible(n, d)
 
 .. function:: divisible_2exp(n, b)

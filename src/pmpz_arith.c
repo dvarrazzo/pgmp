@@ -23,6 +23,7 @@
 #include "pgmp-impl.h"
 
 #include "fmgr.h"
+#include "funcapi.h"
 
 
 /*
@@ -74,8 +75,7 @@ PMPZ_UN(com,    PMPZ_NO_CHECK)
 
 /* Operators defined (mpz, mpz) -> mpz.
  *
- * CHECK2 is a check performed on the 2nd argument. Available checks are
- * defined below.
+ * CHECK2 is a check performed on the 2nd argument.
  */
 
 #define PMPZ_OP(op, CHECK2) \
@@ -96,9 +96,6 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
     PGMP_RETURN_MPZ(zf); \
 }
 
-
-/* Operators definitions */
-
 PMPZ_OP(add,        PMPZ_NO_CHECK)
 PMPZ_OP(sub,        PMPZ_NO_CHECK)
 PMPZ_OP(mul,        PMPZ_NO_CHECK)
@@ -115,6 +112,33 @@ PMPZ_OP(xor,        PMPZ_NO_CHECK)
 PMPZ_OP(gcd,        PMPZ_NO_CHECK)
 PMPZ_OP(lcm,        PMPZ_NO_CHECK)
 PMPZ_OP(remove,     PMPZ_NO_CHECK)      /* TODO: return value not returned */
+
+
+/* Operators defined (mpz, mpz) -> (mpz, mpz). */
+
+#define PMPZ_OP2(op, CHECK2) \
+ \
+PGMP_PG_FUNCTION(pmpz_ ## op) \
+{ \
+    const mpz_t     z1; \
+    const mpz_t     z2; \
+    mpz_t           zf1; \
+    mpz_t           zf2; \
+ \
+    PGMP_GETARG_MPZ(z1, 0); \
+    PGMP_GETARG_MPZ(z2, 1); \
+    CHECK2(z2); \
+ \
+    mpz_init(zf1); \
+    mpz_init(zf2); \
+    mpz_ ## op (zf1, zf2, z1, z2); \
+ \
+    PGMP_RETURN_MPZ_MPZ(zf1, zf2); \
+}
+
+PMPZ_OP2(tdiv_qr,    PMPZ_CHECK_DIV0)
+PMPZ_OP2(cdiv_qr,    PMPZ_CHECK_DIV0)
+PMPZ_OP2(fdiv_qr,    PMPZ_CHECK_DIV0)
 
 
 /* Functions defined on unsigned long */

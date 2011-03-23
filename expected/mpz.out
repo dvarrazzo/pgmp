@@ -333,6 +333,36 @@ SELECT '-1027'::mpz -%>   3;
 5
 SELECT  '1027'::mpz -%>  -3;
 ERROR:  argument can't be negative
+SELECT q, r from tdiv_qr( 7::mpz,  3::mpz);
+2|1
+SELECT q, r from tdiv_qr(-7::mpz,  3::mpz);
+-2|-1
+SELECT q, r from tdiv_qr( 7::mpz, -3::mpz);
+-2|1
+SELECT q, r from tdiv_qr(-7::mpz, -3::mpz);
+2|-1
+SELECT q, r from tdiv_qr( 7::mpz,  0::mpz);
+ERROR:  division by zero
+SELECT q, r from cdiv_qr( 7::mpz,  3::mpz);
+3|-2
+SELECT q, r from cdiv_qr(-7::mpz,  3::mpz);
+-2|-1
+SELECT q, r from cdiv_qr( 7::mpz, -3::mpz);
+-2|1
+SELECT q, r from cdiv_qr(-7::mpz, -3::mpz);
+3|2
+SELECT q, r from cdiv_qr( 7::mpz,  0::mpz);
+ERROR:  division by zero
+SELECT q, r from fdiv_qr( 7::mpz,  3::mpz);
+2|1
+SELECT q, r from fdiv_qr(-7::mpz,  3::mpz);
+-3|2
+SELECT q, r from fdiv_qr( 7::mpz, -3::mpz);
+-3|-2
+SELECT q, r from fdiv_qr(-7::mpz, -3::mpz);
+2|-1
+SELECT q, r from fdiv_qr( 7::mpz,  0::mpz);
+ERROR:  division by zero
 -- power operator/functions
 SELECT 2::mpz ^ 10;
 1024

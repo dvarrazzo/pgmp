@@ -194,6 +194,10 @@ op('+%>', 'cdiv_r_2exp', rarg='int8')
 op('->>', 'fdiv_q_2exp', rarg='int8')
 op('-%>', 'fdiv_r_2exp', rarg='int8')
 
+func_tuple('tdiv_qr', 'mpz, mpz, out q mpz, out r mpz')
+func_tuple('cdiv_qr', 'mpz, mpz, out q mpz, out r mpz')
+func_tuple('fdiv_qr', 'mpz, mpz, out q mpz, out r mpz')
+
 func('pow', 'mpz int8', cname='pmpz_pow_ui')
 
 op('&', 'and')
