@@ -51,11 +51,16 @@ SELECT mpz('10', 63);
 SELECT mpz('10', 0), mpz('0x10', 0), mpz('010', 0), mpz('0b10', 0);
 
 SELECT text(10::mpz);
+SELECT text(10::mpz, 2);
+SELECT text(10::mpz, -2);
 SELECT text(255::mpz, 16);
 SELECT text((36 * 36 - 1)::mpz, 36);
 SELECT text((62 * 62 - 1)::mpz, 62);
 SELECT text((36 * 36 - 1)::mpz, -36);
 SELECT text(10::mpz, -37);
+SELECT text(10::mpz, -1);
+SELECT text(10::mpz, 0);
+SELECT text(10::mpz, 1);
 SELECT text(10::mpz, 63);
 
 -- limited error

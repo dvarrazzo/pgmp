@@ -110,16 +110,16 @@ PGMP_PG_FUNCTION(pmpz_out_base)
     PGMP_GETARG_MPZ(z, 0);
     base = PG_GETARG_INT32(1);
 
-    if (!(-36 <= base && base <= 62) || base == -1 || base == 1)
+    if (!((-36 <= base && base <= -2) || (2 <= base && base <= 62)))
     {
         ereport(ERROR, (
             errcode(ERRCODE_INVALID_PARAMETER_VALUE),
             errmsg("invalid base for mpz output: %d", base),
-            errhint("base should be between -36 and 62 and cant'be -1 or 1")));
+            errhint("base should be between -36 and -2 or between 2 and 62")));
     }
 
     /* Allocate the output buffer manually - see mpmz_out to know why */
-    buf = palloc(mpz_sizeinbase(z, base) + 2);      /* add sign and null */
+    buf = palloc(mpz_sizeinbase(z, ABS(base)) + 2);     /* add sign and null */
     PG_RETURN_CSTRING(mpz_get_str(buf, base, z));
 }
 

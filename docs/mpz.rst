@@ -60,9 +60,6 @@ operators. Indexes on `!mpz` columns can be created using the *btree* method.
     lower-case letters (in that significance order) are used. If *base* is not
     specified, 10 is assumed.
 
-.. todo::
-    Not sure if handling 0 correctly here too, or if it should handled at all
-
 .. todo:: write a wrap() function
 
 

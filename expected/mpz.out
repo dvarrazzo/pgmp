@@ -66,6 +66,10 @@ SELECT mpz('10', 0), mpz('0x10', 0), mpz('010', 0), mpz('0b10', 0);
 10|16|8|2
 SELECT text(10::mpz);
 10
+SELECT text(10::mpz, 2);
+1010
+SELECT text(10::mpz, -2);
+1010
 SELECT text(255::mpz, 16);
 ff
 SELECT text((36 * 36 - 1)::mpz, 36);
@@ -76,10 +80,19 @@ SELECT text((36 * 36 - 1)::mpz, -36);
 ZZ
 SELECT text(10::mpz, -37);
 ERROR:  invalid base for mpz output: -37
-HINT:  base should be between -36 and 62 and cant'be -1 or 1
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text(10::mpz, -1);
+ERROR:  invalid base for mpz output: -1
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text(10::mpz, 0);
+ERROR:  invalid base for mpz output: 0
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text(10::mpz, 1);
+ERROR:  invalid base for mpz output: 1
+HINT:  base should be between -36 and -2 or between 2 and 62
 SELECT text(10::mpz, 63);
 ERROR:  invalid base for mpz output: 63
-HINT:  base should be between -36 and 62 and cant'be -1 or 1
+HINT:  base should be between -36 and -2 or between 2 and 62
 -- limited error
 SELECT ('xx' || repeat('1234567890', 10))::mpz;
 ERROR:  invalid input for mpz: "xx123456789012345678901234567890123456789012345678..."
