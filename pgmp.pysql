@@ -43,6 +43,20 @@ def func(sqlname, argin, argout=None, cname=None):
     print "LANGUAGE C IMMUTABLE STRICT;"
     print
 
+def func_tuple(sqlname, args, argout=None, cname=None):
+    """Create a SQL function returning many arguments from a C function"""
+    if not argout: argout = base_type
+    print "CREATE OR REPLACE FUNCTION %s(%s)" \
+        % (sqlname, args)
+    print "RETURNS RECORD"
+    if not cname:
+        pre = base_type + '_'
+        cname = (sqlname.startswith(pre)
+            and "p" + sqlname or 'p' + pre + sqlname)
+    print "AS 'MODULE_PATHNAME', '%s'" % cname
+    print "LANGUAGE C IMMUTABLE STRICT;"
+    print
+
 !! PYOFF
 
 --
@@ -300,17 +314,11 @@ func('root', 'mpz int8', 'mpz')
 func('perfect_power', 'mpz', 'bool', cname='pmpz_perfect_power')
 func('perfect_square', 'mpz', 'bool', cname='pmpz_perfect_square')
 
+func_tuple('rootrem', 'mpz, int8, out root mpz, out rem mpz')
+func_tuple('sqrtrem', 'mpz, out root mpz, out rem mpz')
+
 !! PYOFF
 
-CREATE OR REPLACE FUNCTION rootrem(mpz, int8, out root mpz, out rem mpz)
-RETURNS RECORD
-AS 'MODULE_PATHNAME', 'pmpz_rootrem'
-LANGUAGE C IMMUTABLE STRICT;
-
-CREATE OR REPLACE FUNCTION sqrtrem(mpz, out root mpz, out rem mpz)
-RETURNS RECORD
-AS 'MODULE_PATHNAME', 'pmpz_sqrtrem'
-LANGUAGE C IMMUTABLE STRICT;
 
 --
 -- Number Theoretic Functions
@@ -328,12 +336,9 @@ func('legendre', 'mpz mpz', 'int4')
 func('kronecker', 'mpz mpz', 'int4')
 func('remove', 'mpz mpz', 'mpz')
 
-!! PYOFF
+func_tuple('gcdext', 'mpz, mpz, out g mpz, out s mpz, out t mpz')
 
-CREATE OR REPLACE FUNCTION gcdext(mpz, mpz, out g mpz, out s mpz, out t mpz)
-RETURNS RECORD
-AS 'MODULE_PATHNAME', 'pmpz_gcdext'
-LANGUAGE C IMMUTABLE STRICT;
+!! PYOFF
 
 
 --
