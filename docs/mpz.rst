@@ -14,8 +14,6 @@ cast (but are implicitly converted in assignment).
     SELECT mpz(10000);      -- Cast using mpz as a function
     SELECT 10000::mpz;      -- PostgreSQL-style cast
 
-.. todo:: Not integer input
-
 `!mpz` values can be compared using the regular PostgreSQL comparison
 operators. Indexes on `!mpz` columns can be created using the *btree* method.
 

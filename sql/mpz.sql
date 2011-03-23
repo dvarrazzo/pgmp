@@ -75,6 +75,20 @@ SELECT 123.10::numeric::mpz, 123.90::numeric::mpz;
 SELECT (-123.10::numeric)::mpz, (-123.90::numeric)::mpz;
 SELECT 'NaN'::numeric::mpz;
 
+SELECT 0.0::float4::mpz, 123.15::float4::mpz, 123.95::float4::mpz;
+SELECT (1e36::float4)::mpz BETWEEN pow(10::mpz,36) - pow(10::mpz,30) AND pow(10::mpz,36) + pow(10::mpz,30);
+SELECT (-1e36::float4)::mpz BETWEEN -pow(10::mpz,36) - pow(10::mpz,30) AND -pow(10::mpz,36) + pow(10::mpz,30);
+SELECT 'NaN'::float4::mpz;
+SELECT 'Infinity'::float4::mpz;
+SELECT '-Infinity'::float4::mpz;
+
+SELECT 0.0::float8::mpz, 123.15::float8::mpz, 123.95::float8::mpz;
+SELECT (1e307::float8)::mpz BETWEEN pow(10::mpz,307) - pow(10::mpz,307-15) AND pow(10::mpz,307) + pow(10::mpz,307-15);
+SELECT (-1e307::float8)::mpz BETWEEN -pow(10::mpz,307) - pow(10::mpz,307-15) AND -pow(10::mpz,307) + pow(10::mpz,307-15);
+SELECT 'NaN'::float8::mpz;
+SELECT 'Infinity'::float8::mpz;
+SELECT '-Infinity'::float8::mpz;
+
 SELECT 0::mpz, 1::mpz, (-1)::mpz;       -- automatic casts
 SELECT 1000000::mpz, (-1000000)::mpz;
 SELECT 1000000000::mpz, (-1000000000)::mpz;
@@ -122,6 +136,11 @@ SELECT (-65536::mpz*65536::mpz)::numeric;
 SELECT (-65536::mpz*65536::mpz*65536::mpz)::numeric;
 SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz)::numeric;
 SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz+1::mpz)::numeric;
+
+SELECT 0::mpz::float4, 123::mpz::float4, (-123::mpz)::float4;
+SELECT pow(10::mpz, 30)::float4, (-pow(10::mpz, 30))::float4;
+SELECT 0::mpz::float8, 123::mpz::float8, (-123::mpz)::float8;
+SELECT pow(10::mpz, 307)::float8, (-pow(10::mpz, 307))::float8;
 
 
 --

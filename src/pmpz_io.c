@@ -129,6 +129,7 @@ PGMP_PG_FUNCTION(pmpz_out_base)
  */
 
 static Datum _pmpz_from_long(long in);
+static Datum _pmpz_from_double(double in);
 
 PGMP_PG_FUNCTION(pmpz_from_int2)
 {
@@ -192,12 +193,45 @@ PGMP_PG_FUNCTION(pmpz_from_int8)
 #endif
 }
 
+
 static Datum
 _pmpz_from_long(long in)
 {
     mpz_t   z;
 
     mpz_init_set_si(z, in);
+
+    PGMP_RETURN_MPZ(z);
+}
+
+
+PGMP_PG_FUNCTION(pmpz_from_float4)
+{
+    float4 in = PG_GETARG_FLOAT4(0);
+    return _pmpz_from_double(in);
+}
+
+PGMP_PG_FUNCTION(pmpz_from_float8)
+{
+    float8 in = PG_GETARG_FLOAT8(0);
+    return _pmpz_from_double(in);
+}
+
+static Datum
+_pmpz_from_double(double in)
+{
+    mpz_t   z;
+
+    if (in == get_float8_infinity() ||
+        in == -get_float8_infinity() ||
+        isnan(in))
+    {
+        ereport(ERROR, (
+            errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+            errmsg("can't convert float value to mpz: \"%f\"", in)));
+    }
+
+    mpz_init_set_d(z, in);
 
     PGMP_RETURN_MPZ(z);
 }

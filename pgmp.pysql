@@ -112,6 +112,8 @@ def castfrom(typname, implicit=False):
 castfrom('int2', implicit='I')
 castfrom('int4', implicit='I')
 castfrom('int8', implicit='I')
+castfrom('float4', implicit='A')
+castfrom('float8', implicit='A')
 castfrom('numeric', implicit='A')
 
 def castto(typname, implicit=False):
@@ -132,9 +134,9 @@ castto('int2', implicit='A')
 
 !! PYOFF
 
-CREATE CAST (mpz AS numeric)
-WITH INOUT
-AS ASSIGNMENT;
+CREATE CAST (mpz AS numeric) WITH INOUT AS ASSIGNMENT;
+CREATE CAST (mpz AS float4) WITH INOUT AS ASSIGNMENT;
+CREATE CAST (mpz AS float8) WITH INOUT AS ASSIGNMENT;
 
 
 --
