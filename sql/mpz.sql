@@ -262,6 +262,20 @@ SELECT q, r from fdiv_qr( 7::mpz, -3::mpz);
 SELECT q, r from fdiv_qr(-7::mpz, -3::mpz);
 SELECT q, r from fdiv_qr( 7::mpz,  0::mpz);
 
+SELECT divisible(10::mpz, 3::mpz);
+SELECT divisible(12::mpz, 3::mpz);
+SELECT divisible(10::mpz, 0::mpz);
+SELECT divisible(0::mpz, 0::mpz);
+SELECT divisible_2exp(63::mpz, 3);
+SELECT divisible_2exp(64::mpz, 3);
+
+SELECT congruent(12::mpz, 16::mpz, 5::mpz);
+SELECT congruent(12::mpz, 17::mpz, 5::mpz);
+SELECT congruent(12::mpz, 11::mpz, 0::mpz);
+SELECT congruent(12::mpz, 12::mpz, 0::mpz);
+SELECT congruent_2exp(18::mpz, 41::mpz, 3);
+SELECT congruent_2exp(18::mpz, 42::mpz, 3);
+
 -- power operator/functions
 
 SELECT 2::mpz ^ 10;

@@ -237,8 +237,6 @@ For all the division-related operators :math:`n \oslash d`, :math:`q` and
     operators, *d*\=0 is accepted and following the rule it can be seen that n
     and c are considered congruent mod 0 only when exactly equal.
 
-    .. todo:: functions `divisible()` and `congruent()`
-
 
 .. todo:: integer fast path
 

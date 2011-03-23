@@ -200,6 +200,11 @@ func_tuple('tdiv_qr', 'mpz, mpz, out q mpz, out r mpz')
 func_tuple('cdiv_qr', 'mpz, mpz, out q mpz, out r mpz')
 func_tuple('fdiv_qr', 'mpz, mpz, out q mpz, out r mpz')
 
+func('divisible', 'mpz mpz', 'bool')
+func('divisible_2exp', 'mpz int8', 'bool')
+func('congruent', 'mpz mpz mpz', 'bool')
+func('congruent_2exp', 'mpz mpz int8', 'bool')
+
 func('pow', 'mpz int8', cname='pmpz_pow_ui')
 
 op('&', 'and')

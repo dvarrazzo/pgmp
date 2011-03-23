@@ -219,3 +219,57 @@ PMPZ_CMP(ge, >=)
 PMPZ_CMP(lt, <)
 PMPZ_CMP(le, <=)
 
+
+/*
+ * Misc functions... each one has its own signature, sigh.
+ */
+
+PGMP_PG_FUNCTION(pmpz_divisible)
+{
+    const mpz_t     n;
+    const mpz_t     d;
+
+    PGMP_GETARG_MPZ(n, 0);
+    PGMP_GETARG_MPZ(d, 1);
+
+    PG_RETURN_BOOL(mpz_divisible_p(n, d));
+}
+
+PGMP_PG_FUNCTION(pmpz_divisible_2exp)
+{
+    const mpz_t     n;
+    mp_bitcnt_t     b;
+
+    PGMP_GETARG_MPZ(n, 0);
+    PGMP_GETARG_ULONG(b, 1);
+
+    PG_RETURN_BOOL(mpz_divisible_2exp_p(n, b));
+}
+
+PGMP_PG_FUNCTION(pmpz_congruent)
+{
+    const mpz_t     n;
+    const mpz_t     c;
+    const mpz_t     d;
+
+    PGMP_GETARG_MPZ(n, 0);
+    PGMP_GETARG_MPZ(c, 1);
+    PGMP_GETARG_MPZ(d, 2);
+
+    PG_RETURN_BOOL(mpz_congruent_p(n, c, d));
+}
+
+PGMP_PG_FUNCTION(pmpz_congruent_2exp)
+{
+    const mpz_t     n;
+    const mpz_t     c;
+    mp_bitcnt_t     b;
+
+    PGMP_GETARG_MPZ(n, 0);
+    PGMP_GETARG_MPZ(c, 1);
+    PGMP_GETARG_ULONG(b, 2);
+
+    PG_RETURN_BOOL(mpz_congruent_2exp_p(n, c, b));
+}
+
+
