@@ -21,7 +21,6 @@
 USE_PGXS=1
 
 SHLIB_LINK=-lgmp -lm
-REGRESS_OPTS=--user postgres
 
 MODULE_big = pgmp
 OBJS = src/pgmp.o src/pgmp_test.o \
