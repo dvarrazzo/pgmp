@@ -363,6 +363,7 @@ func('legendre', 'mpz mpz', 'int4')
 func('kronecker', 'mpz mpz', 'int4')
 func('remove', 'mpz mpz', 'mpz')
 func('fac', 'int8', 'mpz', cname='pmpz_fac_ui')
+func('bin', 'mpz int8', 'mpz', cname='pmpz_bin_ui')
 func('fib', 'int8', 'mpz', cname='pmpz_fib_ui')
 func('lucnum', 'int8', 'mpz', cname='pmpz_lucnum_ui')
 

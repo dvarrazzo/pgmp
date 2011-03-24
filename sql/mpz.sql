@@ -467,6 +467,11 @@ select fac(10);
 select fac(100);
 select fac(-1);
 
+select bin(0::mpz, 0);
+select bin(7::mpz, 2);
+select bin(-2::mpz, 1);
+select bin(2::mpz, -1);
+
 select fib(0);
 select fib(1);
 select fib(10);

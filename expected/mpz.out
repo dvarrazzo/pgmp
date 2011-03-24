@@ -732,6 +732,14 @@ select fac(100);
 93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000
 select fac(-1);
 ERROR:  argument can't be negative
+select bin(0::mpz, 0);
+1
+select bin(7::mpz, 2);
+21
+select bin(-2::mpz, 1);
+-2
+select bin(2::mpz, -1);
+ERROR:  argument can't be negative
 select fib(0);
 0
 select fib(1);

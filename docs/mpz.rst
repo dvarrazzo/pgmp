@@ -419,6 +419,15 @@ Number Theoretic Functions
     Return *op*\!, the factorial of *op*.
 
 
+.. function:: bin(n, k)
+
+    Return the `binomial coefficient`__ :math:`{n \choose k}`.
+    Negative values of *n* are supported, using the identity
+    :math:`{-n \choose k} = (-1)^k {n+k-1 \choose k}`.
+
+    .. __: http://en.wikipedia.org/wiki/Binomial_coefficient
+
+
 .. function:: fib(n)
 
 .. function:: fib2(n)

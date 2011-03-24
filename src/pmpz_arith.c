@@ -165,6 +165,7 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
 
 PMPZ_OP_UL(pow_ui,  PMPZ_NO_CHECK,      PMPZ_NO_CHECK)
 PMPZ_OP_UL(root,    PMPZ_CHECK_NONEG,   PMPZ_CHECK_LONG_POS)
+PMPZ_OP_UL(bin_ui,  PMPZ_NO_CHECK,      PMPZ_CHECK_LONG_NONEG)
 
 
 /* Functions defined on bit count
