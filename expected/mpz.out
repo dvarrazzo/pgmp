@@ -422,6 +422,18 @@ SELECT divisible_2exp(63::mpz, 3);
 f
 SELECT divisible_2exp(64::mpz, 3);
 t
+SELECT 10::mpz /? 3::mpz;
+f
+SELECT 12::mpz /? 3::mpz;
+t
+SELECT 10::mpz /? 0::mpz;
+f
+SELECT 0::mpz /? 0::mpz;
+t
+SELECT 63::mpz >>? 3;
+f
+SELECT 64::mpz >>? 3;
+t
 SELECT congruent(12::mpz, 16::mpz, 5::mpz);
 f
 SELECT congruent(12::mpz, 17::mpz, 5::mpz);

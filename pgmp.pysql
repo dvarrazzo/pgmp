@@ -224,6 +224,18 @@ func('gmp_max_bitcnt', '', 'mpz', cname='pgmp_max_bitcnt')
 
 !! PYOFF
 
+CREATE OPERATOR /? (
+    LEFTARG = mpz,
+    RIGHTARG = mpz,
+    PROCEDURE = divisible
+);
+
+CREATE OPERATOR >>? (
+    LEFTARG = mpz,
+    RIGHTARG = int8,
+    PROCEDURE = divisible_2exp
+);
+
 CREATE OPERATOR ^ (
     LEFTARG = mpz,
     RIGHTARG = int8,

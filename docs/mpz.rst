@@ -109,6 +109,18 @@ Notes:
 Division Operators and Functions
 --------------------------------
 
+For all the division-related operators :math:`n \oslash d`, :math:`q` and
+:math:`r` will satisfy :math:`n = q \cdot d + r`, and :math:`r` will satisfy
+:math:`0 \le |r| \lt |d|`.
+
+.. note::
+    Only the truncating division and reminder (`!/` and `!%`) have the correct
+    precedence respect to addition, subtraction and multiplication.
+    See `the PostgreSQL precedence table`__ for further details.
+
+    .. __: http://www.postgresql.org/docs/9.0/static/sql-syntax-lexical.html#SQL-PRECEDENCE-TABLE
+
+
 .. table:: Division operators
 
     =========== =============================== ==================== =======
@@ -138,12 +150,17 @@ Division Operators and Functions
 
                 Rounding towards -infinity      `!-7::mpz -% 3::mpz` 2
 
-    `/!`        Exact division (1)              `!21::mpz /! 7::mpz` 3
+    `/?`        Divisible (1)                   `!21::mpz /? 7::mpz` `!true`
+
+    `/!`        Exact division (2)              `!21::mpz /! 7::mpz` 3
     =========== =============================== ==================== =======
 
 Notes:
 
 (1)
+    See also the function `divisible()`.
+
+(2)
     The exact division operator (`!/!`) produces correct results only when it
     is known in advance that :math:`d` divides :math:`n`.  The operator is
     much faster than the other division operators, and is the best choice when
@@ -179,18 +196,12 @@ Notes:
     `!-%>`   Remainder of division by :math:`2^n` `!1027::mpz -%> 3`  3
 
              Rounding towards -infinity           `!-1027::mpz -%> 3` 5
+
+    `>>?`    Divisible by :math:`2^n` (1)         `!64::mpz >>? 3`    `!true`
     ======== ==================================== =================== =======
 
-For all the division-related operators :math:`n \oslash d`, :math:`q` and
-:math:`r` will satisfy :math:`n = q \cdot d + r`, and :math:`r` will satisfy
-:math:`0 \le |r| \lt |d|`.
-
-.. note::
-    Only the truncating division and reminder (`!/` and `!%`) have the correct
-    precedence respect to addition, subtraction and multiplication.
-    See `the PostgreSQL precedence table`__ for further details.
-
-    .. __: http://www.postgresql.org/docs/9.0/static/sql-syntax-lexical.html#SQL-PRECEDENCE-TABLE
+(1)
+    See also the function `divisible_2exp()`.
 
 
 .. function:: tdiv_qr(n, d)
@@ -223,6 +234,9 @@ For all the division-related operators :math:`n \oslash d`, :math:`q` and
     satisfying :math:`n = q \cdot d`.  Unlike the other division operators,
     *d*\=0 is accepted and following the rule it can be seen that only 0
     is considered divisible by 0.
+
+    The operators `!/?` and `!>>?` are aliases for `!divisible()` and
+    `!divisible_2exp()`.
 
 
 .. function:: congruent(n, c, d)
