@@ -461,6 +461,12 @@ select remove(43::mpz, 5::mpz);
 select remove(48::mpz, 6::mpz); 
 select remove(48::mpz, 3::mpz); 
 
+select fac(0);
+select fac(1);
+select fac(10);
+select fac(100);
+select fac(-1);
+
 
 --
 -- Logic and bit fiddling functions and operators

@@ -414,6 +414,11 @@ Number Theoretic Functions
     will be zero if either *a* or *b* is zero.
 
 
+.. function:: fac(op)
+
+    Return *op*\!, the factorial of *op*.
+
+
 .. function:: invert(a, b)
 
     Return the inverse of *a* modulo *b* if exists. The return value *r*

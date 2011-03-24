@@ -362,6 +362,7 @@ func('jacobi', 'mpz mpz', 'int4')
 func('legendre', 'mpz mpz', 'int4')
 func('kronecker', 'mpz mpz', 'int4')
 func('remove', 'mpz mpz', 'mpz')
+func('fac', 'int8', 'mpz', cname='pmpz_fac_ui')
 
 func_tuple('gcdext', 'mpz, mpz, out g mpz, out s mpz, out t mpz')
 

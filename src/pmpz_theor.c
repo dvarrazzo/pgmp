@@ -98,3 +98,19 @@ PMPZ_INT32(legendre)
 PMPZ_INT32(kronecker)
 
 
+#define PMPZ_ULONG(f) \
+ \
+PGMP_PG_FUNCTION(pmpz_ ## f) \
+{ \
+    unsigned long   op; \
+    mpz_t           ret; \
+ \
+    PGMP_GETARG_ULONG(op, 0); \
+ \
+    mpz_init(ret); \
+    mpz_ ## f (ret, op); \
+    PGMP_RETURN_MPZ(ret); \
+}
+
+PMPZ_ULONG(fac_ui)
+

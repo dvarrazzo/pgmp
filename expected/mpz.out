@@ -722,6 +722,16 @@ select remove(48::mpz, 6::mpz);
 8
 select remove(48::mpz, 3::mpz); 
 16
+select fac(0);
+1
+select fac(1);
+1
+select fac(10);
+3628800
+select fac(100);
+93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000
+select fac(-1);
+ERROR:  argument can't be negative
 --
 -- Logic and bit fiddling functions and operators
 --
