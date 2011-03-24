@@ -111,6 +111,13 @@ Notes:
     Return +1 if *z* > 0, 0 if *z* = 0, and -1 if *z* < 0. 
 
 
+.. function:: odd(z)
+    
+.. function:: even(z)
+
+    Return `!true` if *z* is odd or even, respectively, else `!false`.
+
+
 Division Operators and Functions
 --------------------------------
 

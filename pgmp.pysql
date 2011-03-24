@@ -149,6 +149,8 @@ func('mpz_uplus', 'mpz')
 func('mpz_neg', 'mpz')
 func('abs', 'mpz')
 func('sgn', 'mpz', 'int4')
+func('even', 'mpz', 'bool')
+func('odd', 'mpz', 'bool')
 
 !! PYOFF
 

@@ -183,6 +183,23 @@ PMPZ_OP_BITCNT(fdiv_q_2exp,     PMPZ_NO_CHECK,  PMPZ_NO_CHECK)
 PMPZ_OP_BITCNT(fdiv_r_2exp,     PMPZ_NO_CHECK,  PMPZ_NO_CHECK)
 
 
+/* Unary predicates */
+
+#define PMPZ_PRED(pred) \
+ \
+PGMP_PG_FUNCTION(pmpz_ ## pred) \
+{ \
+    const mpz_t     op; \
+ \
+    PGMP_GETARG_MPZ(op, 0); \
+ \
+    PG_RETURN_BOOL(mpz_ ## pred ## _p(op)); \
+}
+
+PMPZ_PRED(even)
+PMPZ_PRED(odd)
+
+
 /*
  * Comparison operators
  */
