@@ -732,6 +732,42 @@ select fac(100);
 93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000
 select fac(-1);
 ERROR:  argument can't be negative
+select fib(0);
+0
+select fib(1);
+1
+select fib(10);
+55
+select fib(-1);
+ERROR:  argument can't be negative
+select fn, fnsub1 from fib2(0);
+0|1
+select fn, fnsub1 from fib2(1);
+1|0
+select fn, fnsub1 from fib2(2);
+1|1
+select fn, fnsub1 from fib2(10);
+55|34
+select fn, fnsub1 from fib2(-1);
+ERROR:  argument can't be negative
+select lucnum(0);
+2
+select lucnum(1);
+1
+select lucnum(10);
+123
+select lucnum(-1);
+ERROR:  argument can't be negative
+select ln, lnsub1 from lucnum2(0);
+2|-1
+select ln, lnsub1 from lucnum2(1);
+1|2
+select ln, lnsub1 from lucnum2(2);
+3|1
+select ln, lnsub1 from lucnum2(10);
+123|76
+select ln, lnsub1 from lucnum2(-1);
+ERROR:  argument can't be negative
 --
 -- Logic and bit fiddling functions and operators
 --

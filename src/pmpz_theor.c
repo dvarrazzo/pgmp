@@ -109,8 +109,32 @@ PGMP_PG_FUNCTION(pmpz_ ## f) \
  \
     mpz_init(ret); \
     mpz_ ## f (ret, op); \
+ \
     PGMP_RETURN_MPZ(ret); \
 }
 
 PMPZ_ULONG(fac_ui)
+PMPZ_ULONG(fib_ui)
+PMPZ_ULONG(lucnum_ui)
+
+
+#define PMPZ_ULONG_MPZ2(f) \
+ \
+PGMP_PG_FUNCTION(pmpz_ ## f) \
+{ \
+    unsigned long   op; \
+    mpz_t           ret1; \
+    mpz_t           ret2; \
+ \
+    PGMP_GETARG_ULONG(op, 0); \
+ \
+    mpz_init(ret1); \
+    mpz_init(ret2); \
+    mpz_ ## f (ret1, ret2, op); \
+ \
+    PGMP_RETURN_MPZ_MPZ(ret1, ret2); \
+}
+
+PMPZ_ULONG_MPZ2(fib2_ui)
+PMPZ_ULONG_MPZ2(lucnum2_ui)
 

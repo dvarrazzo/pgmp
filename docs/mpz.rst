@@ -107,12 +107,12 @@ Notes:
 
 
 .. function:: sgn(z)
-    
-    Return +1 if *z* > 0, 0 if *z* = 0, and -1 if *z* < 0. 
+
+    Return +1 if *z* > 0, 0 if *z* = 0, and -1 if *z* < 0.
 
 
 .. function:: odd(z)
-    
+
 .. function:: even(z)
 
     Return `!true` if *z* is odd or even, respectively, else `!false`.
@@ -417,6 +417,41 @@ Number Theoretic Functions
 .. function:: fac(op)
 
     Return *op*\!, the factorial of *op*.
+
+
+.. function:: fib(n)
+
+.. function:: fib2(n)
+
+    `!fib()` returns :math:`F_n`, the *n*\th `Fibonacci number`__.
+    `!fib2()` returns :math:`F_n` and :math:`F_{n-1}`.
+
+    .. __: http://en.wikipedia.org/wiki/Fibonacci_number
+
+    These functions are designed for calculating isolated Fibonacci numbers.
+    When a sequence of values is wanted it's best to start with `!fib2()`
+    and iterate the defining :math:`F_{n+1}=F_n+F_{n-1}` or similar.
+
+
+.. function:: lucnum(n)
+
+.. function:: lucnum2(n)
+
+    `!lucnum()` returns :math:`L_n`, the *n*\th `Lucas number`__.
+    `!lucnum2()` returns :math:`L_n` and :math:`L_{n-1}`.
+
+    .. __: http://en.wikipedia.org/wiki/Lucas_number
+
+    These functions are designed for calculating isolated Lucas numbers.
+    When a sequence of values is wanted it's best to start with `!lucnum2()`
+    and iterate the defining :math:`L_{n+1}=L_n+L_{n-1}` or similar.
+
+    The Fibonacci numbers and Lucas numbers are related sequences, so it's
+    never necessary to call both `!fib2()` and `!lucnum2()`. The formulas for
+    going from Fibonacci to Lucas can be found in `Lucas Numbers Algorithm`__,
+    the reverse is straightforward too.
+
+    .. __: http://gmplib.org/manual/Lucas-Numbers-Algorithm.html
 
 
 .. function:: invert(a, b)

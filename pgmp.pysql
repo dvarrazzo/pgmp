@@ -363,8 +363,12 @@ func('legendre', 'mpz mpz', 'int4')
 func('kronecker', 'mpz mpz', 'int4')
 func('remove', 'mpz mpz', 'mpz')
 func('fac', 'int8', 'mpz', cname='pmpz_fac_ui')
+func('fib', 'int8', 'mpz', cname='pmpz_fib_ui')
+func('lucnum', 'int8', 'mpz', cname='pmpz_lucnum_ui')
 
 func_tuple('gcdext', 'mpz, mpz, out g mpz, out s mpz, out t mpz')
+func_tuple('fib2', 'int8, out fn mpz, out fnsub1 mpz', cname='pmpz_fib2_ui')
+func_tuple('lucnum2', 'int8, out ln mpz, out lnsub1 mpz', cname='pmpz_lucnum2_ui')
 
 !! PYOFF
 

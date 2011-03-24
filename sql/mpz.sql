@@ -467,6 +467,28 @@ select fac(10);
 select fac(100);
 select fac(-1);
 
+select fib(0);
+select fib(1);
+select fib(10);
+select fib(-1);
+
+select fn, fnsub1 from fib2(0);
+select fn, fnsub1 from fib2(1);
+select fn, fnsub1 from fib2(2);
+select fn, fnsub1 from fib2(10);
+select fn, fnsub1 from fib2(-1);
+
+select lucnum(0);
+select lucnum(1);
+select lucnum(10);
+select lucnum(-1);
+
+select ln, lnsub1 from lucnum2(0);
+select ln, lnsub1 from lucnum2(1);
+select ln, lnsub1 from lucnum2(2);
+select ln, lnsub1 from lucnum2(10);
+select ln, lnsub1 from lucnum2(-1);
+
 
 --
 -- Logic and bit fiddling functions and operators
