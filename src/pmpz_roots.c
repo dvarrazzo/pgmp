@@ -28,24 +28,6 @@
 
 /* Function with a more generic signature are defined in pmpz.arith.c */
 
-PGMP_PG_FUNCTION(pmpz_perfect_power)
-{
-    const mpz_t     z1;
-
-    PGMP_GETARG_MPZ(z1, 0);
-
-    PG_RETURN_BOOL(mpz_perfect_power_p(z1));
-}
-
-PGMP_PG_FUNCTION(pmpz_perfect_square)
-{
-    const mpz_t     z1;
-
-    PGMP_GETARG_MPZ(z1, 0);
-
-    PG_RETURN_BOOL(mpz_perfect_square_p(z1));
-}
-
 PGMP_PG_FUNCTION(pmpz_rootrem)
 {
     const mpz_t     z1;

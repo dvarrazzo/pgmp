@@ -198,6 +198,8 @@ PGMP_PG_FUNCTION(pmpz_ ## pred) \
 
 PMPZ_PRED(even)
 PMPZ_PRED(odd)
+PMPZ_PRED(perfect_power)
+PMPZ_PRED(perfect_square)
 
 
 /*
