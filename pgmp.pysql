@@ -148,6 +148,7 @@ CREATE CAST (mpz AS float8) WITH INOUT AS ASSIGNMENT;
 func('mpz_uplus', 'mpz')
 func('mpz_neg', 'mpz')
 func('abs', 'mpz')
+func('sgn', 'mpz', 'int4')
 
 !! PYOFF
 

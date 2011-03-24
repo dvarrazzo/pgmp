@@ -224,6 +224,15 @@ PMPZ_CMP(le, <=)
  * Misc functions... each one has its own signature, sigh.
  */
 
+PGMP_PG_FUNCTION(pmpz_sgn)
+{
+    const mpz_t     n;
+
+    PGMP_GETARG_MPZ(n, 0);
+
+    PG_RETURN_INT32(mpz_sgn(n));
+}
+
 PGMP_PG_FUNCTION(pmpz_divisible)
 {
     const mpz_t     n;

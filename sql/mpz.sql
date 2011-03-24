@@ -156,6 +156,7 @@ SELECT pow(10::mpz, 307)::float8, (-pow(10::mpz, 307))::float8;
 SELECT -('0'::mpz), +('0'::mpz), -('1'::mpz), +('1'::mpz);
 SELECT -('12345678901234567890'::mpz), +('12345678901234567890'::mpz);
 SELECT abs('-1234567890'::mpz), abs('1234567890'::mpz);
+SELECT sgn(0::mpz), sgn('-1234567890'::mpz), sgn('1234567890'::mpz);
 
 SELECT '1'::mpz + '2'::mpz;
 SELECT '2'::mpz + '-4'::mpz;

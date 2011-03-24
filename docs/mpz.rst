@@ -106,6 +106,11 @@ Notes:
     Return the absolute value of *z*.
 
 
+.. function:: sgn(z)
+    
+    Return +1 if *z* > 0, 0 if *z* = 0, and -1 if *z* < 0. 
+
+
 Division Operators and Functions
 --------------------------------
 
