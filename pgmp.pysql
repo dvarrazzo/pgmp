@@ -206,6 +206,7 @@ func('congruent', 'mpz mpz mpz', 'bool')
 func('congruent_2exp', 'mpz mpz int8', 'bool')
 
 func('pow', 'mpz int8', cname='pmpz_pow_ui')
+func('powm', 'mpz mpz mpz')
 
 op('&', 'and')
 op('|', 'ior')

@@ -280,21 +280,6 @@ Exponentiation Functions
     raised.
 
 
-.. function:: powm_sec(base, exp, mod)
-
-    Return (*base* raised to *exp*) modulo *mod*.
-
-    It is required that *exp* > 0 and that *mod* is odd.
-
-    This function is designed to take the same time and have the same cache
-    access patterns for any two same-size arguments, assuming that function
-    arguments are placed at the same position and that the machine state is
-    identical upon function entry. This function is intended for cryptographic
-    purposes, where resilience to side-channel attacks is desired.
-
-.. todo:: `powm()`, `powm_sec()`.
-
-
 Root Extraction Functions
 -------------------------
 

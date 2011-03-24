@@ -291,6 +291,10 @@ SELECT 2::mpz ^ -1;
 SELECT pow(2::mpz, 10);
 SELECT pow(2::mpz, 0);
 SELECT pow(2::mpz, -1);
+SELECT powm(3::mpz, 2::mpz, 9::mpz);
+SELECT powm(3::mpz, 2::mpz, 8::mpz);
+SELECT powm(3::mpz, -1::mpz, 8::mpz);
+SELECT powm(3::mpz, 2::mpz, 0::mpz);
 
 --
 -- mpz ordering operators

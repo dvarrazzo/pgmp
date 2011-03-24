@@ -273,3 +273,22 @@ PGMP_PG_FUNCTION(pmpz_congruent_2exp)
 }
 
 
+PGMP_PG_FUNCTION(pmpz_powm)
+{
+    const mpz_t     base;
+    const mpz_t     exp;
+    const mpz_t     mod;
+    mpz_t           zf;
+
+    PGMP_GETARG_MPZ(base, 0);
+    PGMP_GETARG_MPZ(exp, 1);
+    PMPZ_CHECK_NONEG(exp);
+    PGMP_GETARG_MPZ(mod, 2);
+    PMPZ_CHECK_DIV0(mod);
+
+    mpz_init(zf);
+    mpz_powm(zf, base, exp, mod);
+
+    PGMP_RETURN_MPZ(zf);
+}
+

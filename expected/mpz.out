@@ -459,6 +459,14 @@ SELECT pow(2::mpz, 0);
 1
 SELECT pow(2::mpz, -1);
 ERROR:  argument can't be negative
+SELECT powm(3::mpz, 2::mpz, 9::mpz);
+0
+SELECT powm(3::mpz, 2::mpz, 8::mpz);
+1
+SELECT powm(3::mpz, -1::mpz, 8::mpz);
+ERROR:  argument can't be negative
+SELECT powm(3::mpz, 2::mpz, 0::mpz);
+ERROR:  division by zero
 --
 -- mpz ordering operators
 --
