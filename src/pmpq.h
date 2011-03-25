@@ -91,15 +91,14 @@ void mpq_from_pmpq(mpq_srcptr q, const pmpq *pq);
 #endif
 
 #define ERROR_IF_DENOM_ZERO(arg) \
- \
+do { \
+    if (UNLIKELY(MPZ_IS_ZERO(arg))) \
     { \
-        if (UNLIKELY(MPZ_IS_ZERO(arg))) \
-        { \
-            ereport(ERROR, ( \
-                errcode(ERRCODE_DIVISION_BY_ZERO), \
-                errmsg("denominator can't be zero"))); \
-        } \
-    } while (0)
+        ereport(ERROR, ( \
+            errcode(ERRCODE_DIVISION_BY_ZERO), \
+            errmsg("denominator can't be zero"))); \
+    } \
+} while (0)
 
 #endif  /* __PMPQ_H__ */
 

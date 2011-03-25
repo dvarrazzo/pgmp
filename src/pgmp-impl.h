@@ -96,7 +96,7 @@ Datum name(PG_FUNCTION_ARGS)
 #if PGMP_LONG_32
 
 #define PGMP_GETARG_LONG(tgt,narg) \
-{ \
+do { \
     int64 _tmp = PG_GETARG_INT64(narg); \
     if (!(LONG_MIN <= _tmp && _tmp <= LONG_MAX)) { \
         ereport(ERROR, ( \
@@ -107,7 +107,7 @@ Datum name(PG_FUNCTION_ARGS)
 } while (0)
 
 #define PGMP_GETARG_ULONG(tgt,narg) \
-{ \
+do { \
     int64 _tmp = PG_GETARG_INT64(narg); \
     if (_tmp > ULONG_MAX) { \
         ereport(ERROR, ( \
@@ -128,7 +128,7 @@ Datum name(PG_FUNCTION_ARGS)
     tgt = (long)PG_GETARG_INT64(narg);
 
 #define PGMP_GETARG_ULONG(tgt,narg) \
-{ \
+do { \
     int64 _tmp = PG_GETARG_INT64(narg); \
     if (_tmp < 0) { \
         ereport(ERROR, ( \

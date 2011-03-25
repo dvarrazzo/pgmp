@@ -42,7 +42,7 @@ gmp_randstate_t     *pgmp_randstate;
  * memory context
  */
 #define PGMP_CLEAR_RANDSTATE \
-{ \
+do { \
     if (pgmp_randstate) { \
         gmp_randclear(*pgmp_randstate); \
         pfree(pgmp_randstate); \
@@ -54,7 +54,7 @@ gmp_randstate_t     *pgmp_randstate;
 /* Exit with an error if the random state is not set */
 
 #define PGMP_CHECK_RANDSTATE \
-{ \
+do { \
     if (!pgmp_randstate) { \
         ereport(ERROR, ( \
             errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
@@ -98,7 +98,7 @@ PGMP_RANDINIT(randinit_mt,      PGMP_RANDINIT_NOARG)
 
 
 #define PGMP_RANDINIT_ACE(f) \
-{ \
+do { \
     const mpz_t         a; \
     unsigned long       c; \
     mp_bitcnt_t         e; \
@@ -114,7 +114,7 @@ PGMP_RANDINIT(randinit_lc_2exp, PGMP_RANDINIT_ACE)
 
 
 #define PGMP_RANDINIT_SIZE(f) \
-{ \
+do { \
     mp_bitcnt_t         size; \
  \
     PGMP_GETARG_ULONG(size, 0); \

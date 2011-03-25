@@ -49,7 +49,7 @@ typedef struct
     PG_RETURN_POINTER(pmpz_from_mpz(z))
 
 #define PGMP_RETURN_MPZ_MPZ(z1,z2) \
-{ \
+do { \
     TupleDesc       _tupdesc; \
     Datum           _result[2]; \
     bool            _isnull[2] = {0,0}; \
@@ -69,7 +69,7 @@ typedef struct
 } while (0)
 
 #define PGMP_RETURN_MPZ_MPZ_MPZ(z1,z2,z3) \
-{ \
+do { \
     TupleDesc       _tupdesc; \
     Datum           _result[3]; \
     bool            _isnull[3] = {0,0,0}; \
@@ -117,7 +117,7 @@ void mpz_from_pmpz(mpz_srcptr z, const pmpz *pz);
 #define PMPZ_NO_CHECK(arg)
 
 #define PMPZ_CHECK_DIV0(arg) \
-{ \
+do { \
     if (UNLIKELY(MPZ_IS_ZERO(arg))) \
     { \
         ereport(ERROR, ( \
@@ -127,7 +127,7 @@ void mpz_from_pmpz(mpz_srcptr z, const pmpz *pz);
 } while (0)
 
 #define PMPZ_CHECK_NONEG(arg) \
-{ \
+do { \
     if (UNLIKELY(SIZ(arg) < 0)) \
     { \
         ereport(ERROR, ( \
@@ -137,7 +137,7 @@ void mpz_from_pmpz(mpz_srcptr z, const pmpz *pz);
 } while (0)
 
 #define PMPZ_CHECK_LONG_POS(arg) \
-{ \
+do { \
     if (UNLIKELY((arg) <= 0)) { \
         ereport(ERROR, ( \
             errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
@@ -146,7 +146,7 @@ void mpz_from_pmpz(mpz_srcptr z, const pmpz *pz);
 } while (0)
 
 #define PMPZ_CHECK_LONG_NONEG(arg) \
-{ \
+do { \
     if (UNLIKELY((arg) < 0)) { \
         ereport(ERROR, ( \
             errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
