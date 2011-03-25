@@ -584,3 +584,105 @@ number 0.
     The value is the maximum `!unsigned long` defined on the server, so it can
     be :math:`2^{32}-1` or :math:`2^{64}-1` according to the server platform.
 
+
+Random number functions
+-----------------------
+
+Sequences of pseudo-random numbers are generated using an internal per-session
+variable, which holds an algorithm selection and a current state. Such a
+variable must be initialized by a call to one of the `!randinit*()` functions,
+and can be seeded with the `randseed()` function.
+
+.. function:: randinit()
+
+    Initialize the session random state with a default algorithm. This will be
+    a compromise between speed and randomness, and is recommended for
+    applications with no special requirements. Currently this is
+    `randinit_mt()`.
+
+
+.. function:: randinit_mt()
+
+    Initialize the session random state for a `Mersenne Twister`__ algorithm.
+    This algorithm is fast and has good randomness properties.
+
+    .. __: http://en.wikipedia.org/wiki/Mersenne_twister
+
+
+.. function:: randinit_lc_2exp(a, c, e)
+
+    Initialize the session random state with a `linear congruential`__
+    algorithm :math:`X = (a \cdot X + c) \mod 2^e`.
+
+    .. __: http://en.wikipedia.org/wiki/Linear_congruential_generator
+
+    The low bits of *X* in this algorithm are not very random. The least
+    significant bit will have a period no more than 2, and the second bit no
+    more than 4, etc. For this reason only the high half of each *X* is
+    actually used.
+
+    When a random number of more than :math:`e/2` bits is to be generated,
+    multiple iterations of the recurrence are used and the results
+    concatenated.
+
+
+.. function:: randinit_lc_2exp_size(s)
+
+    Initialize the session random state for a linear congruential algorithm as
+    per `randinit_lc_2exp()`. *a*, *c* and *e* are selected from a table,
+    chosen so that size bits (or more) of each *X* will be used, ie.
+    :math:`e/2 \ge s`.
+
+    The function fails if *s* is bigger than the table data provides. The
+    maximum size currently supported is 128.
+
+
+.. function:: randseed(seed)
+
+    Set an initial seed value into session random state.
+
+    The size of a seed determines how many different sequences of random
+    numbers is possible to generate. The "quality" of the seed is the
+    randomness of a given seed compared to the previous seed used, and this
+    affects the randomness of separate number sequences. The method for
+    choosing a seed is critical if the generated numbers are to be used for
+    important applications, such as generating cryptographic keys.
+
+    Traditionally the system time has been used to seed, but care needs to be
+    taken with this. If an application seeds often and the resolution of the
+    system clock is low, then the same sequence of numbers might be repeated.
+    Also, the system time is quite easy to guess, so if unpredictability is
+    required then it should definitely not be the only source for the seed
+    value. On some systems there's a special device ``/dev/random`` which
+    provides random data better suited for use as a seed.
+
+
+.. function:: urandomb(n)
+
+    Generate a uniformly distributed random integer in the range :math:`0` to
+    :math:`2^n−1`, inclusive.
+
+    The session state must be initialized by calling one of the `!randinit()`
+    functions before invoking this function.
+
+
+.. function:: urandomm(n)
+
+    Generate a uniformly distributed random integer in the range 0 to
+    *n*\−1, inclusive.
+
+    The session state must be initialized by calling one of the `!randinit()`
+    functions before invoking this function.
+
+
+.. function:: urandomb(n)
+
+    Generate a random integer with long strings of zeros and ones in the
+    binary representation. Useful for testing functions and algorithms, since
+    this kind of random numbers have proven to be more likely to trigger
+    corner-case bugs. The random number will be in the range :math:`0` to
+    :math:`2^n−1`, inclusive.
+
+    The session state must be initialized by calling one of the `!randinit()`
+    functions before invoking this function.
+
