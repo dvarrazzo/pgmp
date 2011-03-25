@@ -29,7 +29,7 @@ SET search_path = public;
 
 base_type = 'mpz'
 
-def func(sqlname, argin, argout=None, cname=None):
+def func(sqlname, argin, argout=None, cname=None, volatile=False):
     """Create a SQL function from a C function"""
     if not argout: argout = base_type
     print "CREATE OR REPLACE FUNCTION %s(%s)" \
@@ -40,7 +40,7 @@ def func(sqlname, argin, argout=None, cname=None):
         cname = (sqlname.startswith(pre)
             and "p" + sqlname or 'p' + pre + sqlname)
     print "AS 'MODULE_PATHNAME', '%s'" % cname
-    print "LANGUAGE C IMMUTABLE STRICT;"
+    print "LANGUAGE C", (volatile and "VOLATILE" or "IMMUTABLE"), "STRICT;"
     print
 
 def func_tuple(sqlname, args, argout=None, cname=None):
@@ -370,6 +370,25 @@ func('lucnum', 'int8', 'mpz', cname='pmpz_lucnum_ui')
 func_tuple('gcdext', 'mpz, mpz, out g mpz, out s mpz, out t mpz')
 func_tuple('fib2', 'int8, out fn mpz, out fnsub1 mpz', cname='pmpz_fib2_ui')
 func_tuple('lucnum2', 'int8, out ln mpz, out lnsub1 mpz', cname='pmpz_lucnum2_ui')
+
+!! PYOFF
+
+
+--
+-- Random numbers
+--
+
+!! PYON
+
+func('randinit', '', 'void', cname='pgmp_randinit_default', volatile=True)
+func('randinit_mt', '', 'void', cname='pgmp_randinit_mt', volatile=True)
+func('randinit_lc_2exp', 'mpz int8 int8', 'void',
+    cname='pgmp_randinit_lc_2exp', volatile=True)
+func('randinit_lc_2exp_size', 'int8', 'void',
+    cname='pgmp_randinit_lc_2exp_size', volatile=True)
+func('randseed', 'mpz', 'void', cname='pgmp_randseed', volatile=True)
+func('urandomb', 'int8', 'mpz', volatile=True)
+func('rrandomb', 'int8', 'mpz', volatile=True)
 
 !! PYOFF
 

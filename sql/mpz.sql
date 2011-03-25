@@ -534,3 +534,54 @@ SELECT tstbit('0b1010'::mpz, 0);
 SELECT tstbit('0b1010'::mpz, 1);
 SELECT tstbit(0::mpz, -1);
 SELECT tstbit(0::mpz, (2^64)::numeric::mpz);
+
+
+--
+-- Random numbers
+--
+
+-- Errors
+SELECT rrandomb(128);
+SELECT urandomb(128);
+SELECT randseed(123456::mpz);
+
+-- Correct sequence
+SELECT randinit();
+SELECT urandomb(128);
+SELECT urandomb(128);
+
+-- Re-initialization
+SELECT randinit();
+SELECT urandomb(128);
+SELECT urandomb(128);
+
+SELECT randinit_mt();
+SELECT urandomb(128);
+SELECT urandomb(128);
+
+-- TODO: not sure about this: it quickly starts repeating
+SELECT randinit_lc_2exp(4522384762384682374,23232,37);
+SELECT urandomb(128);
+SELECT urandomb(128);
+
+SELECT randinit_lc_2exp_size(64);
+SELECT urandomb(128);
+SELECT urandomb(128);
+
+-- Seeding
+SELECT randinit();
+SELECT randseed(123456::mpz);
+SELECT urandomb(128);
+SELECT urandomb(128);
+SELECT randseed(123456::mpz);
+SELECT urandomb(128);
+SELECT urandomb(128);
+
+SELECT randinit();
+SELECT randseed(123456::mpz);
+SELECT text(rrandomb(128), 2);
+SELECT text(rrandomb(128), 2);
+SELECT randseed(123456::mpz);
+SELECT text(rrandomb(128), 2);
+SELECT text(rrandomb(128), 2);
+
