@@ -36,7 +36,7 @@
  */
 
 #define PGMP_GETARG_BITCNT(tgt,n) \
-{ \
+do { \
     mpz_t _tmp; \
     PGMP_GETARG_MPZ(_tmp, n); \
  \
@@ -47,14 +47,14 @@
     } \
  \
     tgt = mpz_get_ui(_tmp); \
-} while(0)
+} while (0)
 
 #define PGMP_RETURN_BITCNT(n) \
-{ \
+do { \
     mpz_t _rv; \
     mpz_init_set_ui(_rv, n); \
     PGMP_RETURN_MPZ(_rv); \
-} while(0)
+} while (0)
 
 
 /* Return the largest possible mp_bitcnt_t. Useful for testing the return
