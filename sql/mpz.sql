@@ -559,8 +559,7 @@ SELECT randinit_mt();
 SELECT urandomb(128);
 SELECT urandomb(128);
 
--- TODO: not sure about this: it quickly starts repeating
-SELECT randinit_lc_2exp(4522384762384682374,23232,37);
+SELECT randinit_lc_2exp(1103515245, 12345, 32);
 SELECT urandomb(128);
 SELECT urandomb(128);
 
