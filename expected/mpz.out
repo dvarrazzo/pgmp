@@ -892,6 +892,15 @@ SELECT urandomb(128);
 249447876620907321381460515833516635592
 SELECT urandomb(128);
 22936434003400892378378850487313686779
+-- A failed initialization leaves the state as it was before
+SELECT randinit();
+
+SELECT urandomb(128);
+157222500695008773376422121395749431412
+SELECT randinit_lc_2exp_size(8192);
+ERROR:  failed to initialized random state with size 8192
+SELECT urandomb(128);
+134920890566235299823285762767211707848
 -- Seeding
 SELECT randinit();
 

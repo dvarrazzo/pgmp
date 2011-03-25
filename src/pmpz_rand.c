@@ -119,7 +119,12 @@ PGMP_RANDINIT(randinit_lc_2exp, PGMP_RANDINIT_ACE)
  \
     PGMP_GETARG_ULONG(size, 0); \
  \
-    gmp_ ## f (*state, size); \
+    if (!gmp_ ## f (*state, size)) { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_INVALID_PARAMETER_VALUE), \
+            errmsg("failed to initialized random state with size %lu", \
+                size) )); \
+    } \
 } while (0)
 
 PGMP_RANDINIT(randinit_lc_2exp_size, PGMP_RANDINIT_SIZE)

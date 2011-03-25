@@ -568,6 +568,12 @@ SELECT randinit_lc_2exp_size(64);
 SELECT urandomb(128);
 SELECT urandomb(128);
 
+-- A failed initialization leaves the state as it was before
+SELECT randinit();
+SELECT urandomb(128);
+SELECT randinit_lc_2exp_size(8192);
+SELECT urandomb(128);
+
 -- Seeding
 SELECT randinit();
 SELECT randseed(123456::mpz);
