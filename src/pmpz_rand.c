@@ -78,12 +78,11 @@ PGMP_PG_FUNCTION(pgmp_ ## f) \
     /* in the global memory context. */ \
     oldctx = MemoryContextSwitchTo(TopMemoryContext); \
  \
-    PGMP_CLEAR_RANDSTATE; \
- \
     state = palloc(sizeof(gmp_randstate_t)); \
     INIT(f); \
  \
     /* set the global variable to the initialized state */ \
+    PGMP_CLEAR_RANDSTATE; \
     pgmp_randstate = state; \
  \
     MemoryContextSwitchTo(oldctx); \
