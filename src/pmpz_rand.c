@@ -173,3 +173,19 @@ PGMP_PG_FUNCTION(pmpz_ ## f) \
 PMPZ_RAND_BITCNT(urandomb)
 PMPZ_RAND_BITCNT(rrandomb)
 
+
+PGMP_PG_FUNCTION(pmpz_urandomm)
+{
+    const mpz_t     n;
+    mpz_t           ret;
+
+    PGMP_CHECK_RANDSTATE;
+
+    PGMP_GETARG_MPZ(n, 0);
+
+    mpz_init(ret);
+    mpz_urandomm(ret, *pgmp_randstate, n);
+
+    PGMP_RETURN_MPZ(ret);
+}
+

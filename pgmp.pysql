@@ -388,6 +388,7 @@ func('randinit_lc_2exp_size', 'int8', 'void',
     cname='pgmp_randinit_lc_2exp_size', volatile=True)
 func('randseed', 'mpz', 'void', cname='pgmp_randseed', volatile=True)
 func('urandomb', 'int8', 'mpz', volatile=True)
+func('urandomm', 'mpz', 'mpz', volatile=True)
 func('rrandomb', 'int8', 'mpz', volatile=True)
 
 !! PYOFF

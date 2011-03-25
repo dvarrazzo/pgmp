@@ -591,3 +591,12 @@ SELECT randseed(123456::mpz);
 SELECT text(rrandomb(128), 2);
 SELECT text(rrandomb(128), 2);
 
+SELECT randinit();
+SELECT randseed(123456::mpz);
+SELECT urandomm(1000000::mpz);
+SELECT urandomm(1000000::mpz);
+SELECT randseed(123456::mpz);
+SELECT urandomm(1000000::mpz);
+SELECT urandomm(1000000::mpz);
+
+
