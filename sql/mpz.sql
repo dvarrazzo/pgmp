@@ -350,14 +350,15 @@ INSERT INTO mpzagg VALUES (NULL);
 
 SELECT sum(z) FROM mpzagg;
 SELECT prod(z) FROM mpzagg;
-
 SELECT min(z) FROM mpzagg;
 SELECT max(z) FROM mpzagg;
 
+-- check correct values when the sortop kicks in
 CREATE INDEX mpzagg_idx ON mpzagg(z);
-
 SELECT min(z) FROM mpzagg;
 SELECT max(z) FROM mpzagg;
+
+
 --
 -- test functions
 --

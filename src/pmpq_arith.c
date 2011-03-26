@@ -49,8 +49,8 @@ PGMP_PG_FUNCTION(pmpq_uplus)
 
     pq1 = PGMP_GETARG_PMPQ(0);
 
-	res = (pmpq *)palloc(VARSIZE(pq1));
-	memcpy(res, pq1, VARSIZE(pq1));
+    res = (pmpq *)palloc(VARSIZE(pq1));
+    memcpy(res, pq1, VARSIZE(pq1));
 
     PG_RETURN_POINTER(res);
 }

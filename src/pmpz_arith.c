@@ -37,8 +37,8 @@ PGMP_PG_FUNCTION(pmpz_uplus)
 
     pz1 = PGMP_GETARG_PMPZ(0);
 
-	res = (pmpz *)palloc(VARSIZE(pz1));
-	memcpy(res, pz1, VARSIZE(pz1));
+    res = (pmpz *)palloc(VARSIZE(pz1));
+    memcpy(res, pz1, VARSIZE(pz1));
 
     PG_RETURN_POINTER(res);
 }

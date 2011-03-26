@@ -545,6 +545,7 @@ SELECT min(z) FROM mpzagg;
 1
 SELECT max(z) FROM mpzagg;
 100
+-- check correct values when the sortop kicks in
 CREATE INDEX mpzagg_idx ON mpzagg(z);
 SELECT min(z) FROM mpzagg;
 1

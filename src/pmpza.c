@@ -62,7 +62,7 @@ PGMP_PG_FUNCTION(pmpza_in)
                     "is supported.") ));
     }
 
-	z = (mpz_t *)palloc0(sizeof(mpz_t));
+    z = (mpz_t *)palloc0(sizeof(mpz_t));
 
     PG_RETURN_POINTER(z);
 }
