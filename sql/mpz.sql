@@ -15,6 +15,9 @@ SET client_min_messages = warning;
 RESET client_min_messages;
 
 
+SELECT gmp_version() > 10000;
+
+
 --
 -- mpz input and output functions
 --

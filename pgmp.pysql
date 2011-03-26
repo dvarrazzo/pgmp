@@ -57,6 +57,9 @@ def func_tuple(sqlname, args, argout=None, cname=None):
     print "LANGUAGE C IMMUTABLE STRICT;"
     print
 
+
+func('gmp_version', '', 'int4', cname='pgmp_gmp_version')
+
 !! PYOFF
 
 --

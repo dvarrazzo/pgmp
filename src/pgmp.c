@@ -93,3 +93,33 @@ _pgmp_free(void *ptr, size_t size)
 }
 
 
+/* Return the version of the library as an integer
+ *
+ * Parse the format from the variable gmp_version instead of using the macro
+ * __GNU_PG_VERSION* in order to detect the runtime version instead of the
+ * version pgmp was compiled against (although if I'm not entirely sure it is
+ * working as expected).
+ */
+PGMP_PG_FUNCTION(pgmp_gmp_version)
+{
+    int maj = 0, min = 0, patch = 0;
+    const char *p;
+
+    /* Parse both A.B.C and A.B formats. */
+
+    maj = atoi(gmp_version);
+
+    if (NULL == (p = strchr(gmp_version, '.'))) {
+        goto end;
+    }
+    min = atoi(p + 1);
+
+    if (NULL == (p = strchr(p + 1, '.'))) {
+        goto end;
+    }
+    patch = atoi(p + 1);
+
+end:
+    PG_RETURN_INT32(maj * 10000 + min * 100 + patch);
+}
+
