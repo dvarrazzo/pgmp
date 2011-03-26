@@ -77,6 +77,11 @@
 #define UNLIKELY(cond)  (cond)
 #endif
 
+/* Not available before GMP 5 */
+#if (__GNU_MP_VERSION < 5)
+typedef unsigned long int   mp_bitcnt_t;
+#endif
+
 
 /* Less noise in the creation of postgresql functions */
 #define PGMP_PG_FUNCTION(name) \
