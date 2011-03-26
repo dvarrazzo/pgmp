@@ -449,6 +449,33 @@ CREATE AGGREGATE prod (mpz)
     , INITCOND = ''
 );
 
+CREATE OR REPLACE FUNCTION _mpz_agg_max(_mpza, mpz)
+RETURNS _mpza
+AS 'MODULE_PATHNAME', '_pmpz_agg_max'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE AGGREGATE max (mpz)
+(
+      SFUNC = _mpz_agg_max
+    , STYPE = _mpza
+    , FINALFUNC = _mpz_from_mpza
+    , INITCOND = ''
+    , SORTOP = >
+);
+
+CREATE OR REPLACE FUNCTION _mpz_agg_min(_mpza, mpz)
+RETURNS _mpza
+AS 'MODULE_PATHNAME', '_pmpz_agg_min'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE AGGREGATE min (mpz)
+(
+      SFUNC = _mpz_agg_min
+    , STYPE = _mpza
+    , FINALFUNC = _mpz_from_mpza
+    , INITCOND = ''
+    , SORTOP = <
+);
 
 --
 -- Test functions
