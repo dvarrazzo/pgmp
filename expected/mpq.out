@@ -181,3 +181,57 @@ SELECT '4/5'::mpq >> 4;
 1/20
 SELECT '4/5'::mpq >> -1;
 ERROR:  argument can't be negative
+--
+-- mpq ordering operators
+--
+select 1000::mpq =   999::mpq;
+f
+select 1000::mpq =  1000::mpq;
+t
+select 1000::mpq =  1001::mpq;
+f
+select 1000::mpq <>  999::mpq;
+t
+select 1000::mpq <> 1000::mpq;
+f
+select 1000::mpq <> 1001::mpq;
+t
+select 1000::mpq !=  999::mpq;
+t
+select 1000::mpq != 1000::mpq;
+f
+select 1000::mpq != 1001::mpq;
+t
+select 1000::mpq <   999::mpq;
+f
+select 1000::mpq <  1000::mpq;
+f
+select 1000::mpq <  1001::mpq;
+t
+select 1000::mpq <=  999::mpq;
+f
+select 1000::mpq <= 1000::mpq;
+t
+select 1000::mpq <= 1001::mpq;
+t
+select 1000::mpq >   999::mpq;
+t
+select 1000::mpq >  1000::mpq;
+f
+select 1000::mpq >  1001::mpq;
+f
+select 1000::mpq >=  999::mpq;
+t
+select 1000::mpq >= 1000::mpq;
+t
+select 1000::mpq >= 1001::mpq;
+f
+select mpq_cmp(1000::mpq,  999::mpq);
+1
+select mpq_cmp(1000::mpq, 1000::mpq);
+0
+select mpq_cmp(1000::mpq, 1001::mpq);
+-1
+-- Can create a btree index
+create table test_mpq_idx (q mpq);
+create index test_mpq_idx_idx on test_mpq_idx (q);

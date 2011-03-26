@@ -136,3 +136,56 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
 PMPQ_BIT(mul_2exp)
 PMPQ_BIT(div_2exp)
 
+
+/*
+ * Comparison operators
+ */
+
+PGMP_PG_FUNCTION(pmpq_cmp)
+{
+    const mpq_t     q1;
+    const mpq_t     q2;
+
+    PGMP_GETARG_MPQ(q1, 0);
+    PGMP_GETARG_MPQ(q2, 1);
+
+    PG_RETURN_INT32(mpq_cmp(q1, q2));
+}
+
+
+#define PMPQ_CMP_EQ(op, rel) \
+ \
+PGMP_PG_FUNCTION(pmpq_ ## op) \
+{ \
+    const mpq_t     q1; \
+    const mpq_t     q2; \
+ \
+    PGMP_GETARG_MPQ(q1, 0); \
+    PGMP_GETARG_MPQ(q2, 1); \
+ \
+    PG_RETURN_BOOL(mpq_equal(q1, q2) rel 0); \
+}
+
+PMPQ_CMP_EQ(eq, !=)     /* note that the operators are reversed */
+PMPQ_CMP_EQ(ne, ==)
+
+
+#define PMPQ_CMP(op, rel) \
+ \
+PGMP_PG_FUNCTION(pmpq_ ## op) \
+{ \
+    const mpq_t     q1; \
+    const mpq_t     q2; \
+ \
+    PGMP_GETARG_MPQ(q1, 0); \
+    PGMP_GETARG_MPQ(q2, 1); \
+ \
+    PG_RETURN_BOOL(mpq_cmp(q1, q2) rel 0); \
+}
+
+PMPQ_CMP(gt, >)
+PMPQ_CMP(ge, >=)
+PMPQ_CMP(lt, <)
+PMPQ_CMP(le, <=)
+
+

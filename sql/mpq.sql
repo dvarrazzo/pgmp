@@ -116,3 +116,40 @@ SELECT '4/5'::mpq << -1;
 SELECT '4/5'::mpq >> 4;
 SELECT '4/5'::mpq >> -1;
 
+
+--
+-- mpq ordering operators
+--
+
+select 1000::mpq =   999::mpq;
+select 1000::mpq =  1000::mpq;
+select 1000::mpq =  1001::mpq;
+select 1000::mpq <>  999::mpq;
+select 1000::mpq <> 1000::mpq;
+select 1000::mpq <> 1001::mpq;
+select 1000::mpq !=  999::mpq;
+select 1000::mpq != 1000::mpq;
+select 1000::mpq != 1001::mpq;
+select 1000::mpq <   999::mpq;
+select 1000::mpq <  1000::mpq;
+select 1000::mpq <  1001::mpq;
+select 1000::mpq <=  999::mpq;
+select 1000::mpq <= 1000::mpq;
+select 1000::mpq <= 1001::mpq;
+select 1000::mpq >   999::mpq;
+select 1000::mpq >  1000::mpq;
+select 1000::mpq >  1001::mpq;
+select 1000::mpq >=  999::mpq;
+select 1000::mpq >= 1000::mpq;
+select 1000::mpq >= 1001::mpq;
+
+select mpq_cmp(1000::mpq,  999::mpq);
+select mpq_cmp(1000::mpq, 1000::mpq);
+select mpq_cmp(1000::mpq, 1001::mpq);
+
+-- Can create a btree index
+create table test_mpq_idx (q mpq);
+create index test_mpq_idx_idx on test_mpq_idx (q);
+
+
+
