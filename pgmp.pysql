@@ -401,82 +401,58 @@ func('rrandomb', 'int8', 'mpz', volatile=True)
 -- Aggregation functions
 --
 
-CREATE OR REPLACE FUNCTION mpza_in(cstring)
-RETURNS _mpza
-AS 'MODULE_PATHNAME', 'pmpza_in'
-LANGUAGE C IMMUTABLE STRICT;
-
-CREATE OR REPLACE FUNCTION mpza_out(_mpza)
-RETURNS cstring
-AS 'MODULE_PATHNAME', 'pmpza_out'
-LANGUAGE C IMMUTABLE STRICT;
-
--- TODO: this type should be marked as "non-storable"
-CREATE TYPE _mpza (
-      INPUT = mpza_in
-    , OUTPUT = mpza_out
-    -- 12 is ok on 32 bit, but probably ininfluent anyway
-    -- as we never store this type
-    , INTERNALLENGTH = 16
-);
-
-
-CREATE OR REPLACE FUNCTION _mpz_from_mpza(_mpza)
+CREATE OR REPLACE FUNCTION _mpz_from_agg(internal)
 RETURNS mpz
-AS 'MODULE_PATHNAME', '_pmpz_from_pmpza'
+AS 'MODULE_PATHNAME', '_pmpz_from_agg'
 LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OR REPLACE FUNCTION _mpz_agg_add(_mpza, mpz)
-RETURNS _mpza
+CREATE OR REPLACE FUNCTION _mpz_agg_add(internal, mpz)
+RETURNS internal
 AS 'MODULE_PATHNAME', '_pmpz_agg_add'
-LANGUAGE C IMMUTABLE STRICT;
+LANGUAGE C IMMUTABLE;
 
-CREATE AGGREGATE sum (mpz)
+CREATE AGGREGATE sum(mpz)
 (
       SFUNC = _mpz_agg_add
-    , STYPE = _mpza
-    , FINALFUNC = _mpz_from_mpza
-    , INITCOND = ''
+    , STYPE = internal
+    , FINALFUNC = _mpz_from_agg
 );
 
-CREATE OR REPLACE FUNCTION _mpz_agg_mul(_mpza, mpz)
-RETURNS _mpza
+CREATE OR REPLACE FUNCTION _mpz_agg_mul(internal, mpz)
+RETURNS internal
 AS 'MODULE_PATHNAME', '_pmpz_agg_mul'
-LANGUAGE C IMMUTABLE STRICT;
+LANGUAGE C IMMUTABLE;
 
 CREATE AGGREGATE prod (mpz)
 (
       SFUNC = _mpz_agg_mul
-    , STYPE = _mpza
-    , FINALFUNC = _mpz_from_mpza
-    , INITCOND = ''
+    , STYPE = internal
+    , FINALFUNC = _mpz_from_agg
 );
 
-CREATE OR REPLACE FUNCTION _mpz_agg_max(_mpza, mpz)
-RETURNS _mpza
+CREATE OR REPLACE FUNCTION _mpz_agg_max(internal, mpz)
+RETURNS internal
 AS 'MODULE_PATHNAME', '_pmpz_agg_max'
-LANGUAGE C IMMUTABLE STRICT;
+LANGUAGE C IMMUTABLE;
 
 CREATE AGGREGATE max (mpz)
 (
       SFUNC = _mpz_agg_max
-    , STYPE = _mpza
-    , FINALFUNC = _mpz_from_mpza
-    , INITCOND = ''
+    , STYPE = internal
+    , FINALFUNC = _mpz_from_agg
     , SORTOP = >
 );
 
-CREATE OR REPLACE FUNCTION _mpz_agg_min(_mpza, mpz)
-RETURNS _mpza
+CREATE OR REPLACE FUNCTION _mpz_agg_min(internal, mpz)
+RETURNS internal
 AS 'MODULE_PATHNAME', '_pmpz_agg_min'
-LANGUAGE C IMMUTABLE STRICT;
+LANGUAGE C IMMUTABLE;
 
 CREATE AGGREGATE min (mpz)
 (
       SFUNC = _mpz_agg_min
-    , STYPE = _mpza
-    , FINALFUNC = _mpz_from_mpza
-    , INITCOND = ''
+    , STYPE = internal
+    , FINALFUNC = _mpz_from_agg
     , SORTOP = <
 );
 

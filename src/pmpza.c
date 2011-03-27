@@ -25,82 +25,24 @@
 #include "fmgr.h"
 
 
-/*
- * Input/Output functions
+/* Convert an inplace accumulator into a pmpz structure.
+ *
+ * This function is strict, so don't care about NULLs
  */
-
-PGMP_PG_FUNCTION(pmpza_in)
-{
-    char    *str;
-    mpz_t   *z;
-
-    str = PG_GETARG_CSTRING(0);
-
-    /* We return a null accumulator on blank input.
-     * It can be recognized by having the limbs pointing to 0.
-     *
-     * We need this to allow a strict accumulation function and the
-     * possibility to return null, as the accumulator type is not the same
-     * type of the accumulated values.
-     */
-
-    /* Note: currently is seems we can only have accumulators
-     * starting from null, unless we use a non strict accumulation
-     * function and extra care.
-     *
-     * The problem is that here we are called outside the agg context, so if
-     * we allocate limbs here we will die in a palloc during aggregation.
-     * It's only safe allocating space for the accumulator structure but we
-     * will delay initializing the structure to the first aggregated value.
-     */
-
-    if (str[0] != '\0')
-    {
-        ereport(ERROR, (
-            errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
-            errmsg("currently only aggregation starting from NULL "
-                    "is supported.") ));
-    }
-
-    z = (mpz_t *)palloc0(sizeof(mpz_t));
-
-    PG_RETURN_POINTER(z);
-}
-
-PGMP_PG_FUNCTION(pmpza_out)
-{
-    mpz_t       *z;
-    char        *res;
-
-    z = (mpz_t *)PG_GETARG_POINTER(0);
-
-    res = mpz_get_str(NULL, 10, *z);
-    PG_RETURN_CSTRING(res);
-}
-
-
-/*
- * Accumulation functions
- */
-
-/* Convert an inplace accumulator into a pmpz structure */
-PGMP_PG_FUNCTION(_pmpz_from_pmpza)
+PGMP_PG_FUNCTION(_pmpz_from_agg)
 {
     mpz_t       *a;
 
     a = (mpz_t *)PG_GETARG_POINTER(0);
-
-    if (LIKELY(LIMBS(*a))) {
-        PGMP_RETURN_MPZ(*a);
-    }
-    else {                      /* uninitialized */
-        PG_RETURN_NULL();
-    }
+    PGMP_RETURN_MPZ(*a);
 }
 
 
-/* Macro to create an accumulation function from a gmp operator */
-
+/* Macro to create an accumulation function from a gmp operator.
+ *
+ * This function can't be strict because the internal state is not compatible
+ * with the base type.
+ */
 #define PMPZ_AGG(op, BLOCK, rel) \
  \
 PGMP_PG_FUNCTION(_pmpz_agg_ ## op) \
@@ -115,14 +57,31 @@ PGMP_PG_FUNCTION(_pmpz_agg_ ## op) \
     { \
         ereport(ERROR, \
             (errcode(ERRCODE_DATA_EXCEPTION), \
-            errmsg("_pmpz_agg_" #op " can only be called in accumulation"))); \
+            errmsg("_mpz_agg_" #op " can only be called in accumulation"))); \
     } \
  \
-    a = (mpz_t *)PG_GETARG_POINTER(0); \
+    if (PG_ARGISNULL(1)) { \
+        if (PG_ARGISNULL(0)) { \
+            PG_RETURN_NULL(); \
+        } \
+        else { \
+            PG_RETURN_POINTER(PG_GETARG_POINTER(0)); \
+        } \
+    } \
+ \
     PGMP_GETARG_MPZ(z, 1); \
  \
     oldctx = MemoryContextSwitchTo(aggctx); \
-    BLOCK(op, rel); \
+ \
+    if (LIKELY(!PG_ARGISNULL(0))) { \
+        a = (mpz_t *)PG_GETARG_POINTER(0); \
+        BLOCK(op, rel); \
+    } \
+    else {                      /* uninitialized */ \
+        a = (mpz_t *)palloc(sizeof(mpz_t)); \
+        mpz_init_set(*a, z); \
+    } \
+ \
     MemoryContextSwitchTo(oldctx); \
  \
     PG_RETURN_POINTER(a); \
@@ -130,14 +89,7 @@ PGMP_PG_FUNCTION(_pmpz_agg_ ## op) \
 
 
 #define PMPZ_AGG_OP(op, rel) \
-do { \
-    if (LIKELY(LIMBS(*a))) { \
-        mpz_ ## op (*a, *a, z); \
-    } \
-    else {                      /* uninitialized */ \
-        mpz_init_set(*a, z); \
-    } \
-} while (0)
+    mpz_ ## op (*a, *a, z)
 
 PMPZ_AGG(add, PMPZ_AGG_OP, 0)
 PMPZ_AGG(mul, PMPZ_AGG_OP, 0)
@@ -145,13 +97,8 @@ PMPZ_AGG(mul, PMPZ_AGG_OP, 0)
 
 #define PMPZ_AGG_REL(op, rel) \
 do { \
-    if (LIKELY(LIMBS(*a))) { \
-        if (mpz_cmp(*a, z) rel 0) { \
-            mpz_set(*a, z); \
-        } \
-    } \
-    else {                      /* uninitialized */ \
-        mpz_init_set(*a, z); \
+    if (mpz_cmp(*a, z) rel 0) { \
+        mpz_set(*a, z); \
     } \
 } while (0)
 
