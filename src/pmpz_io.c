@@ -270,9 +270,9 @@ PGMP_PG_FUNCTION(pmpz_to_int4)
     PGMP_GETARG_MPZ(z, 0);
 
     if (!mpz_fits_sint_p(z)) {
-        ereport(ERROR,
-                (errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
-                 errmsg("numeric value too big to be converted in integer data type")));
+        ereport(ERROR, (
+            errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+            errmsg("numeric value too big to be converted to int4 data type")));
     }
 
     out = mpz_get_si(z);
@@ -287,9 +287,9 @@ PGMP_PG_FUNCTION(pmpz_to_int2)
     PGMP_GETARG_MPZ(z, 0);
 
     if (!mpz_fits_sshort_p(z)) {
-        ereport(ERROR,
-                (errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
-                 errmsg("numeric value too big to be converted in smallint data type")));
+        ereport(ERROR, (
+            errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+            errmsg("numeric value too big to be converted to int2 data type")));
     }
 
     out = mpz_get_si(z);
@@ -340,8 +340,8 @@ PGMP_PG_FUNCTION(pmpz_to_int8)
     PG_RETURN_INT64(out);
 
 errorNotInt8Value:
-    ereport(ERROR,
-            (errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
-             errmsg("numeric value too big to be converted in biginteger data type")));
+    ereport(ERROR, (
+        errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+        errmsg("numeric value too big to be converted to int8 data type")));
     PG_RETURN_NULL();
 }

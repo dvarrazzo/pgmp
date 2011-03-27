@@ -167,25 +167,25 @@ SELECT 2147483647::mpz::integer;
 SELECT -2147483647::mpz::integer;
 -2147483647
 SELECT 2147483648::mpz::integer;
-ERROR:  numeric value too big to be converted in integer data type
+ERROR:  numeric value too big to be converted to int4 data type
 SELECT -2147483648::mpz::integer;
-ERROR:  numeric value too big to be converted in integer data type
+ERROR:  numeric value too big to be converted to int4 data type
 SELECT 32767::mpz::smallint;
 32767
 SELECT -32767::mpz::smallint;
 -32767
 SELECT 32768::mpz::smallint;
-ERROR:  numeric value too big to be converted in smallint data type
+ERROR:  numeric value too big to be converted to int2 data type
 SELECT -32768::mpz::smallint;
-ERROR:  numeric value too big to be converted in smallint data type
+ERROR:  numeric value too big to be converted to int2 data type
 SELECT 9223372036854775807::mpz::bigint;
 9223372036854775807
 SELECT -9223372036854775807::mpz::bigint;
 -9223372036854775807
 SELECT 9223372036854775808::mpz::bigint;
-ERROR:  numeric value too big to be converted in biginteger data type
+ERROR:  numeric value too big to be converted to int8 data type
 SELECT -9223372036854775808::mpz::bigint;
-ERROR:  numeric value too big to be converted in biginteger data type
+ERROR:  numeric value too big to be converted to int8 data type
 SELECT 2147483648::mpz::bigint;
 2147483648
 SELECT -2147483648::mpz::bigint;
@@ -199,7 +199,7 @@ SELECT (65536::mpz*65536::mpz*65536::mpz)::bigint;
 SELECT (65536::mpz*65536::mpz*65536::mpz*65536::mpz/2::mpz-1::mpz)::bigint;
 9223372036854775807
 SELECT (65536::mpz*65536::mpz*65536::mpz*65536::mpz/2::mpz)::bigint;
-ERROR:  numeric value too big to be converted in biginteger data type
+ERROR:  numeric value too big to be converted to int8 data type
 SELECT (-65536::mpz)::bigint;
 -65536
 SELECT (-65536::mpz*65536::mpz)::bigint;
