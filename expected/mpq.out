@@ -137,6 +137,40 @@ SELECT -1000000000000000::mpq;
 -1000000000000000
 SELECT -1000000000000000000000000000000::mpq;
 -1000000000000000000000000000000
+SELECT 123.10::mpq::mpz, (-123.10)::mpq::mpz;
+123|-123
+SELECT 123.90::mpq::mpz, (-123.90)::mpq::mpz;
+123|-123
+SELECT 123.10::mpq::int2, (-123.10)::mpq::int2;
+123|-123
+SELECT 123.10::mpq::int4, (-123.10)::mpq::int4;
+123|-123
+SELECT 123.10::mpq::int8, (-123.10)::mpq::int8;
+123|-123
+SELECT 32767::mpq::int2;
+32767
+SELECT -32767::mpq::int2;
+-32767
+SELECT 32768::mpq::int2;
+ERROR:  numeric value too big to be converted to int2 data type
+SELECT -32768::mpq::int2;
+ERROR:  numeric value too big to be converted to int2 data type
+SELECT 2147483647::mpq::int4;
+2147483647
+SELECT -2147483647::mpq::int4;
+-2147483647
+SELECT 2147483648::mpq::int4;
+ERROR:  numeric value too big to be converted to int4 data type
+SELECT -2147483648::mpq::int4;
+ERROR:  numeric value too big to be converted to int4 data type
+SELECT 9223372036854775807::mpq::int8;
+9223372036854775807
+SELECT -9223372036854775807::mpq::int8;
+-9223372036854775807
+SELECT 9223372036854775808::mpq::int8;
+ERROR:  numeric value too big to be converted to int8 data type
+SELECT -9223372036854775808::mpq::int8;
+ERROR:  numeric value too big to be converted to int8 data type
 SELECT mpq(10, 4), mpq(10, -4);
 5/2|-5/2
 SELECT mpq(10, 0);

@@ -211,6 +211,40 @@ PGMP_PG_FUNCTION(pmpq_from_mpz)
     PGMP_RETURN_MPQ(q);
 }
 
+PGMP_PG_FUNCTION(pmpq_to_mpz)
+{
+    const mpq_t     q;
+    mpz_t           z;
+
+    PGMP_GETARG_MPQ(q, 0);
+
+    mpz_init(z);
+    mpz_set_q(z, q);
+
+    PGMP_RETURN_MPZ(z);
+}
+
+#define PMPQ_TO_INT(type) \
+ \
+Datum pmpz_to_ ## type (PG_FUNCTION_ARGS); \
+ \
+PGMP_PG_FUNCTION(pmpq_to_ ## type) \
+{ \
+    const mpq_t     q; \
+    mpz_t           z; \
+ \
+    PGMP_GETARG_MPQ(q, 0); \
+ \
+    mpz_init(z); \
+    mpz_set_q(z, q); \
+ \
+    return DirectFunctionCall1(pmpz_to_ ## type, (Datum)pmpz_from_mpz(z)); \
+}
+
+PMPQ_TO_INT(int2)
+PMPQ_TO_INT(int4)
+PMPQ_TO_INT(int8)
+
 
 /*
  * Constructor and accessors to num and den
