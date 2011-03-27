@@ -686,3 +686,23 @@ and can be seeded with the `randseed()` function.
     The session state must be initialized by calling one of the `!randinit()`
     functions before invoking this function.
 
+
+Aggregation functions
+---------------------
+
+.. function:: sum(z)
+
+    Return the sum of *z* across all input values.
+
+.. function:: prod(z)
+
+    Return the product of *z* across all input values.
+
+.. function:: max(z)
+
+    Return the maximum value of *z* across all input values.
+
+.. function:: min(z)
+
+    Return the minimum value of *z* across all input values.
+
