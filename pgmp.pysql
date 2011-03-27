@@ -29,7 +29,7 @@ SET search_path = public;
 
 base_type = 'mpz'
 
-def func(sqlname, argin, argout=None, cname=None, volatile=False):
+def func(sqlname, argin, argout=None, cname=None, volatile=False, strict=True):
     """Create a SQL function from a C function"""
     if not argout: argout = base_type
     print "CREATE OR REPLACE FUNCTION %s(%s)" \
@@ -40,7 +40,10 @@ def func(sqlname, argin, argout=None, cname=None, volatile=False):
         cname = (sqlname.startswith(pre)
             and "p" + sqlname or 'p' + pre + sqlname)
     print "AS 'MODULE_PATHNAME', '%s'" % cname
-    print "LANGUAGE C", (volatile and "VOLATILE" or "IMMUTABLE"), "STRICT;"
+    print "LANGUAGE C",
+    print volatile and "VOLATILE" or "IMMUTABLE",
+    print strict and "STRICT" or "",
+    print ";"
     print
 
 def func_tuple(sqlname, args, argout=None, cname=None):
@@ -401,60 +404,30 @@ func('rrandomb', 'int8', 'mpz', volatile=True)
 -- Aggregation functions
 --
 
-CREATE OR REPLACE FUNCTION _mpz_from_agg(internal)
-RETURNS mpz
-AS 'MODULE_PATHNAME', '_pmpz_from_agg'
-LANGUAGE C IMMUTABLE STRICT;
+!! PYON
 
-CREATE OR REPLACE FUNCTION _mpz_agg_add(internal, mpz)
-RETURNS internal
-AS 'MODULE_PATHNAME', '_pmpz_agg_add'
-LANGUAGE C IMMUTABLE;
+def agg(sqlname, argin, sfunc, argout=None, ffunc=None, sortop=None):
+    assert sfunc.startswith('_' + base_type)
+    cname = '_p' + sfunc[1:]
+    func(sfunc, 'internal ' + argin, 'internal', cname=cname, strict=False)
+    if not argout: argout = base_type
+    print "CREATE AGGREGATE %s(%s)\n(" \
+        % (sqlname, ", ".join(argin.split()))
+    print "      SFUNC =", sfunc
+    print "    , STYPE = internal"
+    print "    , FINALFUNC =", ffunc or "_%s_from_agg" % base_type
+    if sortop: print "    , SORTOP =", sortop
+    print ");"
+    print
 
-CREATE AGGREGATE sum(mpz)
-(
-      SFUNC = _mpz_agg_add
-    , STYPE = internal
-    , FINALFUNC = _mpz_from_agg
-);
+func('_mpz_from_agg', 'internal', 'mpz', cname='_pmpz_from_agg')
+agg('sum', 'mpz', '_mpz_agg_add')
+agg('prod', 'mpz', '_mpz_agg_mul')
+agg('max', 'mpz', '_mpz_agg_max', sortop='>')
+agg('min', 'mpz', '_mpz_agg_min', sortop='<')
 
-CREATE OR REPLACE FUNCTION _mpz_agg_mul(internal, mpz)
-RETURNS internal
-AS 'MODULE_PATHNAME', '_pmpz_agg_mul'
-LANGUAGE C IMMUTABLE;
+!! PYOFF
 
-CREATE AGGREGATE prod (mpz)
-(
-      SFUNC = _mpz_agg_mul
-    , STYPE = internal
-    , FINALFUNC = _mpz_from_agg
-);
-
-CREATE OR REPLACE FUNCTION _mpz_agg_max(internal, mpz)
-RETURNS internal
-AS 'MODULE_PATHNAME', '_pmpz_agg_max'
-LANGUAGE C IMMUTABLE;
-
-CREATE AGGREGATE max (mpz)
-(
-      SFUNC = _mpz_agg_max
-    , STYPE = internal
-    , FINALFUNC = _mpz_from_agg
-    , SORTOP = >
-);
-
-CREATE OR REPLACE FUNCTION _mpz_agg_min(internal, mpz)
-RETURNS internal
-AS 'MODULE_PATHNAME', '_pmpz_agg_min'
-LANGUAGE C IMMUTABLE;
-
-CREATE AGGREGATE min (mpz)
-(
-      SFUNC = _mpz_agg_min
-    , STYPE = internal
-    , FINALFUNC = _mpz_from_agg
-    , SORTOP = <
-);
 
 --
 -- Test functions
@@ -613,4 +586,18 @@ DEFAULT FOR TYPE mpq USING btree AS
 
 -- TODO: OPERATOR FAMILY?
 
+
+--
+-- Aggregation functions
+--
+
+!! PYON
+
+func('_mpq_from_agg', 'internal', 'mpq', cname='_pmpq_from_agg')
+agg('sum', 'mpq', '_mpq_agg_add')
+agg('prod', 'mpq', '_mpq_agg_mul')
+agg('max', 'mpq', '_mpq_agg_max', sortop='>')
+agg('min', 'mpq', '_mpq_agg_min', sortop='<')
+
+!! PYOFF
 

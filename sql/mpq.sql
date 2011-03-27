@@ -151,5 +151,24 @@ select mpq_cmp(1000::mpq, 1001::mpq);
 create table test_mpq_idx (q mpq);
 create index test_mpq_idx_idx on test_mpq_idx (q);
 
+--
+-- mpq aggregation
+--
 
+CREATE TABLE mpqagg(q mpq);
+
+SELECT sum(q) FROM mpqagg;      -- NULL sum
+
+INSERT INTO mpqagg SELECT mpq(x+1, x) from generate_series(1, 100) x;
+INSERT INTO mpqagg VALUES (NULL);
+
+SELECT sum(q) FROM mpqagg;
+SELECT prod(q) FROM mpqagg;
+SELECT min(q) FROM mpqagg;
+SELECT max(q) FROM mpqagg;
+
+-- check correct values when the sortop kicks in
+CREATE INDEX mpqagg_idx ON mpqagg(q);
+SELECT min(q) FROM mpqagg;
+SELECT max(q) FROM mpqagg;
 
