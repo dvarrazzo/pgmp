@@ -101,6 +101,32 @@ _pmpq_from_long(long in)
 }
 
 
+static Datum _pmpq_from_double(double in);
+
+PGMP_PG_FUNCTION(pmpq_from_float4)
+{
+    double in = (double)PG_GETARG_FLOAT4(0);
+    return _pmpq_from_double(in);
+}
+
+PGMP_PG_FUNCTION(pmpq_from_float8)
+{
+    double in = PG_GETARG_FLOAT8(0);
+    return _pmpq_from_double(in);
+}
+
+static Datum
+_pmpq_from_double(double in)
+{
+    mpq_t   q;
+
+    mpq_init(q);
+    mpq_set_d(q, in);
+
+    PGMP_RETURN_MPQ(q);
+}
+
+
 /* to convert from int8 we piggyback all the mess we've made for mpz */
 
 Datum pmpz_from_int8(PG_FUNCTION_ARGS);

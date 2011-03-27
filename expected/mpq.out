@@ -103,9 +103,14 @@ SELECT 0::numeric::mpq, (-12345678901234567890)::numeric::mpq, 12345678901234567
 0|-12345678901234567890|12345678901234567890
 SELECT 0::mpz::mpq, (-12345678901234567890)::mpz::mpq, 12345678901234567890::mpz::mpq;
 0|-12345678901234567890|12345678901234567890
--- TODO - together with conversion from mpf
--- SELECT 0.0::float4::mpq, (-12345.25)::float4::mpq, 12345.25::float4::mpq;
--- SELECT 0.0::float8::mpq, (-123456789012.25)::float8::mpq, 123456789012.25::float8::mpq;
+SELECT 0.0::float4::mpq, (-12345.25)::float4::mpq, 12345.25::float4::mpq;
+0|-49381/4|49381/4
+SELECT 0.0::float8::mpq, (-123456789012.25)::float8::mpq, 123456789012.25::float8::mpq;
+0|-493827156049/4|493827156049/4
+SELECT 0.1::float4::mpq;    -- don't know if it's portable
+13421773/134217728
+SELECT 0.1::float8::mpq;
+3602879701896397/36028797018963968
 SELECT 0.0::numeric::mpq, (-1234567890.12345)::numeric::mpq, 1234567890.12345::numeric::mpq;
 0|-24691357802469/20000|24691357802469/20000
 SELECT 0::mpq, 1::mpq, (-1)::mpq;       -- automatic casts

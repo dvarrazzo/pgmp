@@ -479,6 +479,8 @@ func('den', 'mpq', 'mpz')
 castfrom('int2', implicit='I')
 castfrom('int4', implicit='I')
 castfrom('int8', implicit='I')
+castfrom('float4', implicit='A')    # those may be probably implicit as well
+castfrom('float8', implicit='A')    # but they are surprising enough
 castfrom('numeric', implicit='I')
 castfrom('mpz', implicit='I')
 
