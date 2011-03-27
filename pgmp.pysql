@@ -105,12 +105,10 @@ import re
 
 def castfrom(typname, implicit=False):
     """Create a cast from a different type to `base_type`"""
-    fname = "%s_from_%s" % (base_type, typname)
-
-    func(fname, typname)
+    func(base_type, typname, cname="p%s_from_%s" % (base_type, typname))
 
     print "CREATE CAST (%s AS %s)" % (typname, base_type)
-    print "WITH FUNCTION %s(%s)" % (fname, typname)
+    print "WITH FUNCTION %s(%s)" % (base_type, typname)
     print {'I': "AS IMPLICIT;", 'A': "AS ASSIGNMENT;", False: ';'}[implicit]
     print
     print
@@ -123,13 +121,11 @@ castfrom('float8', implicit='A')
 castfrom('numeric', implicit='A')
 
 def castto(typname, implicit=False):
-    fname = "%s_to_%s" % (base_type, typname)
     """Create a cast from `base_type` to a different type"""
-
-    func(fname, base_type, typname)
+    func(typname, base_type, typname, cname="p%s_to_%s" % (base_type, typname))
 
     print "CREATE CAST (%s AS %s)" % (base_type, typname)
-    print "WITH FUNCTION %s(%s)" % (fname, base_type)
+    print "WITH FUNCTION %s(%s)" % (typname, base_type)
     print {'I': "AS IMPLICIT;", 'A': "AS ASSIGNMENT;", False: ';'}[implicit]
     print
     print

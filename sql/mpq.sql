@@ -113,6 +113,24 @@ SELECT pow(10::mpz,400)::mpq::float8;
 SELECT (-pow(10::mpz,400))::mpq::float8;
 SELECT mpq(1,pow(10::mpz,400))::float8;
 
+-- function-style casts
+SELECT mpq('0'::varchar);
+SELECT mpq('0'::int2);
+SELECT mpq('0'::int4);
+SELECT mpq('0'::int8);
+SELECT mpq('0'::float4);
+SELECT mpq('0'::float8);
+SELECT mpq('0'::numeric);
+SELECT mpq('0'::mpz);
+
+SELECT text(0::mpq);
+SELECT int2(0::mpq);
+SELECT int4(0::mpq);
+SELECT int8(0::mpq);
+SELECT float4(0::mpq);
+SELECT float8(0::mpq);
+SELECT mpz('0'::mpq);
+
 SELECT mpq(10, 4), mpq(10, -4);
 SELECT mpq(10, 0);
 SELECT mpq(47563485764385764395874365986384, 874539847539845639485769837553465);

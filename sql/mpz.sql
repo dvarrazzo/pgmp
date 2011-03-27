@@ -151,6 +151,22 @@ SELECT pow(10::mpz, 30)::float4, (-pow(10::mpz, 30))::float4;
 SELECT 0::mpz::float8, 123::mpz::float8, (-123::mpz)::float8;
 SELECT pow(10::mpz, 307)::float8, (-pow(10::mpz, 307))::float8;
 
+-- function-style casts
+SELECT mpz('0'::varchar);
+SELECT mpz('0'::int2);
+SELECT mpz('0'::int4);
+SELECT mpz('0'::int8);
+SELECT mpz('0'::float4);
+SELECT mpz('0'::float8);
+SELECT mpz('0'::numeric);
+
+SELECT text(0::mpz);
+SELECT int2(0::mpz);
+SELECT int4(0::mpz);
+SELECT int8(0::mpz);
+SELECT float4(0::mpz);
+SELECT float8(0::mpz);
+
 
 --
 -- mpz arithmetic
