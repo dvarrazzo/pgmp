@@ -246,6 +246,23 @@ PMPQ_TO_INT(int4)
 PMPQ_TO_INT(int8)
 
 
+PGMP_PG_FUNCTION(pmpq_to_float4)
+{
+    const mpq_t     q;
+    PGMP_GETARG_MPQ(q, 0);
+
+    PG_RETURN_FLOAT4((float4)mpq_get_d(q));
+}
+
+PGMP_PG_FUNCTION(pmpq_to_float8)
+{
+    const mpq_t     q;
+    PGMP_GETARG_MPQ(q, 0);
+
+    PG_RETURN_FLOAT8((float8)mpq_get_d(q));
+}
+
+
 /*
  * Constructor and accessors to num and den
  */

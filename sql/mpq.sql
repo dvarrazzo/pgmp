@@ -104,6 +104,14 @@ SELECT 9223372036854775807::mpq::int8;
 SELECT -9223372036854775807::mpq::int8;
 SELECT 9223372036854775808::mpq::int8;
 SELECT -9223372036854775808::mpq::int8;
+SELECT 123.10::mpq::float4, (-123.10)::mpq::float4;
+SELECT 123.10::mpq::float8, (-123.10)::mpq::float8;
+SELECT pow(10::mpz,400)::mpq::float4;       -- +inf
+SELECT (-pow(10::mpz,400))::mpq::float4;    -- -inf
+SELECT mpq(1,pow(10::mpz,400))::float4;     -- underflow
+SELECT pow(10::mpz,400)::mpq::float8;
+SELECT (-pow(10::mpz,400))::mpq::float8;
+SELECT mpq(1,pow(10::mpz,400))::float8;
 
 SELECT mpq(10, 4), mpq(10, -4);
 SELECT mpq(10, 0);

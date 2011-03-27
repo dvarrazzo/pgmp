@@ -487,6 +487,8 @@ castfrom('mpz', implicit='I')
 castto('int2', implicit='A')
 castto('int4', implicit='A')
 castto('int8', implicit='A')
+castto('float4', implicit='A')
+castto('float8', implicit='A')
 castto('mpz', implicit='A')
 
 !! PYOFF

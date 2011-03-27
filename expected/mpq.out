@@ -171,6 +171,22 @@ SELECT 9223372036854775808::mpq::int8;
 ERROR:  numeric value too big to be converted to int8 data type
 SELECT -9223372036854775808::mpq::int8;
 ERROR:  numeric value too big to be converted to int8 data type
+SELECT 123.10::mpq::float4, (-123.10)::mpq::float4;
+123.1|-123.1
+SELECT 123.10::mpq::float8, (-123.10)::mpq::float8;
+123.1|-123.1
+SELECT pow(10::mpz,400)::mpq::float4;       -- +inf
+Infinity
+SELECT (-pow(10::mpz,400))::mpq::float4;    -- -inf
+-Infinity
+SELECT mpq(1,pow(10::mpz,400))::float4;     -- underflow
+0
+SELECT pow(10::mpz,400)::mpq::float8;
+Infinity
+SELECT (-pow(10::mpz,400))::mpq::float8;
+-Infinity
+SELECT mpq(1,pow(10::mpz,400))::float8;
+0
 SELECT mpq(10, 4), mpq(10, -4);
 5/2|-5/2
 SELECT mpq(10, 0);
