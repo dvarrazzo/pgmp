@@ -1,4 +1,4 @@
-/* pmpza -- mpz aggregation
+/* pmpz_agg -- mpz aggregation functions
  *
  * Copyright (C) 2011 Daniele Varrazzo
  *
