@@ -402,19 +402,25 @@ PGMP_PG_FUNCTION(pmpq_numeric_numeric)
 PGMP_PG_FUNCTION(pmpq_num)
 {
     const mpq_t     q;
+    mpz_t           z;
 
     PGMP_GETARG_MPQ(q, 0);
 
-    PGMP_RETURN_MPZ(mpq_numref(q));
+    mpz_init_set(z, mpq_numref(q));
+
+    PGMP_RETURN_MPZ(z);
 }
 
 PGMP_PG_FUNCTION(pmpq_den)
 {
     const mpq_t     q;
+    mpz_t           z;
 
     PGMP_GETARG_MPQ(q, 0);
 
-    PGMP_RETURN_MPZ(mpq_denref(q));
+    mpz_init_set(z, mpq_denref(q));
+
+    PGMP_RETURN_MPZ(z);
 }
 
 
