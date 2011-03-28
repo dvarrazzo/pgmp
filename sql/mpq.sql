@@ -112,6 +112,16 @@ SELECT mpq(1,pow(10::mpz,400))::float4;     -- underflow
 SELECT pow(10::mpz,400)::mpq::float8;
 SELECT (-pow(10::mpz,400))::mpq::float8;
 SELECT mpq(1,pow(10::mpz,400))::float8;
+SELECT 1::mpq::numeric;
+SELECT 123.456::mpq::numeric;
+SELECT 123.456::mpq::numeric(10);
+SELECT 123.456::mpq::numeric(10,2);
+SELECT mpq(4,3)::numeric;
+SELECT mpq(4,3)::numeric(10);
+SELECT mpq(4,3)::numeric(10,5);
+SELECT mpq(40000,3)::numeric(10,5);
+SELECT mpq(-40000,3)::numeric(10,5);
+SELECT mpq(400000,3)::numeric(10,5);
 
 -- function-style casts
 SELECT mpq('0'::varchar);

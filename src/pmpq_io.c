@@ -263,6 +263,73 @@ PGMP_PG_FUNCTION(pmpq_to_float8)
 }
 
 
+PGMP_PG_FUNCTION(pmpq_to_numeric)
+{
+    const mpq_t     q;
+    int32           typmod;
+    unsigned long   scale;
+    mpz_t           z;
+    char            *buf;
+
+    PGMP_GETARG_MPQ(q, 0);
+    typmod = PG_GETARG_INT32(1);
+
+    /* Parse precision and scale from the type modifier */
+    if (typmod >= VARHDRSZ) {
+        scale = (typmod - VARHDRSZ) & 0xffff;
+    }
+    else {
+        scale = 15;
+    }
+
+    if (scale) {
+        /* Convert q into a scaled z */
+        char *cmult;
+        mpz_t mult;
+
+        /* create 10000... with as many 0s as the scale */
+        cmult = (char *)palloc(scale + 2);
+        memset(cmult + 1, '0', scale);
+        cmult[0] = '1';
+        cmult[scale + 1] = '\0';
+        mpz_init_set_str(mult, cmult, 10);
+
+        mpz_init(z);
+        mpz_mul(z, mpq_numref(q), mult);
+        mpz_tdiv_q(z, z, mpq_denref(q));
+    }
+    else {
+        /* Just truncate q into an integer */
+        mpz_init(z);
+        mpz_set_q(z, q);
+    }
+
+    /* convert z into a string */
+    buf = palloc(mpz_sizeinbase(z, 10) + 3);    /* add sign, point and null */
+    mpz_get_str(buf, 10, z);
+    if (scale) {
+        char *end = buf + strlen(buf);
+        char *p;
+
+        /* Add the decimal point in the right place */
+        memmove(end - scale + 1, end - scale, scale + 1);
+        end[-scale] = '.';
+
+        /* delete trailing 0s or they will be used to add extra precision */
+        for (p = end; p > (end - scale) && *p == '0'; --p) {
+            *p = '\0';
+        }
+    }
+
+    /* use numeric_in to build the value from the string and to apply the
+     * typemod (which may result in overflow) */
+    return DirectFunctionCall3(numeric_in,
+        CStringGetDatum(buf),
+        ObjectIdGetDatum(0),    /* unused 2nd value */
+        Int32GetDatum(typmod));
+}
+
+
 /*
  * Constructor and accessors to num and den
  */

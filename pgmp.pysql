@@ -489,6 +489,15 @@ castto('mpz', implicit='A')
 
 !! PYOFF
 
+CREATE OR REPLACE FUNCTION mpq_to_numeric(mpq, int4)
+RETURNS numeric
+AS '$libdir/pgmp', 'pmpq_to_numeric'
+LANGUAGE C IMMUTABLE STRICT ;
+
+CREATE CAST (mpq AS numeric)
+WITH FUNCTION mpq_to_numeric(mpq, int4)
+AS ASSIGNMENT;
+
 
 --
 -- mpq operators
