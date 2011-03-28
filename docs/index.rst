@@ -28,6 +28,7 @@ Documentation
    :maxdepth: 2
 
    mpz
+   mpq
    misc
 
 
