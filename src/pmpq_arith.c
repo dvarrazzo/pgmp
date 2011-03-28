@@ -66,9 +66,9 @@ PMPQ_UN(inv, PMPQ_CHECK_DIV0)
  * Binary operators
  */
 
-/* Template to generate regular binary operators */
+/* Template to generate binary operators */
 
-#define PMPQ_OP(op) \
+#define PMPQ_OP(op, CHECK2) \
  \
 PGMP_PG_FUNCTION(pmpq_ ## op) \
 { \
@@ -78,6 +78,7 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
  \
     PGMP_GETARG_MPQ(q1, 0); \
     PGMP_GETARG_MPQ(q2, 1); \
+    CHECK2(q2); \
  \
     mpq_init(qf); \
     mpq_ ## op (qf, q1, q2); \
@@ -85,38 +86,10 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
     PGMP_RETURN_MPQ(qf); \
 }
 
-PMPQ_OP(add)
-PMPQ_OP(sub)
-PMPQ_OP(mul)
-
-
-/* Template to generate binary operators that may divide by zero */
-
-#define PMPQ_OP_DIV(op) \
- \
-PGMP_PG_FUNCTION(pmpq_ ## op) \
-{ \
-    const mpq_t     q1; \
-    const mpq_t     q2; \
-    mpq_t           qf; \
- \
-    PGMP_GETARG_MPQ(q2, 1); \
-    if (UNLIKELY(MPZ_IS_ZERO(mpq_numref(q2)))) \
-    { \
-        ereport(ERROR, ( \
-            errcode(ERRCODE_DIVISION_BY_ZERO), \
-            errmsg("division by zero"))); \
-    } \
- \
-    PGMP_GETARG_MPQ(q1, 0); \
- \
-    mpq_init(qf); \
-    mpq_ ## op (qf, q1, q2); \
- \
-    PGMP_RETURN_MPQ(qf); \
-}
-
-PMPQ_OP_DIV(div)
+PMPQ_OP(add, PMPQ_NO_CHECK)
+PMPQ_OP(sub, PMPQ_NO_CHECK)
+PMPQ_OP(mul, PMPQ_NO_CHECK)
+PMPQ_OP(div, PMPQ_CHECK_DIV0)
 
 
 /* Functions defined on bit count */
