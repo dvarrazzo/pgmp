@@ -189,6 +189,8 @@ SELECT inv(mpq(1,3));
 SELECT inv(mpq(-1,3));
 SELECT inv(mpq(3,1));
 SELECT inv(mpq(-3,1));
+SELECT inv(0::mpq);
+
 
 --
 -- mpq ordering operators

@@ -41,24 +41,25 @@ PGMP_PG_FUNCTION(pmpq_uplus)
     PG_RETURN_POINTER(res);
 }
 
-#define PMPQ_UN(op) \
+#define PMPQ_UN(op, CHECK) \
  \
 PGMP_PG_FUNCTION(pmpq_ ## op) \
 { \
-    const mpq_t     q1; \
+    const mpq_t     q; \
     mpq_t           qf; \
  \
-    PGMP_GETARG_MPQ(q1, 0); \
+    PGMP_GETARG_MPQ(q, 0); \
+    CHECK(q); \
  \
     mpq_init(qf); \
-    mpq_ ## op (qf, q1); \
+    mpq_ ## op (qf, q); \
  \
     PGMP_RETURN_MPQ(qf); \
 }
 
-PMPQ_UN(neg)
-PMPQ_UN(abs)
-PMPQ_UN(inv)
+PMPQ_UN(neg, PMPQ_NO_CHECK)
+PMPQ_UN(abs, PMPQ_NO_CHECK)
+PMPQ_UN(inv, PMPQ_CHECK_DIV0)
 
 
 /*

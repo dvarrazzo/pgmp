@@ -82,7 +82,7 @@ pmpq * pmpq_from_mpq(mpq_ptr q);
 void mpq_from_pmpq(mpq_srcptr q, const pmpq *pq);
 
 
-/* macro to report division by zero on denominator */
+/* Macros to be used in functions wrappers to limit the arguments domain */
 
 /* TODO: this macro should be somewhere I can import from,
  * I'd prefer avoiding to import pmpz.h here */
@@ -90,6 +90,19 @@ void mpq_from_pmpq(mpq_srcptr q, const pmpq *pq);
 #define MPZ_IS_ZERO(z) (SIZ(z) == 0)
 #endif
 
+#define PMPQ_NO_CHECK(arg)
+
+#define PMPQ_CHECK_DIV0(arg) \
+do { \
+    if (UNLIKELY(MPZ_IS_ZERO(mpq_numref(arg)))) \
+    { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_DIVISION_BY_ZERO), \
+            errmsg("division by zero"))); \
+    } \
+} while (0)
+
+/* used in mpq creation. Note that the argument is a z */
 #define ERROR_IF_DENOM_ZERO(arg) \
 do { \
     if (UNLIKELY(MPZ_IS_ZERO(arg))) \
@@ -99,6 +112,7 @@ do { \
             errmsg("denominator can't be zero"))); \
     } \
 } while (0)
+
 
 #endif  /* __PMPQ_H__ */
 
