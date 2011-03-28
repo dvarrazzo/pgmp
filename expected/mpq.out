@@ -243,18 +243,22 @@ SELECT mpq(10, 4), mpq(10, -4);
 5/2|-5/2
 SELECT mpq(10, 0);
 ERROR:  denominator can't be zero
+-- fails if mpq(int, int) or similar are availiable
+SELECT mpq(4000000000000000000,3);
+4000000000000000000/3
+-- TODO: this shoud work.
+-- currently not accepting it for ambiguous type promotion problems,
+-- but this could change in the future if we find how to fix the above problem
 SELECT mpq(47563485764385764395874365986384, 874539847539845639485769837553465);
-15854495254795254798624788662128/291513282513281879828589945851155
-SELECT mpq(1230::numeric, 123::numeric);
-10
-SELECT mpq(123.45::numeric, 1::numeric);
-ERROR:  can't handle numeric value at numerator: 123.45
-HINT:  the mpq components should be integers
-SELECT mpq(1::numeric, 123.45::numeric);
-ERROR:  can't handle numeric value at denominator: 123.45
-HINT:  the mpq components should be integers
-SELECT mpq(123::numeric, 0::numeric);
-ERROR:  denominator can't be zero
+ERROR:  function mpq(numeric, numeric) does not exist
+LINE 1: SELECT mpq(47563485764385764395874365986384, 874539847539845...
+               ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+-- Enable these checks if the above is solved.
+-- SELECT mpq(1230::numeric, 123::numeric);
+-- SELECT mpq(123.45::numeric, 1::numeric);
+-- SELECT mpq(1::numeric, 123.45::numeric);
+-- SELECT mpq(123::numeric, 0::numeric);
 SELECT mpq(47563485764385764395874365986384::mpz, 874539847539845639485769837553465::mpz);
 15854495254795254798624788662128/291513282513281879828589945851155
 SELECT mpq('10'::mpz, '0'::mpz);

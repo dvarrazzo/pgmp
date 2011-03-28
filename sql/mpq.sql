@@ -143,11 +143,17 @@ SELECT mpz('0'::mpq);
 
 SELECT mpq(10, 4), mpq(10, -4);
 SELECT mpq(10, 0);
+-- fails if mpq(int, int) or similar are availiable
+SELECT mpq(4000000000000000000,3);
+-- TODO: this shoud work.
+-- currently not accepting it for ambiguous type promotion problems,
+-- but this could change in the future if we find how to fix the above problem
 SELECT mpq(47563485764385764395874365986384, 874539847539845639485769837553465);
-SELECT mpq(1230::numeric, 123::numeric);
-SELECT mpq(123.45::numeric, 1::numeric);
-SELECT mpq(1::numeric, 123.45::numeric);
-SELECT mpq(123::numeric, 0::numeric);
+-- Enable these checks if the above is solved.
+-- SELECT mpq(1230::numeric, 123::numeric);
+-- SELECT mpq(123.45::numeric, 1::numeric);
+-- SELECT mpq(1::numeric, 123.45::numeric);
+-- SELECT mpq(123::numeric, 0::numeric);
 SELECT mpq(47563485764385764395874365986384::mpz, 874539847539845639485769837553465::mpz);
 SELECT mpq('10'::mpz, '0'::mpz);
 SELECT num('4/5'::mpq);

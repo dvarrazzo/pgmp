@@ -469,11 +469,15 @@ CREATE TYPE mpq (
 
 !! PYON
 
-# TODO: this seems messy: mpq(a,b) works sometimes, some other times
-# fails cast, e.g. mpq(4000000000000000000,3);
 func('mpq', 'mpz mpz', 'mpq', cname='pmpq_mpz_mpz')
-func('mpq', 'int4 int4', 'mpq', cname='pmpq_int4_int4')
-func('mpq', 'numeric numeric', 'mpq', cname='pmpq_numeric_numeric')
+# Currently not exposing these versions as they have surprising limits
+# E.g. calling mpq(n, d) with two numeric literal of which one fits
+# into an int and one doesn't fails to find a best candidate.
+# So we currently only accept mpq(n, d) if both fit into a type smaller
+# than numeric (because of the implicit casts int? -> mpz) and require
+# explicit mpz for bigger numbers.
+# func('mpq', 'int4 int4', 'mpq', cname='pmpq_int4_int4')
+# func('mpq', 'numeric numeric', 'mpq', cname='pmpq_numeric_numeric')
 func('num', 'mpq', 'mpz')
 func('den', 'mpq', 'mpz')
 
