@@ -421,6 +421,9 @@ agg('sum', 'mpz', '_mpz_agg_add')
 agg('prod', 'mpz', '_mpz_agg_mul')
 agg('max', 'mpz', '_mpz_agg_max', sortop='>')
 agg('min', 'mpz', '_mpz_agg_min', sortop='<')
+agg('bit_and', 'mpz', '_mpz_agg_and')
+agg('bit_or', 'mpz', '_mpz_agg_ior')
+agg('bit_xor', 'mpz', '_mpz_agg_xor')
 
 !! PYOFF
 

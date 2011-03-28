@@ -578,6 +578,22 @@ SELECT min(z) FROM mpzagg;
 1
 SELECT max(z) FROM mpzagg;
 100
+SELECT bit_and(z) FROM mpzagg;
+0
+SELECT bit_and(z) FROM mpzagg WHERE z % 2 = 1;
+1
+SELECT bit_or(z) FROM mpzagg;
+127
+SELECT bit_or(z) FROM mpzagg WHERE z % 2 = 0;
+126
+SELECT bit_or(z) FROM mpzagg WHERE z = 1 or z = 2;
+3
+SELECT bit_xor(z) FROM mpzagg;
+100
+SELECT bit_xor(z) FROM mpzagg WHERE z = 1 or z = 2;
+3
+SELECT bit_xor(z) FROM mpzagg WHERE z = 1 or z = 2 or z = 3;
+0
 --
 -- test functions
 --

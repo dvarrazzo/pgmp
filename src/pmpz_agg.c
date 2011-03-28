@@ -93,6 +93,9 @@ PGMP_PG_FUNCTION(_pmpz_agg_ ## op) \
 
 PMPZ_AGG(add, PMPZ_AGG_OP, 0)
 PMPZ_AGG(mul, PMPZ_AGG_OP, 0)
+PMPZ_AGG(and, PMPZ_AGG_OP, 0)
+PMPZ_AGG(ior, PMPZ_AGG_OP, 0)
+PMPZ_AGG(xor, PMPZ_AGG_OP, 0)
 
 
 #define PMPZ_AGG_REL(op, rel) \

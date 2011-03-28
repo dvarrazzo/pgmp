@@ -374,6 +374,14 @@ CREATE INDEX mpzagg_idx ON mpzagg(z);
 SELECT min(z) FROM mpzagg;
 SELECT max(z) FROM mpzagg;
 
+SELECT bit_and(z) FROM mpzagg;
+SELECT bit_and(z) FROM mpzagg WHERE z % 2 = 1;
+SELECT bit_or(z) FROM mpzagg;
+SELECT bit_or(z) FROM mpzagg WHERE z % 2 = 0;
+SELECT bit_or(z) FROM mpzagg WHERE z = 1 or z = 2;
+SELECT bit_xor(z) FROM mpzagg;
+SELECT bit_xor(z) FROM mpzagg WHERE z = 1 or z = 2;
+SELECT bit_xor(z) FROM mpzagg WHERE z = 1 or z = 2 or z = 3;
 
 --
 -- test functions
