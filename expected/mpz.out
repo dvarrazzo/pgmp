@@ -234,10 +234,14 @@ SELECT 0::mpz::float4, 123::mpz::float4, (-123::mpz)::float4;
 0|123|-123
 SELECT pow(10::mpz, 30)::float4, (-pow(10::mpz, 30))::float4;
 1e+30|-1e+30
+SELECT pow(10::mpz, 300)::float4, (-pow(10::mpz, 300))::float4;
+Infinity|-Infinity
 SELECT 0::mpz::float8, 123::mpz::float8, (-123::mpz)::float8;
 0|123|-123
 SELECT pow(10::mpz, 307)::float8, (-pow(10::mpz, 307))::float8;
 1e+307|-1e+307
+SELECT pow(10::mpz, 407)::float8, (-pow(10::mpz, 407))::float8;
+Infinity|-Infinity
 -- function-style casts
 SELECT mpz('0'::varchar);
 0

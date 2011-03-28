@@ -345,3 +345,25 @@ errorNotInt8Value:
         errmsg("numeric value too big to be converted to int8 data type")));
     PG_RETURN_NULL();
 }
+
+
+PGMP_PG_FUNCTION(pmpz_to_float4)
+{
+    const mpz_t     z;
+    double          out;
+
+    PGMP_GETARG_MPZ(z, 0);
+    out = mpz_get_d(z);
+    PG_RETURN_FLOAT4((float4)out);
+}
+
+PGMP_PG_FUNCTION(pmpz_to_float8)
+{
+    const mpz_t     z;
+    double          out;
+
+    PGMP_GETARG_MPZ(z, 0);
+    out = mpz_get_d(z);
+    PG_RETURN_FLOAT8((float8)out);
+}
+

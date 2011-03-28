@@ -14,6 +14,11 @@ cast (but are implicitly converted in assignment).
     SELECT mpz(10000);      -- Cast using mpz as a function
     SELECT 10000::mpz;      -- PostgreSQL-style cast
 
+Casting `!mpz` to PostgreSQL integer types and `!numeric` works as expected
+and will overflow if the value is too big for their range. Casting to
+`!float4` and `!float8` works as well: in case of overflow the value will be
+*Infinity*.
+
 `!mpz` values can be compared using the regular PostgreSQL comparison
 operators. Indexes on `!mpz` columns can be created using the *btree* method.
 

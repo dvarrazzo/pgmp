@@ -148,8 +148,10 @@ SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz+1::mpz)::numeric;
 
 SELECT 0::mpz::float4, 123::mpz::float4, (-123::mpz)::float4;
 SELECT pow(10::mpz, 30)::float4, (-pow(10::mpz, 30))::float4;
+SELECT pow(10::mpz, 300)::float4, (-pow(10::mpz, 300))::float4;
 SELECT 0::mpz::float8, 123::mpz::float8, (-123::mpz)::float8;
 SELECT pow(10::mpz, 307)::float8, (-pow(10::mpz, 307))::float8;
+SELECT pow(10::mpz, 407)::float8, (-pow(10::mpz, 407))::float8;
 
 -- function-style casts
 SELECT mpz('0'::varchar);
