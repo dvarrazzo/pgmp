@@ -706,3 +706,16 @@ Aggregation functions
 
     Return the minimum value of *z* across all input values.
 
+.. function:: bit_and(z)
+
+    Return the bitwise and of *z* across all input values.
+
+.. function:: bit_or(z)
+
+    Return the bitwise inclusive-or of *z* across all input values.
+
+.. function:: bit_xor(z)
+
+    Return the bitwise exclusive-or of *z* across all input values.
+
+
