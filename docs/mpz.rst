@@ -39,7 +39,8 @@ operators. Indexes on `!mpz` columns can be created using the *btree* method.
 
     .. code-block:: sql
 
-        =# SELECT '0x10'::mpz AS hex, '10'::mpz AS dec , '010'::mpz AS oct, '0b10'::mpz AS bin;
+        =# SELECT '0x10'::mpz AS hex, '10'::mpz AS dec,
+        -#        '010'::mpz AS oct, '0b10'::mpz AS bin;
          hex | dec | oct | bin
         -----+-----+-----+-----
          16  | 10  | 8   | 2
@@ -132,33 +133,35 @@ For all the division-related operators :math:`n \oslash d`, :math:`q` and
 
     .. __: http://www.postgresql.org/docs/9.0/static/sql-syntax-lexical.html#SQL-PRECEDENCE-TABLE
 
+..
+    note: this table contains non-breaking spaces to align the - signs.
 
 .. table:: Division operators
 
     =========== =============================== ==================== =======
     Operator    Description                     Example              Return
     =========== =============================== ==================== =======
-    `!/`        Division quotient               `!7::mpz / 3::mpz`   2
+    `!/`        Division quotient               `! 7::mpz / 3::mpz`  2
 
                 Rounding towards zero           `!-7::mpz / 3::mpz`  -2
 
-    `!%`        Division reminder               `!7::mpz % 3::mpz`   1
+    `!%`        Division reminder               `! 7::mpz % 3::mpz`  1
 
                 Rounding towards zero           `!-7::mpz % 3::mpz`  -1
 
-    `+/`        Division quotient               `!7::mpz +/ 3::mpz`  3
+    `+/`        Division quotient               `! 7::mpz +/ 3::mpz` 3
 
                 Rounding towards +infinity      `!-7::mpz +/ 3::mpz` -2
 
-    `+%`        Division reminder               `!7::mpz +% 3::mpz`  -2
+    `+%`        Division reminder               `! 7::mpz +% 3::mpz` -2
 
                 Rounding towards +infinity      `!-7::mpz +% 3::mpz` -1
 
-    `!-/`       Division quotient               `!7::mpz -/ 3::mpz`  2
+    `!-/`       Division quotient               `! 7::mpz -/ 3::mpz` 2
 
                 Rounding towards -infinity      `!-7::mpz -/ 3::mpz` -3
 
-    `!-%`       Division reminder               `!7::mpz -% 3::mpz`  1
+    `!-%`       Division reminder               `! 7::mpz -% 3::mpz` 1
 
                 Rounding towards -infinity      `!-7::mpz -% 3::mpz` 2
 
@@ -179,33 +182,35 @@ Notes:
     exact division is known to occur, for example reducing a rational to
     lowest terms.
 
+..
+    note: this table contains non-breaking spaces to align the - signs.
 
 .. table:: Division operators for powers of 2
 
     ======== ==================================== =================== =======
     Operator Description                          Example             Return
     ======== ==================================== =================== =======
-    `!>>`    Quotient of division by :math:`2^n`  `!1027::mpz >> 3`   128
+    `!>>`    Quotient of division by :math:`2^n`  `! 1027::mpz >> 3`  128
 
              Rounding towards zero                `!-1027::mpz >> 3`  -128
 
-    `!%>`    Remainder of division by :math:`2^n` `!1027::mpz %> 3`   3
+    `!%>`    Remainder of division by :math:`2^n` `! 1027::mpz %> 3`  3
 
              Rounding towards zero                `!-1027::mpz %> 3`  -3
 
-    `!+>>`   Quotient of division by :math:`2^n`  `!1027::mpz +>> 3`  129
+    `!+>>`   Quotient of division by :math:`2^n`  `! 1027::mpz +>> 3` 129
 
              Rounding towards +infinity           `!-1027::mpz +>> 3` -128
 
-    `!+%>`   Remainder of division by :math:`2^n` `!1027::mpz +%> 3`  -5
+    `!+%>`   Remainder of division by :math:`2^n` `! 1027::mpz +%> 3` -5
 
              Rounding towards +infinity           `!-1027::mpz +%> 3` -3
 
-    `!->>`   Quotient of division by :math:`2^n`  `!1027::mpz ->> 3`  128
+    `!->>`   Quotient of division by :math:`2^n`  `! 1027::mpz ->> 3` 128
 
              Rounding towards -infinity           `!-1027::mpz ->> 3` -129
 
-    `!-%>`   Remainder of division by :math:`2^n` `!1027::mpz -%> 3`  3
+    `!-%>`   Remainder of division by :math:`2^n` `! 1027::mpz -%> 3` 3
 
              Rounding towards -infinity           `!-1027::mpz -%> 3` 5
 
@@ -332,7 +337,7 @@ Root Extraction Functions
 
 .. function:: perfect_power(op)
 
-    Return ``true`` if *op* is a perfect power, *i.e.*, if there exist
+    Return `!true` if *op* is a perfect power, *i.e.*, if there exist
     integers :math:`a` and :math:`b`, with :math:`b>1`, such that *op* equals
     :math:`a^b`.
 
@@ -342,7 +347,7 @@ Root Extraction Functions
 
 .. function:: perfect_square(op)
 
-    Return ``true`` if *op* is a perfect square, *i.e.*, if the square root of
+    Return `!true` if *op* is a perfect square, *i.e.*, if the square root of
     *op* is an integer. Under this definition both 0 and 1 are considered to
     be perfect squares.
 
