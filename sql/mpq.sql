@@ -58,6 +58,22 @@ SELECT '123456789012345678901234567890123456789012345678901234567890123456789012
 
 SELECT '1/0'::mpq;
 
+SELECT mpq('1/1');
+SELECT mpq('2/3');
+SELECT mpq('640/30');
+SELECT mpq('-640/30');
+SELECT mpq('0xEF/100');
+SELECT mpq('0xEF/0x100');
+
+SELECT mpq('10/30', 10);
+SELECT mpq('EF/100', 16);
+SELECT mpq('0xEF/100', 0);
+
+SELECT mpq('z', 36), mpq('z', 62), mpq('Z', 36), mpq('Z', 62);
+SELECT mpq('1', 1);
+SELECT mpq('1', -10);
+SELECT mpq('1', 63);
+
 --
 -- mpq cast
 --

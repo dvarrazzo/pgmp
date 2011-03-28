@@ -90,6 +90,35 @@ SELECT '1/0'::mpq;
 ERROR:  denominator can't be zero
 LINE 1: SELECT '1/0'::mpq;
                ^
+SELECT mpq('1/1');
+1
+SELECT mpq('2/3');
+2/3
+SELECT mpq('640/30');
+64/3
+SELECT mpq('-640/30');
+-64/3
+SELECT mpq('0xEF/100');
+239/100
+SELECT mpq('0xEF/0x100');
+239/256
+SELECT mpq('10/30', 10);
+1/3
+SELECT mpq('EF/100', 16);
+239/256
+SELECT mpq('0xEF/100', 0);
+239/100
+SELECT mpq('z', 36), mpq('z', 62), mpq('Z', 36), mpq('Z', 62);
+35|61|35|35
+SELECT mpq('1', 1);
+ERROR:  invalid base for mpq input: 1
+HINT:  base should be between 2 and 62
+SELECT mpq('1', -10);
+ERROR:  invalid base for mpq input: -10
+HINT:  base should be between 2 and 62
+SELECT mpq('1', 63);
+ERROR:  invalid base for mpq input: 63
+HINT:  base should be between 2 and 62
 --
 -- mpq cast
 --

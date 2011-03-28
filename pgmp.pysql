@@ -466,8 +466,10 @@ CREATE TYPE mpq (
     , CATEGORY = 'N'
 );
 
-
 !! PYON
+
+func('mpq', 'text int4', 'mpq', cname='pmpq_in_base')
+
 
 func('mpq', 'mpz mpz', 'mpq', cname='pmpq_mpz_mpz')
 # Currently not exposing these versions as they have surprising limits

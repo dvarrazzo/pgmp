@@ -41,12 +41,49 @@ PGMP_PG_FUNCTION(pmpq_in)
     str = PG_GETARG_CSTRING(0);
 
     mpq_init(q);
-    if (0 != mpq_set_str(q, str, 10))
+    if (0 != mpq_set_str(q, str, 0))
     {
         ereport(ERROR,
                 (errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
                  errmsg("invalid input syntax for mpq: \"%s\"",
                         str)));
+    }
+
+    ERROR_IF_DENOM_ZERO(mpq_denref(q));
+
+    mpq_canonicalize(q);
+    PGMP_RETURN_MPQ(q);
+}
+
+PGMP_PG_FUNCTION(pmpq_in_base)
+{
+    int     base;
+    char    *str;
+    mpq_t   q;
+
+    base = PG_GETARG_INT32(1);
+
+    if (!(base == 0 || (2 <= base && base <= 62)))
+    {
+        ereport(ERROR, (
+            errcode(ERRCODE_INVALID_PARAMETER_VALUE),
+            errmsg("invalid base for mpq input: %d", base),
+            errhint("base should be between 2 and 62")));
+    }
+
+    str = TextDatumGetCString(PG_GETARG_POINTER(0));
+
+    mpq_init(q);
+    if (0 != mpq_set_str(q, str, base))
+    {
+        const char *ell;
+        const int maxchars = 50;
+        ell = (strlen(str) > maxchars) ? "..." : "";
+
+        ereport(ERROR, (
+            errcode(ERRCODE_INVALID_TEXT_REPRESENTATION),
+            errmsg("invalid input for mpq base %d: \"%.*s%s\"",
+                base, 50, str, ell)));
     }
 
     ERROR_IF_DENOM_ZERO(mpq_denref(q));
