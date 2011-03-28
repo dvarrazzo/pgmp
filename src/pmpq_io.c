@@ -107,6 +107,30 @@ PGMP_PG_FUNCTION(pmpq_out)
     PG_RETURN_CSTRING(mpq_get_str(buf, 10, q));
 }
 
+PGMP_PG_FUNCTION(pmpq_out_base)
+{
+    const mpq_t     q;
+    int             base;
+    char            *buf;
+
+    PGMP_GETARG_MPQ(q, 0);
+    base = PG_GETARG_INT32(1);
+
+    if (!((-36 <= base && base <= -2) || (2 <= base && base <= 62)))
+    {
+        ereport(ERROR, (
+            errcode(ERRCODE_INVALID_PARAMETER_VALUE),
+            errmsg("invalid base for mpq output: %d", base),
+            errhint("base should be between -36 and -2 or between 2 and 62")));
+    }
+
+    /* Allocate the output buffer manually - see mpmz_out to know why */
+    buf = palloc(3             /* add sign, slash and null */
+        + mpz_sizeinbase(mpq_numref(q), ABS(base))
+        + mpz_sizeinbase(mpq_denref(q), ABS(base)));
+    PG_RETURN_CSTRING(mpq_get_str(buf, base, q));
+}
+
 
 /*
  * Cast functions

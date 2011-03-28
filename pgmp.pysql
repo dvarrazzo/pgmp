@@ -469,6 +469,7 @@ CREATE TYPE mpq (
 !! PYON
 
 func('mpq', 'text int4', 'mpq', cname='pmpq_in_base')
+func('text', 'mpq int4', 'cstring', cname='pmpq_out_base')
 
 
 func('mpq', 'mpz mpz', 'mpq', cname='pmpq_mpz_mpz')

@@ -74,6 +74,24 @@ SELECT mpq('1', 1);
 SELECT mpq('1', -10);
 SELECT mpq('1', 63);
 
+SELECT text('239'::mpq);
+SELECT text('-239'::mpq);
+SELECT text('239/256'::mpq);
+SELECT text('239'::mpq, 16);
+SELECT text('239/256'::mpq, 10);
+SELECT text('239/256'::mpq, 16);
+SELECT text('239/256'::mpq, 0);
+SELECT text('239/256'::mpq, 1);
+SELECT text('239/256'::mpq, 2);
+SELECT text('239/256'::mpq, 36);
+SELECT text('239/256'::mpq, 62);
+SELECT text('239/256'::mpq, 63);
+SELECT text('239/256'::mpq, -1);
+SELECT text('239/256'::mpq, -2);
+SELECT text('239/256'::mpq, -36);
+SELECT text('239/256'::mpq, -37);
+
+
 --
 -- mpq cast
 --

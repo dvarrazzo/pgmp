@@ -119,6 +119,43 @@ HINT:  base should be between 2 and 62
 SELECT mpq('1', 63);
 ERROR:  invalid base for mpq input: 63
 HINT:  base should be between 2 and 62
+SELECT text('239'::mpq);
+239
+SELECT text('-239'::mpq);
+-239
+SELECT text('239/256'::mpq);
+239/256
+SELECT text('239'::mpq, 16);
+ef
+SELECT text('239/256'::mpq, 10);
+239/256
+SELECT text('239/256'::mpq, 16);
+ef/100
+SELECT text('239/256'::mpq, 0);
+ERROR:  invalid base for mpq output: 0
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text('239/256'::mpq, 1);
+ERROR:  invalid base for mpq output: 1
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text('239/256'::mpq, 2);
+11101111/100000000
+SELECT text('239/256'::mpq, 36);
+6n/74
+SELECT text('239/256'::mpq, 62);
+3r/48
+SELECT text('239/256'::mpq, 63);
+ERROR:  invalid base for mpq output: 63
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text('239/256'::mpq, -1);
+ERROR:  invalid base for mpq output: -1
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text('239/256'::mpq, -2);
+11101111/100000000
+SELECT text('239/256'::mpq, -36);
+6N/74
+SELECT text('239/256'::mpq, -37);
+ERROR:  invalid base for mpq output: -37
+HINT:  base should be between -36 and -2 or between 2 and 62
 --
 -- mpq cast
 --
