@@ -25,22 +25,8 @@
 #include "fmgr.h"
 
 /*
- * Unary minus, plus
+ * Unary operators
  */
-
-PGMP_PG_FUNCTION(pmpq_uminus)
-{
-    const mpq_t     q1;
-    mpq_t           qf;
-
-    PGMP_GETARG_MPQ(q1, 0);
-
-    mpz_init_set(mpq_numref(qf), mpq_numref(q1));
-    mpz_init_set(mpq_denref(qf), mpq_denref(q1));
-    mpz_neg(mpq_numref(qf), mpq_numref(qf));
-
-    PGMP_RETURN_MPQ(qf);
-}
 
 PGMP_PG_FUNCTION(pmpq_uplus)
 {
@@ -54,6 +40,25 @@ PGMP_PG_FUNCTION(pmpq_uplus)
 
     PG_RETURN_POINTER(res);
 }
+
+#define PMPQ_UN(op) \
+ \
+PGMP_PG_FUNCTION(pmpq_ ## op) \
+{ \
+    const mpq_t     q1; \
+    mpq_t           qf; \
+ \
+    PGMP_GETARG_MPQ(q1, 0); \
+ \
+    mpq_init(qf); \
+    mpq_ ## op (qf, q1); \
+ \
+    PGMP_RETURN_MPQ(qf); \
+}
+
+PMPQ_UN(neg)
+PMPQ_UN(abs)
+PMPQ_UN(inv)
 
 
 /*

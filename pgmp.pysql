@@ -514,14 +514,16 @@ AS ASSIGNMENT;
 
 !! PYON
 
-func('mpq_uminus', 'mpq')
 func('mpq_uplus', 'mpq')
+func('mpq_neg', 'mpq')
+func('abs', 'mpq')
+func('inv', 'mpq')
 
 !! PYOFF
 
 CREATE OPERATOR - (
     RIGHTARG = mpq,
-    PROCEDURE = mpq_uminus
+    PROCEDURE = mpq_neg
 );
 
 CREATE OPERATOR + (

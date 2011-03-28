@@ -293,6 +293,25 @@ SELECT '4/5'::mpq >> 4;
 SELECT '4/5'::mpq >> -1;
 ERROR:  argument can't be negative
 --
+-- mpq unary function
+--
+SELECT abs(mpq(1,3));
+1/3
+SELECT abs(mpq(-1,3));
+1/3
+SELECT abs(mpq(1,-3));
+1/3
+SELECT abs(mpq(-1,-3));
+1/3
+SELECT inv(mpq(1,3));
+3
+SELECT inv(mpq(-1,3));
+-3
+SELECT inv(mpq(3,1));
+1/3
+SELECT inv(mpq(-3,1));
+-1/3
+--
 -- mpq ordering operators
 --
 select 1000::mpq =   999::mpq;

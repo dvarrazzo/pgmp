@@ -179,6 +179,18 @@ SELECT '4/5'::mpq >> -1;
 
 
 --
+-- mpq unary function
+--
+SELECT abs(mpq(1,3));
+SELECT abs(mpq(-1,3));
+SELECT abs(mpq(1,-3));
+SELECT abs(mpq(-1,-3));
+SELECT inv(mpq(1,3));
+SELECT inv(mpq(-1,3));
+SELECT inv(mpq(3,1));
+SELECT inv(mpq(-3,1));
+
+--
 -- mpq ordering operators
 --
 
