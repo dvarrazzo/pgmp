@@ -35,14 +35,15 @@ Documentation
 Indices and tables
 ------------------
 
-* :ref:`genindex`
+  * :ref:`genindex`
+  * :ref:`search`
 
 ..
   * :ref:`modindex`
-  * :ref:`search`
 
-To Do List
-----------
+..
+    To Do List
+    ----------
 
-.. todolist::
+    .. todolist::
 

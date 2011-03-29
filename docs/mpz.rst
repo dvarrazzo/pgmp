@@ -50,8 +50,6 @@ operators. Indexes on `!mpz` columns can be created using the *btree* method.
         -----+-----+-----+-----
          16  | 10  | 8   | 2
 
-.. todo:: I should write a psql pygmets lexer
-
 
 .. function:: text(z)
 
@@ -65,8 +63,6 @@ operators. Indexes on `!mpz` columns can be created using the *btree* method.
     upper-case letters are used; for 37..62, digits, upper-case letters, and
     lower-case letters (in that significance order) are used. If *base* is not
     specified, 10 is assumed.
-
-.. todo:: write a wrap() function
 
 
 Arithmetic Operators and Functions
