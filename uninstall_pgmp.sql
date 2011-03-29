@@ -22,7 +22,16 @@
 -- Adjust this setting to control where the objects get created.
 SET search_path = public;
 
+-- Drop the data types: this will rip off all the functions defined on them.
 DROP TYPE mpz CASCADE;
 DROP TYPE mpq CASCADE;
 
-DROP TYPE _mpza CASCADE;
+-- Drop the remaining functions.
+DROP FUNCTION gmp_version();
+
+DROP FUNCTION randinit();
+DROP FUNCTION randinit_mt();
+DROP FUNCTION randinit_lc_2exp_size(int8);
+
+DROP FUNCTION numeric_test_dataset(int4, numeric);
+
