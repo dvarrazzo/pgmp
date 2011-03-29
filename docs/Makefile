@@ -23,8 +23,10 @@ BUILDDIR      = .
 default: html
 
 html:
+	(cd env/sphinx-tip && hg qpush --all)
 	PYTHONPATH=$(ENV_LIB) $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) \
 		. $(BUILDDIR)/html
+	(cd env/sphinx-tip && hg qpop --all)
 
 upload:
 	tar cjf - -C html . \
