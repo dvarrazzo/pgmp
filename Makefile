@@ -18,6 +18,8 @@
 # along with the PostgreSQL GMP Module.  If not, see
 # http://www.gnu.org/licenses/.
 
+.PHONY: docs
+
 USE_PGXS=1
 
 SHLIB_LINK=-lgmp -lm
@@ -32,6 +34,7 @@ DATA_built = pgmp.sql
 DATA = uninstall_pgmp.sql
 REGRESS = mpz mpq
 EXTRA_CLEAN = pgmp.sql.in
+DOCS=docs/html/ 
 
 PG_CONFIG = pg_config
 PGXS := $(shell $(PG_CONFIG) --pgxs)
@@ -39,4 +42,7 @@ include $(PGXS)
 
 pgmp.sql.in: pgmp.pysql
 	tools/unmix.py < $< > $@
+
+docs:
+	$(MAKE) -C docs
 
