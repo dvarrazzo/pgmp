@@ -76,9 +76,6 @@ These operators can either work on `!mpz` arguments or take an integer
 argument that will be implicitly converted.  Operators taking a :math:`2^n`
 argument always use an integer as right argument.
 
-A few operators may use optimized algorithms when one of the arguments is an
-integer.
-
 .. note::
     GMP defines many structures in terms of `!long` or `!unsigned long`, whose
     definitions may vary across platforms. PostgreSQL instead offers data
@@ -272,12 +269,6 @@ Notes:
     :math:`q` satisfying :math:`n = c + q \cdot d`. Unlike the other division
     operators, *d*\=0 is accepted and following the rule it can be seen that n
     and c are considered congruent mod 0 only when exactly equal.
-
-
-.. todo:: integer fast path
-
-.. todo::
-    fast path on int64 for 64 bit backends? Maybe introduce a long data type?
 
 
 Exponentiation Functions
