@@ -8,11 +8,11 @@ Rational numbers are converted in canonical form on input (meaning that the
 denominator and the numerator have no common factors) and all the
 operators will return a number in canonical form.
 
-PostgreSQL integer types (`!int16`, `!int32`, `!int64`) and `!numeric` can be
-converted to `!mpq` without loss of precision and without surprise. Floating
-point types (`!float4`, `!float8`) are converted without loss as well... but
-with some surprise, as many fractions with finite decimal expansion have no
-finite expansion in binary.
+PostgreSQL integer types (`!int16`, `!int32`, `!int64`), `!numeric` and `mpz`
+can be converted to `!mpq` without loss of precision and without surprise.
+Floating point types (`!float4`, `!float8`) are converted without loss as
+well... but with some surprise, as many fractions with finite decimal
+expansion have no finite expansion in binary.
 
 .. code-block:: sql
 
@@ -23,8 +23,6 @@ finite expansion in binary.
     ---------+----------------+----------------------------------
      101/10  | 5295309/524288 | 5685794529555251/562949953421312
 
-
-`!mpq` values can be converted to `mpz` as well.
 
 `!mpq` values can be converted to integer types (both PostgreSQL's and
 `!mpz`): the result will be truncated. Conversion to `!float4` and `!float8`
