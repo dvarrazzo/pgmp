@@ -225,6 +225,19 @@ SELECT inv(mpq(3,1));
 SELECT inv(mpq(-3,1));
 SELECT inv(0::mpq);
 
+SELECT limit_den(3.141592653589793, 10);
+SELECT limit_den(3.141592653589793, 100);
+SELECT limit_den(3.141592653589793, 1000000);
+SELECT limit_den(3.141592653589793);
+SELECT limit_den('4321/8765', 10000);
+SELECT limit_den(3.141592653589793, 10000);
+SELECT limit_den(-3.141592653589793, 10000);
+SELECT limit_den(3.141592653589793, 113);
+SELECT limit_den(3.141592653589793, 112);
+SELECT limit_den('201/200', 100);
+SELECT limit_den('201/200', 101);
+SELECT limit_den(0, 10000);
+
 
 --
 -- mpq ordering operators

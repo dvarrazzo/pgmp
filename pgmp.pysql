@@ -544,6 +544,9 @@ op('/', 'div')
 op('<<', 'mul_2exp', rarg='int8')
 op('>>', 'div_2exp', rarg='int8')
 
+func('limit_den', 'mpq')
+func('limit_den', 'mpq mpz')
+
 !! PYOFF
 
 

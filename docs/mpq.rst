@@ -19,7 +19,7 @@ finite expansion in binary.
     =# select 10.1::numeric::mpq as numeric,
     -#        10.1::float4::mpq as single,
     -#        10.1::float8::mpq as double;
-     numeric |     single     |              double              
+     numeric |     single     |              double
     ---------+----------------+----------------------------------
      101/10  | 5295309/524288 | 5685794529555251/562949953421312
 
@@ -37,7 +37,7 @@ a rounding to the precision set for the target type.
     =# select mpq('4/3')::integer as integer,
     -#        mpq('4/3')::float4 as single,
     -#        mpq('4/3')::decimal(10,3) as decimal;
-     integer | single  | decimal 
+     integer | single  | decimal
     ---------+---------+---------
            1 | 1.33333 |   1.333
 
@@ -70,7 +70,7 @@ operators. Indexes on `!mpq` columns can be created using the *btree* method.
 .. function:: mpq(num, den)
 
     Return an `!mpq` from its numerator and denominator.
-    
+
     .. note::
         The function signature accepts `!mpz` values. PostgreSQL integers are
         implicitly converted to `!mpz` so invoking the function as
@@ -129,6 +129,33 @@ canonical form.
 
     Return 1/*q*.
 
+.. function:: limit_den(q, max_den=1000000)
+
+    Return the closest rational to *q* with denominator at most *max_den*.
+
+    The function is useful for finding rational approximations to a given
+    floating-point number:
+
+    .. code-block:: sql
+
+        =# select limit_den(pi(), 10);
+        22/7
+
+    or for recovering a rational number that's represented as a float:
+
+    .. code-block:: sql
+
+        =# select mpq(cos(pi()/3));
+        4503599627370497/9007199254740992
+        =# select limit_den(cos(pi()/3));
+        1/2
+        =# select limit_den(10.1::float);
+        101/10
+
+    This function is not part of the GMP library: it is ported instead `from
+    the Python library`__.
+
+    .. __: http://docs.python.org/library/fractions.html#fractions.Fraction.limit_denominator
 
 Aggregation functions
 ---------------------
