@@ -1,3 +1,6 @@
+title: Time spent for sum() on a table
+xlabel: Numbers size (in decimal digits)
+ylabel: Time (in millis)
 SumTable mpz 1000000 1 1805.042
 SumTable numeric 1000000 1 2358.262
 SumTable mpz 1000000 2 1828.121

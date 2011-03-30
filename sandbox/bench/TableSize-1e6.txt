@@ -1,3 +1,6 @@
+title: Size of a table on disk
+xlabel: Numbers size (in decimal digits)
+ylabel: Size (in pages)
 TableSize mpz 1000000 1 4902
 TableSize numeric 1000000 1 4425
 TableSize mpz 1000000 2 4902

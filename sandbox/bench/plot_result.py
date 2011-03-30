@@ -8,22 +8,24 @@ from collections import defaultdict
 
 import matplotlib.pyplot as plt
 
-import benchmark
-
 tests = defaultdict(list)
 nsamples = cls_name = None
 
 # Read from a file or stdin if no file provided
 f = len(sys.argv) > 1 and open(sys.argv[1]) or sys.stdin
 
+labels = {}
+
 for line in f:
+    if ':' in line:
+        tokens = line.split(':', 1)
+        labels[tokens[0].strip()] = tokens[1].strip()
+        continue
+
     tokens = line.split()
 
     # Parse the class of the test
-    if cls_name is None:
-        cls_name = tokens[0]
-        test = getattr(benchmark, cls_name)
-
+    if cls_name is None: cls_name = tokens[0]
     assert cls_name == tokens[0], (cls_name, tokens)
 
     # Parse the number of samples
@@ -39,9 +41,9 @@ for label, data in sorted(tests.items()):
     data = zip(*data)  # transpose
     p = ax.plot(data[0], data[1], 'o-', label=label)
 
-ax.set_title("%s (n=%s)" % (test.title, nsamples))
-ax.set_xlabel(test.xlabel)
-ax.set_ylabel(test.ylabel)
+ax.set_title("%s (n=%s)" % (labels.get('title', ''), nsamples))
+if 'xlabel' in labels: ax.set_xlabel(labels['xlabel'])
+if 'ylabel' in labels: ax.set_ylabel(labels['ylabel'])
 ax.legend(loc=2)
 
 plt.show()

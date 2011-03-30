@@ -1,3 +1,6 @@
+title: Time spent for sum() on a SRF
+xlabel: Numbers size (in decimal digits)
+ylabel: Time (in millis)
 SumSequence mpz 1000000 1 1182.24
 SumSequence numeric 1000000 1 1484.823
 SumSequence mpz 1000000 2 1177.217

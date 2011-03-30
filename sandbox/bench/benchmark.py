@@ -29,13 +29,11 @@ class Benchmark(object):
     ylabel = "y axis"
 
     def __init__(self, opt):
-        self.nsamples = opt.nsamples
-        self.size = opt.size
-        self.repeats = opt.repeats
-        self.dsn = opt.dsn
+        self.opt = opt
 
     def run(self):
-        self.conn = psycopg2.connect(self.dsn)
+        opt = self.opt
+        self.conn = psycopg2.connect(opt.dsn)
         self.conn.set_isolation_level(0)
 
         tests = []
@@ -44,8 +42,12 @@ class Benchmark(object):
                 tests.append((k[5:], getattr(self, k)))
         tests.sort()
 
-        for n in self.nsamples:
-            for s in self.size:
+        print "title:", self.title
+        print "xlabel:", self.xlabel
+        print "ylabel:", self.ylabel
+
+        for n in opt.nsamples:
+            for s in opt.size:
                 for name, f in tests:
                     # test initialization
                     setup = getattr(self, 'setup_' + name, None)
@@ -55,9 +57,9 @@ class Benchmark(object):
 
                     # test run
                     results = []
-                    for i in xrange(self.repeats):
+                    for i in xrange(opt.repeats):
                         logger.info("test %s (n=%d s=%s) run %d of %d",
-                            name, n, s, i+1, self.repeats)
+                            name, n, s, i+1, opt.repeats)
                         results.append(f(n, s))
                         logger.info("result: %s", results[-1])
 
