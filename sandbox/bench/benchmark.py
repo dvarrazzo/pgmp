@@ -101,6 +101,58 @@ class SumSequence(Benchmark):
         return float(recs[-1][0].split()[-2])
 
 
+class SumTableRational(Benchmark):
+    """Test the time used to perform sum(x) for mpq and decimal data types.
+
+    The type represent the same values.
+    """
+    _title = "Time for sum() for values with scale %s"
+    xlabel = "Numbers size (in decimal digits)"
+    ylabel = "Time (in millis)"
+
+    @property
+    def title(self): return self._title % self.opt.scale
+
+    def setup_numeric(self, n, s):
+        self._setup(n, s, "test_sum_rat_numeric",
+            "create table test_sum_rat_numeric (n numeric(%s,%s));"
+                % (s, self.opt.scale))
+
+    def test_numeric(self, n, s):
+        return self._test("test_sum_rat_numeric")
+
+    def setup_mpq(self, n, s):
+        self._setup(n, s, "test_sum_rat_mpq",
+            "create table test_sum_rat_mpq (n mpq);")
+
+    def test_mpq(self, n, s):
+        return self._test("test_sum_rat_mpq")
+
+    def _setup(self, n, s, table, query):
+        cur = self.conn.cursor()
+        cur.execute("drop table if exists %s;" % table)
+        cur.execute(query)
+        cur.execute("""
+            select randinit();
+            select randseed(31415926);
+
+            insert into %s
+            select urandomm(%%(max)s::mpz)::mpq / %%(scale)s
+            from generate_series(1, %%(n)s);
+            """ % table, {
+            'max': 10 ** s,
+            'scale': 10 ** self.opt.scale,
+            'n': n})
+
+        cur.execute("vacuum analyze %s;" % table)
+
+    def _test(self, table):
+        cur = self.conn.cursor()
+        cur.execute("explain analyze select sum(n) from %s;" % table)
+        recs = cur.fetchall()
+        return float(recs[-1][0].split()[-2])
+
+
 class SumTable(Benchmark):
     """Test the time used to perform sum(n) for mpz and decimal data types.
 
@@ -200,6 +252,8 @@ def parse_args():
         help="number of numbers to sum. specify once or more")
     parser.add_option('-s', '--size', type=int, action='append',
         help="size of numbers to sum. specify once or more")
+    parser.add_option('-p', '--scale', type=int,
+        help="scale of the tested numbers, if applicable")
     parser.add_option('-r', '--repeats', type=int, default=3,
         help="test repetitions (take the best value) [default: %default]")
     parser.add_option('--dsn', help="database to connect", default="")
