@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """Plot a result from benchmark.py
 
 Copyright (C) 2011 - Daniele Varrazzo
