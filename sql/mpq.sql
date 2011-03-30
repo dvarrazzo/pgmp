@@ -175,6 +175,12 @@ SELECT float4(0::mpq);
 SELECT float8(0::mpq);
 SELECT mpz('0'::mpq);
 
+-- tricky cases of cast to numeric
+select (x::mpz::mpq / 100)::decimal      from generate_series(-2, 2) x;
+select (x::mpz::mpq / 100)::decimal(6,0) from generate_series(-2, 2) x;
+select (x::mpz::mpq / 100)::decimal(6,1) from generate_series(-2, 2) x;
+select (x::mpz::mpq / 100)::decimal(6,2) from generate_series(-2, 2) x;
+
 SELECT mpq(10, 4), mpq(10, -4);
 SELECT mpq(10, 0);
 -- fails if mpq(int, int) or similar are availiable

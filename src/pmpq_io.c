@@ -331,6 +331,7 @@ PGMP_PG_FUNCTION(pmpq_to_numeric)
     unsigned long   scale;
     mpz_t           z;
     char            *buf;
+    int             sbuf, snum;
 
     PGMP_GETARG_MPQ(q, 0);
     typmod = PG_GETARG_INT32(1);
@@ -354,31 +355,57 @@ PGMP_PG_FUNCTION(pmpq_to_numeric)
         cmult[0] = '1';
         cmult[scale + 1] = '\0';
         mpz_init_set_str(mult, cmult, 10);
+        pfree(cmult);
 
         mpz_init(z);
         mpz_mul(z, mpq_numref(q), mult);
+        sbuf = mpz_sizeinbase(z, 10);       /* size of the output buffer */
         mpz_tdiv_q(z, z, mpq_denref(q));
+        snum = mpz_sizeinbase(z, 10);       /* size of the number */
     }
     else {
         /* Just truncate q into an integer */
         mpz_init(z);
         mpz_set_q(z, q);
+        sbuf = snum = mpz_sizeinbase(z, 10);
+    }
+
+    /* If the numer is 0, everything is a special case: bail out */
+    if (mpz_cmp_si(z, 0) == 0) {
+        return DirectFunctionCall3(numeric_in,
+            CStringGetDatum("0"),
+            ObjectIdGetDatum(0),            /* unused 2nd value */
+            Int32GetDatum(typmod));
     }
 
     /* convert z into a string */
-    buf = palloc(mpz_sizeinbase(z, 10) + 3);    /* add sign, point and null */
+    buf = palloc(sbuf + 3);                 /* add sign, point and null */
     mpz_get_str(buf, 10, z);
     if (scale) {
-        char *end = buf + strlen(buf);
-        char *p;
+        char *end, *p;
+
+        /* Left pad with 0s the number if smaller than the buffer */
+        if (snum < sbuf) {
+            char *num0 = buf + (buf[0] == '-'); /* start of the num w/o sign */
+            memmove(num0 + (sbuf - snum), num0, snum + 1);
+            memset(num0, '0', sbuf - snum);
+        }
+
+        end = buf + strlen(buf);
 
         /* Add the decimal point in the right place */
         memmove(end - scale + 1, end - scale, scale + 1);
         end[-scale] = '.';
 
         /* delete trailing 0s or they will be used to add extra precision */
-        for (p = end; p > (end - scale) && *p == '0'; --p) {
-            *p = '\0';
+        if (typmod < VARHDRSZ) {        /* scale was not specified */
+            for (p = end; p > (end - scale) && *p == '0'; --p) {
+                *p = '\0';
+            }
+            /* Don't leave a traliling point */
+            if (*p == '.') {
+                *p = '\0';
+            }
         }
     }
 

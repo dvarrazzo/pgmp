@@ -305,6 +305,31 @@ SELECT float8(0::mpq);
 0
 SELECT mpz('0'::mpq);
 0
+-- tricky cases of cast to numeric
+select (x::mpz::mpq / 100)::decimal      from generate_series(-2, 2) x;
+-0.02
+-0.01
+0
+0.01
+0.02
+select (x::mpz::mpq / 100)::decimal(6,0) from generate_series(-2, 2) x;
+0
+0
+0
+0
+0
+select (x::mpz::mpq / 100)::decimal(6,1) from generate_series(-2, 2) x;
+0.0
+0.0
+0.0
+0.0
+0.0
+select (x::mpz::mpq / 100)::decimal(6,2) from generate_series(-2, 2) x;
+-0.02
+-0.01
+0.00
+0.01
+0.02
 SELECT mpq(10, 4), mpq(10, -4);
 5/2|-5/2
 SELECT mpq(10, 0);
