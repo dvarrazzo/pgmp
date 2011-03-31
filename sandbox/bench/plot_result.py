@@ -17,6 +17,9 @@ f = len(sys.argv) > 1 and open(sys.argv[1]) or sys.stdin
 labels = {}
 
 for line in f:
+    if line.isspace():
+        continue
+
     if ':' in line:
         tokens = line.split(':', 1)
         labels[tokens[0].strip()] = tokens[1].strip()

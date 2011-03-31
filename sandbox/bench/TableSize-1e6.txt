@@ -1,23 +1,36 @@
 title: Size of a table on disk
 xlabel: Numbers size (in decimal digits)
 ylabel: Size (in pages)
-TableSize mpz 1000000 1 4902
-TableSize numeric 1000000 1 4425
-TableSize mpz 1000000 2 4902
-TableSize numeric 1000000 2 4425
-TableSize mpz 1000000 5 4902
-TableSize numeric 1000000 5 4902
-TableSize mpz 1000000 10 5406
-TableSize numeric 1000000 10 4902
-TableSize mpz 1000000 20 5883
+TableSize mpq 1000000 20 6294
+TableSize mpz 1000000 20 5802
 TableSize numeric 1000000 20 5406
-TableSize mpz 1000000 50 7353
-TableSize numeric 1000000 50 7353
+TableSize mpq 1000000 100 10310
 TableSize mpz 1000000 100 9804
 TableSize numeric 1000000 100 10310
+TableSize mpq 1000000 200 15385
 TableSize mpz 1000000 200 14706
 TableSize numeric 1000000 200 16667
+TableSize mpq 1000000 300 20834
+TableSize mpz 1000000 300 20408
+TableSize numeric 1000000 300 23256
+TableSize mpq 1000000 400 25642
+TableSize mpz 1000000 400 25000
+TableSize numeric 1000000 400 29412
+TableSize mpq 1000000 500 31250
 TableSize mpz 1000000 500 30304
 TableSize numeric 1000000 500 35715
+TableSize mpq 1000000 600 37036
+TableSize mpz 1000000 600 35715
+TableSize numeric 1000000 600 41667
+TableSize mpq 1000000 700 41667
+TableSize mpz 1000000 700 41667
+TableSize numeric 1000000 700 47620
+TableSize mpq 1000000 800 47620
+TableSize mpz 1000000 800 45515
+TableSize numeric 1000000 800 55556
+TableSize mpq 1000000 900 52632
+TableSize mpz 1000000 900 52632
+TableSize numeric 1000000 900 62500
+TableSize mpq 1000000 1000 58824
 TableSize mpz 1000000 1000 55556
 TableSize numeric 1000000 1000 66667

@@ -16,6 +16,9 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S")
 
 
+class SkipTest(Exception):
+    """The test can't be performed for some reason."""
+
 class Benchmark(object):
     """Base class for a test.
 
@@ -53,7 +56,12 @@ class Benchmark(object):
                     setup = getattr(self, 'setup_' + name, None)
                     if setup:
                         logger.info("setup %s: n=%d s=%d", name, n, s)
-                        setup(n, s)
+                        try:
+                            setup(n, s)
+                        except SkipTest, e:
+                            logger.info("skipping %s (n=%d s=%d): %s",
+                                name, n, s, e)
+                            continue
 
                     # test run
                     results = []
@@ -124,13 +132,17 @@ class SumRational(Benchmark):
 
 
 class SumInteger(Benchmark):
-    """Test the time used to perform sum(n) for mpz and decimal data types.
+    """Test the time used to perform sum(n) for different data types.
 
     n is read from a table.
     """
     title = "Time to calculate sum() on a table"
     xlabel = "Numbers size (in decimal digits)"
     ylabel = "Time (in millis)"
+
+    def setup_mpq(self, n, s):
+        self._setup(n, s, "test_sum_mpq",
+            "create table test_sum_mpq (n mpq);")
 
     def setup_mpz(self, n, s):
         self._setup(n, s, "test_sum_mpz",
@@ -139,6 +151,20 @@ class SumInteger(Benchmark):
     def setup_numeric(self, n, s):
         self._setup(n, s, "test_sum_numeric",
             "create table test_sum_numeric (n numeric);")
+
+    def setup_int8(self, n, s):
+        if s > 18:
+            raise SkipTest("skipping test with %d digits" % s)
+
+        self._setup(n, s, "test_sum_int8",
+            "create table test_sum_int8 (n int8);")
+
+    def setup_int4(self, n, s):
+        if s > 9:
+            raise SkipTest("skipping test with %d digits" % s)
+
+        self._setup(n, s, "test_sum_int4",
+            "create table test_sum_int4 (n int4);")
 
     def _setup(self, n, s, table, query):
         cur = self.conn.cursor()
@@ -156,11 +182,20 @@ class SumInteger(Benchmark):
 
         cur.execute("vacuum analyze %s;" % table)
 
+    def test_mpq(self, n, s):
+        return self._test('test_sum_mpq')
+
     def test_mpz(self, n, s):
         return self._test('test_sum_mpz')
 
     def test_numeric(self, n, s):
         return self._test('test_sum_numeric')
+
+    def test_int8(self, n, s):
+        return self._test('test_sum_int8')
+
+    def test_int4(self, n, s):
+        return self._test('test_sum_int4')
 
     def _test(self, table):
         cur = self.conn.cursor()
@@ -175,22 +210,53 @@ class Arith(Benchmark):
     title = "Performance on arithmetic operations"
     xlabel = "Numbers size (in decimal digits)"
     ylabel = "Time (in millis)"
-    def setup_numeric(self, n, s):
-        self._setup(n, s, "test_arith_numeric", """
-            create table test_arith_numeric (
-                a numeric(%s), b numeric(%s), c numeric(%s), d numeric(%s));
-                """ % ((s,s,s,s+1)))
 
-    def test_numeric(self, n, s):
-        return self._test("test_arith_numeric")
+    def setup_mpq(self, n, s):
+        self._setup(n, s, "test_arith_mpq", """
+            create table test_arith_mpq
+                (a mpq, b mpq, c mpq, d mpq);""")
 
     def setup_mpz(self, n, s):
         self._setup(n, s, "test_arith_mpz", """
             create table test_arith_mpz
                 (a mpz, b mpz, c mpz, d mpz);""")
 
+    def setup_numeric(self, n, s):
+        self._setup(n, s, "test_arith_numeric", """
+            create table test_arith_numeric (
+                a numeric(%s), b numeric(%s), c numeric(%s), d numeric(%s));
+                """ % ((s,s,s,s+1)))
+
+    def setup_int8(self, n, s):
+        if s > 9:
+            raise SkipTest("skipping test with %d digits" % s)
+
+        self._setup(n, s, "test_arith_int8", """
+            create table test_arith_int8
+                (a int8, b int8, c int8, d int8);""")
+
+    def setup_int4(self, n, s):
+        if s > 4:
+            raise SkipTest("skipping test with %d digits" % s)
+
+        self._setup(n, s, "test_arith_int4", """
+            create table test_arith_int4
+                (a int4, b int4, c int4, d int4);""")
+
+    def test_mpq(self, n, s):
+        return self._test("test_arith_mpq")
+
     def test_mpz(self, n, s):
         return self._test("test_arith_mpz")
+
+    def test_numeric(self, n, s):
+        return self._test("test_arith_numeric")
+
+    def test_int8(self, n, s):
+        return self._test("test_arith_int8")
+
+    def test_int4(self, n, s):
+        return self._test("test_arith_int4")
 
     def _setup(self, n, s, table, query):
         cur = self.conn.cursor()
@@ -262,34 +328,71 @@ class TableSize(Benchmark):
     xlabel = "Numbers size (in decimal digits)"
     ylabel = "Size (in pages)"
 
-    def test_mpz(self, n, s):
-        return self._test(n, s,
+    def setup_int8(self, n, s):
+        if s > 18:
+            raise SkipTest("skipping test with %d digits" % s)
+
+    def setup_int4(self, n, s):
+        if s > 9:
+            raise SkipTest("skipping test with %d digits" % s)
+
+    def test_mpq(self, n, s):
+        return self._test(n, s, "test_size_mpq",
             """
-            create table test_size (n mpz);
-            insert into test_size
+            create table test_size_mpq (n mpq);
+            insert into test_size_mpq
+                select urandomm(%(max)s::mpz)s
+                from generate_series(1, %(n)s);
+            """)
+
+    def test_mpz(self, n, s):
+        return self._test(n, s, "test_size_mpz",
+            """
+            create table test_size_mpz (n mpz);
+            insert into test_size_mpz
                 select urandomm(%(max)s::mpz)s
                 from generate_series(1, %(n)s);
             """)
 
     def test_numeric(self, n, s):
-        return self._test(n, s,
+        return self._test(n, s, "test_size_numeric",
             """
-            create table test_size (n numeric);
-            insert into test_size
+            create table test_size_numeric (n numeric);
+            insert into test_size_numeric
                 select urandomm(%(max)s::mpz)s
                 from generate_series(1, %(n)s);
             """)
 
-    def _test(self, n, s, query):
+    def test_int8(self, n, s):
+        return self._test(n, s, "test_size_int8",
+            """
+            create table test_size_int8 (n int8);
+            insert into test_size_int8
+                select urandomm(%(max)s::mpz)s
+                from generate_series(1, %(n)s);
+            """)
+
+    def test_int4(self, n, s):
+        return self._test(n, s, "test_size_int4",
+            """
+            create table test_size_int4 (n int4);
+            insert into test_size_int4
+                select urandomm(%(max)s::mpz)s
+                from generate_series(1, %(n)s);
+            """)
+
+    def _test(self, n, s, table, query):
         cur = self.conn.cursor()
         cur.execute("""
-            drop table if exists test_size;
+            drop table if exists %s;
             select randinit();
-            select randseed(31415926); """)
-        cur.execute(query, {'n': n, 'max': s ** 10})
-        cur.execute("vacuum analyze test_size;")
+            select randseed(31415926);
+            """ % table)
+        cur.execute(query, {'n': n, 'max': 10 ** s})
+        cur.execute("vacuum analyze %s;" % table)
         cur.execute(
-            "select relpages from pg_class where relname = 'test_size';")
+            "select relpages from pg_class where relname = %s;" ,
+            (table, ))
         return cur.fetchone()[0]
 
 
