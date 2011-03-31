@@ -429,23 +429,6 @@ agg('bit_xor', 'mpz', '_mpz_agg_xor')
 
 
 --
--- Test functions
---
-
-CREATE OR REPLACE FUNCTION mpz_test_dataset(int4, int4)
-RETURNS SETOF mpz
-AS 'MODULE_PATHNAME'
-LANGUAGE C IMMUTABLE STRICT;
-
-CREATE OR REPLACE FUNCTION numeric_test_dataset(int4, numeric)
-RETURNS SETOF numeric
-AS 'MODULE_PATHNAME'
-LANGUAGE C IMMUTABLE STRICT;
-
-
-
-
---
 -- mpq user-defined type
 --
 

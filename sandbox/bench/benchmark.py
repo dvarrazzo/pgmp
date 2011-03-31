@@ -71,37 +71,7 @@ class Benchmark(object):
         return min(results)
 
 
-class SumSequence(Benchmark):
-    """Test the time used to perform sum(n) for mpz and decimal data types.
-
-    n is generated from a SRF, not a table.
-    """
-    title = "Time spent for sum() on a SRF"
-    xlabel = "Numbers size (in decimal digits)"
-    ylabel = "Time (in millis)"
-
-    def test_mpz(self, n, s):
-        return self._test(n, s,
-            """
-            explain analyze select sum(x)
-            from mpz_test_dataset(%(n)s, %(s)s) as x;
-            """)
-
-    def test_numeric(self, n, s):
-        return self._test(n, s,
-            """
-            explain analyze select sum(x)
-            from numeric_test_dataset(%(n)s, repeat('8', %(s)s)::numeric) as x;
-            """)
-
-    def _test(self, n, s, query):
-        cur = self.conn.cursor()
-        cur.execute(query, {'n': n, 's': s})
-        recs = cur.fetchall()
-        return float(recs[-1][0].split()[-2])
-
-
-class SumTableRational(Benchmark):
+class SumRational(Benchmark):
     """Test the time used to perform sum(x) for mpq and decimal data types.
 
     The type represent the same values.
@@ -153,47 +123,48 @@ class SumTableRational(Benchmark):
         return float(recs[-1][0].split()[-2])
 
 
-class SumTable(Benchmark):
+class SumInteger(Benchmark):
     """Test the time used to perform sum(n) for mpz and decimal data types.
 
     n is read from a table.
     """
-    title = "Time spent for sum() on a table"
+    title = "Time to calculate sum() on a table"
     xlabel = "Numbers size (in decimal digits)"
     ylabel = "Time (in millis)"
 
     def setup_mpz(self, n, s):
-        self._setup(n, s,
-            """
-            create table test_sum (n mpz);
-            insert into test_sum
-                select * from mpz_test_dataset(%(n)s, %(s)s);
-            """)
-
-    def test_mpz(self, n, s):
-        return self._test()
+        self._setup(n, s, "test_sum_mpz",
+            "create table test_sum_mpz (n mpz);")
 
     def setup_numeric(self, n, s):
-        self._setup(n, s,
-            """
-            create table test_sum (n numeric);
-            insert into test_sum
-                select * from numeric_test_dataset(%(n)s,
-                    repeat('8', %(s)s)::numeric);
-            """)
+        self._setup(n, s, "test_sum_numeric",
+            "create table test_sum_numeric (n numeric);")
+
+    def _setup(self, n, s, table, query):
+        cur = self.conn.cursor()
+        cur.execute("drop table if exists %s;" % table)
+        cur.execute(query)
+        cur.execute("""
+            select randinit();
+            select randseed(31415926);
+
+            insert into %s
+            select urandomm(%%(max)s::mpz)s
+            from generate_series(1, %%(n)s);
+            """ % table,
+            { 'max': 10 ** s, 'n': n})
+
+        cur.execute("vacuum analyze %s;" % table)
+
+    def test_mpz(self, n, s):
+        return self._test('test_sum_mpz')
 
     def test_numeric(self, n, s):
-        return self._test()
+        return self._test('test_sum_numeric')
 
-    def _setup(self, n, s, query):
+    def _test(self, table):
         cur = self.conn.cursor()
-        cur.execute("drop table if exists test_sum;")
-        cur.execute(query, {'n': n, 's': s})
-        cur.execute("vacuum analyze test_sum;")
-
-    def _test(self):
-        cur = self.conn.cursor()
-        cur.execute("explain analyze select sum(n) from test_sum;")
+        cur.execute("explain analyze select sum(n) from %s;" % table)
         recs = cur.fetchall()
         return float(recs[-1][0].split()[-2])
 
@@ -296,7 +267,8 @@ class TableSize(Benchmark):
             """
             create table test_size (n mpz);
             insert into test_size
-                select * from mpz_test_dataset(%(n)s, %(s)s);
+                select urandomm(%(max)s::mpz)s
+                from generate_series(1, %(n)s);
             """)
 
     def test_numeric(self, n, s):
@@ -304,14 +276,17 @@ class TableSize(Benchmark):
             """
             create table test_size (n numeric);
             insert into test_size
-                select * from numeric_test_dataset(%(n)s,
-                    repeat('8', %(s)s)::numeric);
+                select urandomm(%(max)s::mpz)s
+                from generate_series(1, %(n)s);
             """)
 
     def _test(self, n, s, query):
         cur = self.conn.cursor()
-        cur.execute("drop table if exists test_size;")
-        cur.execute(query, {'n': n, 's': s})
+        cur.execute("""
+            drop table if exists test_size;
+            select randinit();
+            select randseed(31415926); """)
+        cur.execute(query, {'n': n, 'max': s ** 10})
         cur.execute("vacuum analyze test_size;")
         cur.execute(
             "select relpages from pg_class where relname = 'test_size';")

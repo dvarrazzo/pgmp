@@ -25,7 +25,7 @@ USE_PGXS=1
 SHLIB_LINK=-lgmp -lm
 
 MODULE_big = pgmp
-OBJS = src/pgmp.o src/pgmp_test.o \
+OBJS = src/pgmp.o \
 	src/pmpz.o src/pmpz_io.o src/pmpz_arith.o src/pmpz_agg.o \
 	src/pmpz_roots.o src/pmpz_theor.o src/pmpz_bits.o src/pmpz_rand.o \
 	src/pmpq.o src/pmpq_io.o src/pmpq_arith.o src/pmpq_agg.o
@@ -34,7 +34,7 @@ DATA_built = pgmp.sql
 DATA = uninstall_pgmp.sql
 REGRESS = mpz mpq
 EXTRA_CLEAN = pgmp.sql.in
-DOCS=docs/html/ 
+DOCS=docs/html/
 
 PG_CONFIG = pg_config
 PGXS := $(shell $(PG_CONFIG) --pgxs)

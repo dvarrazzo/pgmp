@@ -386,13 +386,6 @@ SELECT bit_xor(z) FROM mpzagg WHERE z = 1 or z = 2;
 SELECT bit_xor(z) FROM mpzagg WHERE z = 1 or z = 2 or z = 3;
 
 --
--- test functions
---
-
-SELECT mpz_test_dataset(5, 20);
-SELECT numeric_test_dataset(5, '123456'::numeric);
-
---
 -- mpz functions tests
 --
 

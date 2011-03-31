@@ -599,21 +599,6 @@ SELECT bit_xor(z) FROM mpzagg WHERE z = 1 or z = 2;
 SELECT bit_xor(z) FROM mpzagg WHERE z = 1 or z = 2 or z = 3;
 0
 --
--- test functions
---
-SELECT mpz_test_dataset(5, 20);
-88888888888888888888
-88888888888888888888
-88888888888888888888
-88888888888888888888
-88888888888888888888
-SELECT numeric_test_dataset(5, '123456'::numeric);
-123456
-123456
-123456
-123456
-123456
---
 -- mpz functions tests
 --
 SELECT sqrt(25::mpz);

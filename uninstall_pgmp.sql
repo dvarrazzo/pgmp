@@ -33,5 +33,3 @@ DROP FUNCTION randinit();
 DROP FUNCTION randinit_mt();
 DROP FUNCTION randinit_lc_2exp_size(int8);
 
-DROP FUNCTION numeric_test_dataset(int4, numeric);
-

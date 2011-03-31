@@ -1,0 +1,25 @@
+title: Time to calculate sum() on a table
+xlabel: Numbers size (in decimal digits)
+ylabel: Time (in millis)
+SumInteger mpz 1000000 10 807.93
+SumInteger numeric 1000000 10 1097.713
+SumInteger mpz 1000000 100 807.669
+SumInteger numeric 1000000 100 1415.72
+SumInteger mpz 1000000 200 839.114
+SumInteger numeric 1000000 200 1696.542
+SumInteger mpz 1000000 300 799.881
+SumInteger numeric 1000000 300 1954.924
+SumInteger mpz 1000000 400 822.759
+SumInteger numeric 1000000 400 2204.32
+SumInteger mpz 1000000 500 848.198
+SumInteger numeric 1000000 500 2496.212
+SumInteger mpz 1000000 600 875.586
+SumInteger numeric 1000000 600 2792.95
+SumInteger mpz 1000000 700 913.817
+SumInteger numeric 1000000 700 3058.447
+SumInteger mpz 1000000 800 940.029
+SumInteger numeric 1000000 800 3334.242
+SumInteger mpz 1000000 900 962.342
+SumInteger numeric 1000000 900 3575.623
+SumInteger mpz 1000000 1000 980.073
+SumInteger numeric 1000000 1000 3847.978
