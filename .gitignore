@@ -1,4 +1,5 @@
-sandbox/hello/hello
+data
+tags
 pgmp.so
 pgmp.sql
 pgmp.sql.in
@@ -8,3 +9,5 @@ regression.out
 docs/env
 docs/html
 docs/_static/jsMath/
+sandbox/hello/hello
+sandbox/bench/*.png
