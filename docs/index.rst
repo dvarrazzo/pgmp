@@ -19,6 +19,9 @@ the functions available in the GMP library for these data types, allowing:
 - using specialized functions to deal with prime numbers, random numbers,
   factorization directly into the database.
 
+See the :ref:`Performance` page for comparison tests between GMP data types
+and PostgreSQL builtins.
+
 
 References
 ----------
@@ -28,6 +31,9 @@ References
 - Source repository: https://github.com/dvarrazzo/pgmp/
 - Bug tracking: https://github.com/dvarrazzo/pgmp/issues
 - PgFoundry project: http://pgfoundry.org/projects/pgmp/
+
+See the :ref:`Performance` page for a comparison between GMP data types and
+PostgreSQL builtins.
 
 
 Documentation

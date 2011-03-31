@@ -18,11 +18,13 @@ SPHINXBUILD   = $(ENV_BIN)/sphinx-build
 PAPER         =
 BUILDDIR      = .
 
+PLOTS = $(patsubst %.txt,%.png,$(wildcard ../sandbox/bench/*.txt))
+
 .PHONY: env clean html upload
 
 default: html
 
-html:
+html: $(PLOTS)
 	(cd env/sphinx-tip && hg qpush --all)
 	PYTHONPATH=$(ENV_LIB) $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) \
 		. $(BUILDDIR)/html
@@ -32,6 +34,9 @@ upload:
 	tar cjf - -C html . \
 	| ssh dvarrazzo@pgfoundry.org \
 		tar xjvf - -C /home/pgfoundry.org/groups/pgmp/htdocs
+
+../sandbox/bench/%.png: ../sandbox/bench/%.txt
+	../sandbox/bench/plot_result.py $< -o $@
 
 # The environment is currently required to build the documentation.
 # It is not clean by 'make clean'
