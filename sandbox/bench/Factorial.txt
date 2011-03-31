@@ -1,0 +1,23 @@
+title: Time to calculate n!
+xlabel: Input number
+ylabel: Time (in millis)
+Factorial mpz 0 1000 3.029
+Factorial numeric 0 1000 6.427
+Factorial mpz 0 2000 5.894
+Factorial numeric 0 2000 40.662
+Factorial mpz 0 3000 5.281
+Factorial numeric 0 3000 133.611
+Factorial mpz 0 4000 8.487
+Factorial numeric 0 4000 321.281
+Factorial mpz 0 5000 19.249
+Factorial numeric 0 5000 643.611
+Factorial mpz 0 6000 16.97
+Factorial numeric 0 6000 1140.778
+Factorial mpz 0 7000 21.159
+Factorial numeric 0 7000 1854.77
+Factorial mpz 0 8000 26.373
+Factorial numeric 0 8000 2822.352
+Factorial mpz 0 9000 32.44
+Factorial numeric 0 9000 4106.126
+Factorial mpz 0 10000 39.152
+Factorial numeric 0 10000 5772.065

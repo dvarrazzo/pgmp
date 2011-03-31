@@ -1,0 +1,25 @@
+title: Performance on arithmetic operations
+xlabel: Numbers size (in decimal digits)
+ylabel: Time (in millis)
+Arith mpz 1000000 5 1501.352
+Arith numeric 1000000 5 2806.314
+Arith mpz 1000000 10 1713.657
+Arith numeric 1000000 10 2844.612
+Arith mpz 1000000 20 1855.234
+Arith numeric 1000000 20 3142.704
+Arith mpz 1000000 30 1866.971
+Arith numeric 1000000 30 3901.096
+Arith mpz 1000000 40 1920.063
+Arith numeric 1000000 40 4539.643
+Arith mpz 1000000 50 2003.029
+Arith numeric 1000000 50 5619.141
+Arith mpz 1000000 60 2060.608
+Arith numeric 1000000 60 6527.557
+Arith mpz 1000000 70 2109.8
+Arith numeric 1000000 70 7832.202
+Arith mpz 1000000 80 2181.845
+Arith numeric 1000000 80 8878.389
+Arith mpz 1000000 90 2274.953
+Arith numeric 1000000 90 10746.137
+Arith mpz 1000000 100 2515.654
+Arith numeric 1000000 100 12040.895

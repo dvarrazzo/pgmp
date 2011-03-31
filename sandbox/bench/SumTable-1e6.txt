@@ -1,23 +1,23 @@
 title: Time spent for sum() on a table
 xlabel: Numbers size (in decimal digits)
 ylabel: Time (in millis)
-SumTable mpz 1000000 1 1805.042
-SumTable numeric 1000000 1 2358.262
-SumTable mpz 1000000 2 1828.121
-SumTable numeric 1000000 2 2365.338
-SumTable mpz 1000000 5 1800.395
-SumTable numeric 1000000 5 2374.968
-SumTable mpz 1000000 10 1798.084
-SumTable numeric 1000000 10 2385.615
-SumTable mpz 1000000 20 1845.442
-SumTable numeric 1000000 20 2425.354
-SumTable mpz 1000000 50 1818.354
-SumTable numeric 1000000 50 2579.281
-SumTable mpz 1000000 100 1895.573
-SumTable numeric 1000000 100 2777.584
-SumTable mpz 1000000 200 1975.537
-SumTable numeric 1000000 200 3120.558
-SumTable mpz 1000000 500 1994.86
-SumTable numeric 1000000 500 3872.77
-SumTable mpz 1000000 1000 2237.576
-SumTable numeric 1000000 1000 5295.378
+SumTable mpz 1000000 1 782.555
+SumTable numeric 1000000 1 1052.345
+SumTable mpz 1000000 2 783.336
+SumTable numeric 1000000 2 1053.034
+SumTable mpz 1000000 5 782.12
+SumTable numeric 1000000 5 1068.168
+SumTable mpz 1000000 10 787.072
+SumTable numeric 1000000 10 1079.497
+SumTable mpz 1000000 20 788.925
+SumTable numeric 1000000 20 1112.389
+SumTable mpz 1000000 50 795.879
+SumTable numeric 1000000 50 1216.75
+SumTable mpz 1000000 100 826.682
+SumTable numeric 1000000 100 1265.976
+SumTable mpz 1000000 200 845.205
+SumTable numeric 1000000 200 1394.51
+SumTable mpz 1000000 500 857.222
+SumTable numeric 1000000 500 1722.196
+SumTable mpz 1000000 1000 993.036
+SumTable numeric 1000000 1000 2286.867
