@@ -44,9 +44,13 @@ for label, data in sorted(tests.items()):
 title = labels.get('title', '')
 if int(nsamples): title += " (n=%s)" % nsamples
 ax.set_title(title)
+
 if 'xlabel' in labels: ax.set_xlabel(labels['xlabel'])
 if 'ylabel' in labels: ax.set_ylabel(labels['ylabel'])
 ax.legend(loc=2)
 
-plt.show()
+if '-o' in sys.argv:
+    plt.savefig(sys.argv[sys.argv.index('-o') + 1], dpi=72)
+else:
+    plt.show()
 
