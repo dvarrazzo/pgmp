@@ -1,0 +1,25 @@
+title: Time for sum() for values with scale 4
+xlabel: Numbers size (in decimal digits)
+ylabel: Time (in millis)
+SumRational mpq 1000000 5 1119.65
+SumRational numeric 1000000 5 1080.88
+SumRational mpq 1000000 10 1141.113
+SumRational numeric 1000000 10 1090.011
+SumRational mpq 1000000 20 1150.815
+SumRational numeric 1000000 20 1127.691
+SumRational mpq 1000000 30 1147.41
+SumRational numeric 1000000 30 1160.891
+SumRational mpq 1000000 40 1159.387
+SumRational numeric 1000000 40 1207.802
+SumRational mpq 1000000 50 1153.466
+SumRational numeric 1000000 50 1261.346
+SumRational mpq 1000000 60 1157.451
+SumRational numeric 1000000 60 1277.414
+SumRational mpq 1000000 70 1167.845
+SumRational numeric 1000000 70 1302.096
+SumRational mpq 1000000 80 1173.909
+SumRational numeric 1000000 80 1347.751
+SumRational mpq 1000000 90 1196.104
+SumRational numeric 1000000 90 1370.181
+SumRational mpq 1000000 100 1196.038
+SumRational numeric 1000000 100 1410.034
