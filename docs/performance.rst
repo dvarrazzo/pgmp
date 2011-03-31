@@ -26,23 +26,33 @@ builtin PostgreSQL data types.  A few observations:
 
   .. __: https://github.com/dvarrazzo/pgmp/tree/master/sandbox/bench
 
+
+.. _performance-sum:
+
 Just taking the sum of a table with 1M records, `!mpz` is about 25% faster than
 `!numeric` for small numbers; the difference increases with the size of the
 number up to about 75% for numbers with 1000 digits. `!int8` is probably
 slower than `!numeric` because the numbers are cast to `!numeric` before
 calculation. `!int4` is casted to `!int8` instead, so it still benefits of the
-speed of a native datatype.
+speed of a native datatype. `!mpq` behaves good as no canonicalization has to
+be performed.
 
 .. image:: ../sandbox/bench/SumInteger-1e6.png
 
-Performing a mix of operations the difference becomes more noticeable. This
+
+.. _performance-arith:
+
+Performing a mix of operations the differences becomes more noticeable. This
 plot shows the time taken to calculate sum(a + b * c / d) on a 1M records
 table. `!mpz` is about 45% faster for small numbers, up to 80% faster for
 numbers with 100 digits.  `!int8` is not visible as perfectly overlapping
 `!mpz`. `!mpq` is not shown as out of scale (a test with smaller table reveals
-a quadratic behavior probably due to the canonicalization.
+a quadratic behavior probably due to the canonicalization).
 
 .. image:: ../sandbox/bench/Arith-1e6.png
+
+
+.. _performance-fact:
 
 The difference in performance of multiplications is particularly evident: Here
 is a test calculating *n*! in a trivial way (performing the product of a
@@ -53,6 +63,27 @@ about 40 ms.
 .. image:: ../sandbox/bench/Factorial.png
 
 .. __: http://www.postgresql.org/docs/9.0/static/sql-createaggregate.html
+
+
+.. _preformance-dec:
+
+These comparisons show the perfomance with a sum of the same values stored in
+`!mpq` and `!decimal`. Because these rationals are representation of numbers
+with finite decimal expansion, the denominator doesn't grow unbounded (as in
+sum(1/n) on a sequence of random numbers) but is capped by 10^scale.
+`!decimal` is pretty stable in its performance for any scale but the time
+increases markedly with the precision (total number of digits). `!mpq` grows
+way more slowly with the precision, but has a noticeable overhead increasing
+with the scale.
+
+.. image:: ../sandbox/bench/SumRational-p2-1e6.png
+
+.. image:: ../sandbox/bench/SumRational-p4-1e6.png
+
+.. image:: ../sandbox/bench/SumRational-p8-1e6.png
+
+
+.. _performance-size:
 
 Here is a comparison of the size on disk of tables containing 1M records of
 different data types. The numbers are integers, so there is about a constant
