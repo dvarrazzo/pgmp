@@ -198,6 +198,92 @@ class SumTable(Benchmark):
         return float(recs[-1][0].split()[-2])
 
 
+class Arith(Benchmark):
+    """Perform an operation sum(a + b * c / d) on a table.
+    """
+    title = "Performance on arithmetic operations"
+    xlabel = "Numbers size (in decimal digits)"
+    ylabel = "Time (in millis)"
+    def setup_numeric(self, n, s):
+        self._setup(n, s, "test_arith_numeric", """
+            create table test_arith_numeric (
+                a numeric(%s), b numeric(%s), c numeric(%s), d numeric(%s));
+                """ % ((s,s,s,s+1)))
+
+    def test_numeric(self, n, s):
+        return self._test("test_arith_numeric")
+
+    def setup_mpz(self, n, s):
+        self._setup(n, s, "test_arith_mpz", """
+            create table test_arith_mpz
+                (a mpz, b mpz, c mpz, d mpz);""")
+
+    def test_mpz(self, n, s):
+        return self._test("test_arith_mpz")
+
+    def _setup(self, n, s, table, query):
+        cur = self.conn.cursor()
+        cur.execute("drop table if exists %s;" % table)
+        cur.execute(query)
+        cur.execute("""
+            select randinit();
+            select randseed(31415926);
+
+            insert into %s
+            select
+                urandomm(%%(max)s::mpz), urandomm(%%(max)s::mpz),
+                urandomm(%%(max)s::mpz), urandomm(%%(max)s::mpz) + 1
+            from generate_series(1, %%(n)s);
+            """ % table, {
+            'max': 10 ** s,
+            'n': n})
+
+        cur.execute("vacuum analyze %s;" % table)
+
+    def _test(self, table):
+        cur = self.conn.cursor()
+        cur.execute("""explain analyze
+            select sum(a + b * c / d)
+            from %s;""" % table)
+        recs = cur.fetchall()
+        return float(recs[-1][0].split()[-2])
+
+
+class Factorial(Benchmark):
+    """Measure the speed to calculate the factorial of n"""
+    title = "Time to calculate n!"
+    xlabel = "Input number"
+    ylabel = "Time (in millis)"
+
+    def setup_mpz(self, n, s):
+        self._setup('mpz', 'mpz_mul')
+
+    def setup_numeric(self, n, s):
+        self._setup('numeric', 'numeric_mul')
+
+    def _setup(self, type, f):
+        cur = self.conn.cursor()
+        cur.execute("drop aggregate if exists m(%s);" % type)
+        cur.execute("create aggregate m(%s) (sfunc=%s, stype=%s);"
+            % (type, f, type))
+
+    def test_mpz(self, n, s):
+        return self._test('mpz', s)
+
+    def test_numeric(self, n, s):
+        return self._test('numeric', s)
+
+    def _test(self, type, s):
+        cur = self.conn.cursor()
+        cur.execute("""
+            explain analyze
+            select m(n::%s)
+            from generate_series(1,%s) n;
+            """ % (type, s))
+        recs = cur.fetchall()
+        return float(recs[-1][0].split()[-2])
+
+
 class TableSize(Benchmark):
     """Measure the size of a table on disk with mpz and decimal columns.
     """

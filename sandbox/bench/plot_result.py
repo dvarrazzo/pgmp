@@ -41,7 +41,9 @@ for label, data in sorted(tests.items()):
     data = zip(*data)  # transpose
     p = ax.plot(data[0], data[1], 'o-', label=label)
 
-ax.set_title("%s (n=%s)" % (labels.get('title', ''), nsamples))
+title = labels.get('title', '')
+if int(nsamples): title += " (n=%s)" % nsamples
+ax.set_title(title)
 if 'xlabel' in labels: ax.set_xlabel(labels['xlabel'])
 if 'ylabel' in labels: ax.set_ylabel(labels['ylabel'])
 ax.legend(loc=2)
