@@ -162,33 +162,33 @@ SELECT -1000000000000000::mpz;
 -1000000000000000
 SELECT -1000000000000000000000000000000::mpz;
 -1000000000000000000000000000000
-SELECT 2147483647::mpz::integer;
-2147483647
-SELECT -2147483647::mpz::integer;
--2147483647
-SELECT 2147483648::mpz::integer;
-ERROR:  numeric value too big to be converted to int4 data type
-SELECT -2147483648::mpz::integer;
-ERROR:  numeric value too big to be converted to int4 data type
-SELECT 32767::mpz::smallint;
+SELECT 32767::mpz::int2;
 32767
-SELECT -32767::mpz::smallint;
--32767
-SELECT 32768::mpz::smallint;
+SELECT 32768::mpz::int2;
 ERROR:  numeric value too big to be converted to int2 data type
-SELECT -32768::mpz::smallint;
+SELECT (-32768)::mpz::int2;
+-32768
+SELECT (-32769)::mpz::int2;
 ERROR:  numeric value too big to be converted to int2 data type
-SELECT 9223372036854775807::mpz::bigint;
+SELECT 2147483647::mpz::int4;
+2147483647
+SELECT 2147483648::mpz::int4;
+ERROR:  numeric value too big to be converted to int4 data type
+SELECT (-2147483648)::mpz::int4;
+-2147483648
+SELECT (-2147483649)::mpz::int4;
+ERROR:  numeric value too big to be converted to int4 data type
+SELECT 9223372036854775807::mpz::int8;
 9223372036854775807
-SELECT -9223372036854775807::mpz::bigint;
--9223372036854775807
-SELECT 9223372036854775808::mpz::bigint;
+SELECT 9223372036854775808::mpz::int8;
 ERROR:  numeric value too big to be converted to int8 data type
-SELECT -9223372036854775808::mpz::bigint;
+SELECT (-9223372036854775808)::mpz::int8;
+-9223372036854775808
+SELECT (-9223372036854775809)::mpz::int8;
 ERROR:  numeric value too big to be converted to int8 data type
-SELECT 2147483648::mpz::bigint;
+SELECT (2147483648)::mpz::int8;
 2147483648
-SELECT -2147483648::mpz::bigint;
+SELECT (-2147483648)::mpz::int8;
 -2147483648
 SELECT (65536::mpz)::bigint;
 65536
@@ -208,8 +208,8 @@ SELECT (-65536::mpz*65536::mpz*65536::mpz)::bigint;
 -281474976710656
 SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz/2::mpz+1::mpz)::bigint;
 -9223372036854775807
--- TODO: error on 32 bit, works on 64 bit.
--- SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz/2::mpz)::bigint;
+SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz/2::mpz)::bigint;
+-9223372036854775808
 SELECT (65536::mpz)::numeric;
 65536
 SELECT (65536::mpz*65536::mpz)::numeric;
