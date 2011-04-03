@@ -2,18 +2,9 @@
 --  Test mpz datatype
 --
 
---
--- first, define the datatype.  Turn off echoing so that expected file
--- does not depend on contents of pgmp.sql.
---
-SET client_min_messages = warning;
-\set ECHO none
-\i pgmp.sql
+-- Compact output
 \t
 \a
-\set ECHO all
-RESET client_min_messages;
-
 
 SELECT gmp_version() > 10000;
 

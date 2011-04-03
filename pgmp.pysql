@@ -22,9 +22,6 @@
 !# This file is made of a mix of Python code and SQL statements.
 !# Use the script ``tools/unmix.py`` to convert it into plain SQL.
 
--- Adjust this setting to control where the objects get created.
-SET search_path = public;
-
 !! PYON
 
 base_type = 'mpz'
@@ -39,7 +36,9 @@ def func(sqlname, argin, argout=None, cname=None, volatile=False, strict=True):
         pre = base_type + '_'
         cname = (sqlname.startswith(pre)
             and "p" + sqlname or 'p' + pre + sqlname)
-    print "AS 'MODULE_PATHNAME', '%s'" % cname
+    # not using MODULE_PATHNAME to make the resulting sql file
+    # compatible with both PG pre-9.1 and 9.1
+    print "AS '$libdir/pgmp', '%s'" % cname
     print "LANGUAGE C",
     print volatile and "VOLATILE" or "IMMUTABLE",
     print strict and "STRICT" or "",
@@ -56,7 +55,7 @@ def func_tuple(sqlname, args, argout=None, cname=None):
         pre = base_type + '_'
         cname = (sqlname.startswith(pre)
             and "p" + sqlname or 'p' + pre + sqlname)
-    print "AS 'MODULE_PATHNAME', '%s'" % cname
+    print "AS '$libdir/pgmp', '%s'" % cname
     print "LANGUAGE C IMMUTABLE STRICT;"
     print
 
@@ -255,7 +254,7 @@ CREATE OPERATOR ^ (
 
 CREATE OR REPLACE FUNCTION mpz_eq(mpz, mpz)
 RETURNS boolean
-AS 'MODULE_PATHNAME', 'pmpz_eq'
+AS '$libdir/pgmp', 'pmpz_eq'
 LANGUAGE C IMMUTABLE STRICT;
 
 CREATE OPERATOR = (
@@ -272,7 +271,7 @@ CREATE OPERATOR = (
 
 CREATE OR REPLACE FUNCTION mpz_ne(mpz, mpz)
 RETURNS boolean
-AS 'MODULE_PATHNAME', 'pmpz_ne'
+AS '$libdir/pgmp', 'pmpz_ne'
 LANGUAGE C IMMUTABLE STRICT;
 
 CREATE OPERATOR <> (
@@ -319,7 +318,7 @@ bop('<=', 'le', comm='>=', neg='>')
 
 CREATE OR REPLACE FUNCTION mpz_cmp(mpz, mpz)
 RETURNS integer
-AS 'MODULE_PATHNAME', 'pmpz_cmp'
+AS '$libdir/pgmp', 'pmpz_cmp'
 LANGUAGE C IMMUTABLE STRICT;
 
 CREATE OPERATOR CLASS mpz_btree_ops
@@ -539,7 +538,7 @@ func('limit_den', 'mpq mpz')
 
 CREATE OR REPLACE FUNCTION mpq_eq(mpq, mpq)
 RETURNS boolean
-AS 'MODULE_PATHNAME', 'pmpq_eq'
+AS '$libdir/pgmp', 'pmpq_eq'
 LANGUAGE C IMMUTABLE STRICT;
 
 CREATE OPERATOR = (
@@ -556,7 +555,7 @@ CREATE OPERATOR = (
 
 CREATE OR REPLACE FUNCTION mpq_ne(mpq, mpq)
 RETURNS boolean
-AS 'MODULE_PATHNAME', 'pmpq_ne'
+AS '$libdir/pgmp', 'pmpq_ne'
 LANGUAGE C IMMUTABLE STRICT;
 
 CREATE OPERATOR <> (
@@ -585,7 +584,7 @@ bop('<=', 'le', comm='>=', neg='>')
 
 CREATE OR REPLACE FUNCTION mpq_cmp(mpq, mpq)
 RETURNS integer
-AS 'MODULE_PATHNAME', 'pmpq_cmp'
+AS '$libdir/pgmp', 'pmpq_cmp'
 LANGUAGE C IMMUTABLE STRICT;
 
 CREATE OPERATOR CLASS mpq_btree_ops

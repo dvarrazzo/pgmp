@@ -1,8 +1,8 @@
 data
 tags
 pgmp.so
-pgmp.sql
-pgmp.sql.in
+pgmp--*.sql
+sql/setup-pre91.sql
 results/*.out
 regression.diffs
 regression.out

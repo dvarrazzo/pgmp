@@ -19,8 +19,10 @@
  * http://www.gnu.org/licenses/.
  */
 
--- Adjust this setting to control where the objects get created.
-SET search_path = public;
+--
+-- NOTE: use this script only with PostgreSQL before 9.1
+-- Starting from PostgreSQL 9.1 use DROP EXTENSION pgmp; instead.
+--
 
 -- Drop the data types: this will rip off all the functions defined on them.
 DROP TYPE mpz CASCADE;
