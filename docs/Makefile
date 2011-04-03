@@ -1,3 +1,9 @@
+# pgmp -- documentation makefile
+#
+# Use 'make env', then 'make html' to build the HTML documentation
+#
+# Copyright (C) 2011 Daniele Varrazzo
+
 PYTHON := python$(PYTHON_VERSION)
 PYTHON_VERSION ?= $(shell $(PYTHON) -c 'import sys; print ("%d.%d" % sys.version_info[:2])')
 BUILD_DIR = $(shell pwd)/build/lib.$(PYTHON_VERSION)

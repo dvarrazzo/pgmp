@@ -45,8 +45,7 @@ DATA = pgmp--$(PGMP_VERSION).sql uninstall_pgmp.sql
 
 REGRESS = setup-$(PG91) mpz mpq
 EXTRA_CLEAN = pgmp--$(PGMP_VERSION).sql $(VERSIONED)
-# TODO: all the docs
-DOCS=docs/html/index.html
+DOCS=$(wildcard docs/*.rst) docs/conf.py docs/Makefile docs/_static/pgmp.css
 
 # replace the version number in the many files needing it
 %.sql: %.sql.ver
