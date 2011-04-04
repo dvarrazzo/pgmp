@@ -38,27 +38,27 @@ OBJS = src/pgmp.o \
 	src/pmpz_roots.o src/pmpz_theor.o src/pmpz_bits.o src/pmpz_rand.o \
 	src/pmpq.o src/pmpq_io.o src/pmpq_arith.o src/pmpq_agg.o
 
-# Files containing the extension version number
-VERSIONED = sql/setup-pre91.sql
+ifeq ($(PG91),91)
+INSTALLSCRIPT=pgmp--$(PGMP_VERSION).sql
+DATA = $(INSTALLSCRIPT)
+else
+INSTALLSCRIPT=pgmp.sql
+DATA = $(INSTALLSCRIPT) uninstall_pgmp.sql
+endif
 
-DATA = pgmp--$(PGMP_VERSION).sql uninstall_pgmp.sql
 
 REGRESS = setup-$(PG91) mpz mpq
-EXTRA_CLEAN = pgmp--$(PGMP_VERSION).sql $(VERSIONED)
+EXTRA_CLEAN = $(INSTALLSCRIPT)
 DOCS=$(wildcard docs/*.rst) docs/conf.py docs/Makefile docs/_static/pgmp.css
-
-# replace the version number in the many files needing it
-%.sql: %.sql.ver
-	sed -e 's/\$$VERSION\$$/$(PGMP_VERSION)/' < $< > $@
 
 USE_PGXS=1
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 include $(PGXS)
 
 # added to the targets defined in pgxs
-all: pgmp--$(PGMP_VERSION).sql $(VERSIONED)
+all: $(INSTALLSCRIPT)
 
-pgmp--$(PGMP_VERSION).sql: pgmp.pysql
+$(INSTALLSCRIPT): pgmp.pysql
 	tools/unmix.py < $< > $@
 
 docs:
