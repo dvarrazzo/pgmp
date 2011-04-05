@@ -20,6 +20,7 @@
  */
 
 #include "pmpz.h"
+#include "pgmp_utils.h"             /* for AggCheckCallContext on PG < 9.0 */
 #include "pgmp-impl.h"
 
 #include "fmgr.h"
@@ -52,7 +53,6 @@ PGMP_PG_FUNCTION(_pmpz_agg_ ## op) \
     MemoryContext   oldctx; \
     MemoryContext   aggctx; \
  \
-    /* TODO: make compatible with PG < 9 */ \
     if (UNLIKELY(!AggCheckCallContext(fcinfo, &aggctx))) \
     { \
         ereport(ERROR, \

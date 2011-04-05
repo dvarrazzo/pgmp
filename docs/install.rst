@@ -6,8 +6,8 @@ Prerequisites
 
 `!pgmp` is currently compatible with:
 
-- PostgreSQL from version 9.0
-- GMP from version 4.3.2 (untested with previous versions)
+- PostgreSQL from version 8.4
+- GMP from version 4.3 (tested with versions 4.3.2 and 5.0.1)
 
 
 Building the library
