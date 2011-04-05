@@ -40,15 +40,15 @@ OBJS = src/pgmp.o \
 
 ifeq ($(PG91),91)
 INSTALLSCRIPT=pgmp--$(PGMP_VERSION).sql
-DATA = $(INSTALLSCRIPT)
+UPGRADESCRIPT=pgmp--unpackaged--$(PGMP_VERSION).sql
+DATA = $(INSTALLSCRIPT) $(UPGRADESCRIPT)
 else
 INSTALLSCRIPT=pgmp.sql
 DATA = $(INSTALLSCRIPT) uninstall_pgmp.sql
 endif
 
-
 REGRESS = setup-$(PG91) mpz mpq
-EXTRA_CLEAN = $(INSTALLSCRIPT)
+EXTRA_CLEAN = $(INSTALLSCRIPT) $(UPGRADESCRIPT)
 DOCS=$(wildcard docs/*.rst) docs/conf.py docs/Makefile docs/_static/pgmp.css
 
 USE_PGXS=1
@@ -56,10 +56,13 @@ PGXS := $(shell $(PG_CONFIG) --pgxs)
 include $(PGXS)
 
 # added to the targets defined in pgxs
-all: $(INSTALLSCRIPT)
+all: $(INSTALLSCRIPT) $(UPGRADESCRIPT)
 
 $(INSTALLSCRIPT): pgmp.pysql
 	tools/unmix.py < $< > $@
+
+$(UPGRADESCRIPT): $(INSTALLSCRIPT)
+	tools/sql2extension.py --extname pgmp $< > $@
 
 docs:
 	$(MAKE) -C docs
