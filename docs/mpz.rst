@@ -27,7 +27,7 @@ operators. Indexes on `!mpz` columns can be created using the *btree* method.
 ---------------------------
 
 .. function:: mpz(text)
-.. function:: mpz(text, base)
+              mpz(text, base)
 
     Convert a textual representation into an `!mpz` number. The form
     :samp:`{text}::mpz` is equivalent to :samp:`mpz({text})`.
@@ -52,8 +52,7 @@ operators. Indexes on `!mpz` columns can be created using the *btree* method.
 
 
 .. function:: text(z)
-
-.. function:: text(z, base)
+              text(z, base)
 
     Convert the `!mpz` *z* into a string. The form :samp:`{z}::text` is
     equivalent to :samp:`text({z})`.
@@ -111,8 +110,7 @@ Notes:
 
 
 .. function:: odd(z)
-
-.. function:: even(z)
+              even(z)
 
     Return `!true` if *z* is odd or even, respectively, else `!false`.
 
@@ -239,8 +237,7 @@ Notes:
 
 
 .. function:: divisible(n, d)
-
-.. function:: divisible_2exp(n, b)
+              divisible_2exp(n, b)
 
     Return `!true` if *n* is exactly divisible by *d*, or in the case of
     `!divisible_2exp()` by :math:`2^b`.
@@ -255,8 +252,7 @@ Notes:
 
 
 .. function:: congruent(n, c, d)
-
-.. function:: congruent_2exp(n, c, b)
+              congruent_2exp(n, c, b)
 
     Return `!true` if *n* is congruent to *c* modulo *d*, or in the case of
     `!congruent_2exp()` modulo :math:`2^b`.
@@ -426,8 +422,7 @@ Number Theoretic Functions
 
 
 .. function:: fib(n)
-
-.. function:: fib2(n)
+              fib2(n)
 
     `!fib()` returns :math:`F_n`, the *n*\th `Fibonacci number`__.
     `!fib2()` returns :math:`F_n` and :math:`F_{n-1}`.
@@ -440,8 +435,7 @@ Number Theoretic Functions
 
 
 .. function:: lucnum(n)
-
-.. function:: lucnum2(n)
+              lucnum2(n)
 
     `!lucnum()` returns :math:`L_n`, the *n*\th `Lucas number`__.
     `!lucnum2()` returns :math:`L_n` and :math:`L_{n-1}`.
@@ -540,8 +534,7 @@ number 0.
 
 
 .. function:: scan0(op, starting_bit)
-
-.. function:: scan1(op, starting_bit)
+              scan1(op, starting_bit)
 
     Scan *op*, starting from bit *starting_bit*, towards more significant
     bits, until the first 0 or 1 bit (respectively) is found. Return the index

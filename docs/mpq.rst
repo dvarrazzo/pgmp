@@ -48,7 +48,7 @@ operators. Indexes on `!mpq` columns can be created using the *btree* method.
 ---------------------------
 
 .. function:: mpq(text)
-.. function:: mpq(text, base)
+              mpq(text, base)
 
     Convert a textual representation into an `!mpq` number. The form
     :samp:`{text}::mpq` is equivalent to :samp:`mpq({text})`.
@@ -80,8 +80,7 @@ operators. Indexes on `!mpq` columns can be created using the *btree* method.
 
 
 .. function:: text(q)
-
-.. function:: text(q, base)
+              text(q, base)
 
     Convert the `!mpq` *q* into a string. The form :samp:`{q}::text` is
     equivalent to :samp:`text({q})`.

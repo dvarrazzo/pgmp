@@ -1,6 +1,3 @@
-.. PostgreSQL Multiple Precision Arithmetic documentation master file, created by
-   sphinx-quickstart on Thu Mar 10 01:09:43 2011.
-
 PostgreSQL Multiple Precision Arithmetic
 ========================================
 
@@ -14,12 +11,17 @@ The extension adds the types `mpz` (arbitrary size integers) and `mpq`
 (arbitrary precision rationals) to PostgreSQL and exposes to the database all
 the functions available in the GMP library for these data types, allowing:
 
-- higher performance arithmetic on integer respect to the ``decimal`` data type
+- higher performance arithmetic on integers respect to the `!numeric` data
+  type
 
 - a rational data type for absolute precision storage and arithmetic
 
 - using specialized functions to deal with prime numbers, random numbers,
   factorization directly into the database.
+
+
+References
+----------
 
 - Homepage: http://pgmp.projects.postgresql.org/
 - Discussion group: http://groups.google.com/group/postgresql-gmp

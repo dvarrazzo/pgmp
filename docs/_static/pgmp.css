@@ -21,8 +21,12 @@ table.docutils th {
      background-color; #eeeeec;
 }
 
-/* Less space into the toc nested lists */
-div.toctree-wrapper ul li ul {
-    margin-top: 0.25em;
+/* Less vertical margin around lists */
+html div.document ul {
+    margin: 0.5em 1.5em;
 }
 
+/* Less vertical spacing in the examples */
+div.highlight {
+    line-height: 1em;
+}
