@@ -24,6 +24,8 @@
 #include "pgmp-impl.h"
 
 #include "fmgr.h"
+#include "access/hash.h"            /* for hash_any */
+
 
 /*
  * Unary operators
@@ -167,6 +169,22 @@ PMPQ_CMP(gt, >)
 PMPQ_CMP(ge, >=)
 PMPQ_CMP(lt, <)
 PMPQ_CMP(le, <=)
+
+
+PGMP_PG_FUNCTION(pmpq_hash)
+{
+    const mpq_t     q;
+
+    PGMP_GETARG_MPQ(q, 0);
+
+    PG_RETURN_INT32(
+        hash_any(
+            (unsigned char *)LIMBS(mpq_numref(q)),
+            NLIMBS(mpq_numref(q)) * sizeof(mp_limb_t))
+        ^ hash_any(
+            (unsigned char *)LIMBS(mpq_denref(q)),
+            NLIMBS(mpq_denref(q)) * sizeof(mp_limb_t)));
+}
 
 
 /* limit_den */

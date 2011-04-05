@@ -479,9 +479,11 @@ select mpq_cmp(1000::mpq, 1000::mpq);
 0
 select mpq_cmp(1000::mpq, 1001::mpq);
 -1
--- Can create a btree index
+-- Can create btree and hash indexes
 create table test_mpq_idx (q mpq);
-create index test_mpq_idx_idx on test_mpq_idx (q);
+insert into test_mpq_idx select generate_series(1, 10000);
+create index test_mpq_btree_idx on test_mpq_idx using btree (q);
+create index test_mpq_hash_idx on test_mpq_idx using hash (q);
 --
 -- mpq aggregation
 --

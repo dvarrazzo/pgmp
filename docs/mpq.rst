@@ -41,7 +41,8 @@ a rounding to the precision set for the target type.
 
 
 `!mpq` values can be compared using the regular PostgreSQL comparison
-operators. Indexes on `!mpq` columns can be created using the *btree* method.
+operators. Indexes on `!mpq` columns can be created using the *btree* or the
+*hash* method.
 
 
 `!mpq` textual input/output

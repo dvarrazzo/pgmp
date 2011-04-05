@@ -20,7 +20,8 @@ and will overflow if the value is too big for their range. Casting to
 *Infinity*.
 
 `!mpz` values can be compared using the regular PostgreSQL comparison
-operators. Indexes on `!mpz` columns can be created using the *btree* method.
+operators. Indexes on `!mpz` columns can be created using the *btree* or the
+*hash* method.
 
 
 `!mpz` textual input/output

@@ -340,9 +340,11 @@ select mpz_cmp(1000::mpz,  999::mpz);
 select mpz_cmp(1000::mpz, 1000::mpz);
 select mpz_cmp(1000::mpz, 1001::mpz);
 
--- Can create a btree index
+-- Can create btree and hash indexes
 create table test_mpz_idx (z mpz);
-create index test_mpz_idx_idx on test_mpz_idx (z);
+insert into test_mpz_idx select generate_series(1, 10000);
+create index test_mpz_btree_idx on test_mpz_idx using btree (z);
+create index test_mpz_hash_idx on test_mpz_idx using hash (z);
 
 
 --

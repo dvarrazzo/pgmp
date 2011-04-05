@@ -24,10 +24,11 @@
 
 #include "fmgr.h"
 #include "funcapi.h"
+#include "access/hash.h"            /* for hash_any */
 
 
 /*
- * Unary minus, plus
+ * Unary operators
  */
 
 PGMP_PG_FUNCTION(pmpz_uplus)
@@ -238,6 +239,18 @@ PMPZ_CMP(gt, >)
 PMPZ_CMP(ge, >=)
 PMPZ_CMP(lt, <)
 PMPZ_CMP(le, <=)
+
+
+PGMP_PG_FUNCTION(pmpz_hash)
+{
+    const mpz_t     z;
+
+    PGMP_GETARG_MPZ(z, 0);
+
+    PG_RETURN_INT32(hash_any(
+        (unsigned char *)LIMBS(z),
+        NLIMBS(z) * sizeof(mp_limb_t)));
+}
 
 
 /*

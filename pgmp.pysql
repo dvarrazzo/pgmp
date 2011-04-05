@@ -331,6 +331,17 @@ DEFAULT FOR TYPE mpz USING btree AS
     FUNCTION    1   mpz_cmp(mpz, mpz)
     ;
 
+CREATE OR REPLACE FUNCTION mpz_hash(mpz)
+RETURNS integer
+AS '$libdir/pgmp', 'pmpz_hash'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OPERATOR CLASS mpz_btree_ops
+DEFAULT FOR TYPE mpz USING hash AS
+    OPERATOR    1   =   ,
+    FUNCTION    1   mpz_hash(mpz)
+    ;
+
 -- TODO: OPERATOR FAMILY?
 
 -- mpz functions
@@ -595,6 +606,18 @@ DEFAULT FOR TYPE mpq USING btree AS
     OPERATOR    4   >=  ,
     OPERATOR    5   >   ,
     FUNCTION    1   mpq_cmp(mpq, mpq)
+    ;
+
+
+CREATE OR REPLACE FUNCTION mpq_hash(mpq)
+RETURNS integer
+AS '$libdir/pgmp', 'pmpq_hash'
+LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OPERATOR CLASS mpq_btree_ops
+DEFAULT FOR TYPE mpq USING hash AS
+    OPERATOR    1   =   ,
+    FUNCTION    1   mpq_hash(mpq)
     ;
 
 -- TODO: OPERATOR FAMILY?
