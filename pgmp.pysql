@@ -252,50 +252,26 @@ CREATE OPERATOR ^ (
 -- mpz comparisons
 --
 
-CREATE OR REPLACE FUNCTION mpz_eq(mpz, mpz)
-RETURNS boolean
-AS '$libdir/pgmp', 'pmpz_eq'
-LANGUAGE C IMMUTABLE STRICT;
-
-CREATE OPERATOR = (
-    LEFTARG = mpz
-    , RIGHTARG = mpz
-    , PROCEDURE = mpz_eq
-    , COMMUTATOR = =
-    , NEGATOR = <>
-    , RESTRICT = eqsel
-    , JOIN = eqjoinsel
-    , HASHES
-    , MERGES
-);
-
-CREATE OR REPLACE FUNCTION mpz_ne(mpz, mpz)
-RETURNS boolean
-AS '$libdir/pgmp', 'pmpz_ne'
-LANGUAGE C IMMUTABLE STRICT;
-
-CREATE OPERATOR <> (
-    LEFTARG = mpz
-    , RIGHTARG = mpz
-    , PROCEDURE = mpz_ne
-    , COMMUTATOR = <>
-    , NEGATOR = =
-    , RESTRICT = neqsel
-    , JOIN = neqjoinsel
-);
-
 !! PYON
 
-def bop(sym, fname, comm=None, neg=None):
+def bop(sym, fname, comm=None, neg=None,
+        selectivity=None, hashes=False, merges=False):
     """Create an operator on `base_type` returning a bool"""
     func('%s_%s' % (base_type, fname), 
         base_type + " " + base_type, argout='boolean')
-    fname1 = fname[0] + 't'
 
     comm_map = {'=': '=', '<>': '<>', '>': '<', '>=': '<=', '<': '>', '<=': '>='}
-    neg_map = {'=': '<>', '<>': '=', '>': '<=', '>=': '<', '<': '>=', '<=': '>' }
     if not comm: comm = comm_map.get(sym)
+
+    neg_map = {'=': '<>', '<>': '=', '>': '<=', '>=': '<', '<': '>=', '<=': '>' }
     if not neg: neg = neg_map.get(sym)
+
+    sel_map = {'=': 'eq', '<>': 'neq', '>': 'gt', '>=': 'gt', '<': 'lt', '<=': 'lt'}
+    if selectivity is not None:     # can be the empty string
+        restrict = selectivity + sel_map[sym] + 'sel'
+        join = selectivity + sel_map[sym] + 'joinsel'
+    else:
+        restrict = join = None
 
     print "CREATE OPERATOR %s (" % sym
     print "    LEFTARG =", base_type
@@ -305,16 +281,24 @@ def bop(sym, fname, comm=None, neg=None):
         print "    , COMMUTATOR = %s" % comm
     if neg:
         print "    , NEGATOR = %s" % neg
-    print "    , RESTRICT = scalar%ssel" % fname1
-    print "    , JOIN = scalar%sjoinsel" % fname1
+    if restrict:
+        print "    , RESTRICT = %s" % restrict
+    if join:
+        print "    , JOIN = %s" % join
+    if hashes:
+        print "    , HASHES"
+    if merges:
+        print "    , MERGES"
     print ");"
     print
     print
 
-bop('>', 'gt')
-bop('>=', 'ge')
-bop('<', 'lt')
-bop('<=', 'le')
+bop('=', 'eq', selectivity='', hashes=True, merges=True)
+bop('<>', 'ne', selectivity='')
+bop('>', 'gt', selectivity='scalar')
+bop('>=', 'ge', selectivity='scalar')
+bop('<', 'lt', selectivity='scalar')
+bop('<=', 'le', selectivity='scalar')
 
 !! PYOFF
 
@@ -556,40 +540,17 @@ func('limit_den', 'mpq mpz')
 
 !! PYON
 
-func('mpq_eq', 'mpq mpq', 'boolean')
-func('mpq_ne', 'mpq mpq', 'boolean')
-
-bop('>', 'gt')
-bop('>=', 'ge')
-bop('<', 'lt')
-bop('<=', 'le')
+bop('=', 'eq', selectivity='', hashes=True, merges=True)
+bop('<>', 'ne', selectivity='')
+bop('>', 'gt', selectivity='scalar')
+bop('>=', 'ge', selectivity='scalar')
+bop('<', 'lt', selectivity='scalar')
+bop('<=', 'le', selectivity='scalar')
 
 func('mpq_cmp', 'mpq mpq', 'integer')
 func('mpq_hash', 'mpq', 'integer')
 
 !! PYOFF
-
-CREATE OPERATOR = (
-    LEFTARG = mpq
-    , RIGHTARG = mpq
-    , PROCEDURE = mpq_eq
-    , COMMUTATOR = =
-    , NEGATOR = <>
-    , RESTRICT = eqsel
-    , JOIN = eqjoinsel
-    , HASHES
-    , MERGES
-);
-
-CREATE OPERATOR <> (
-    LEFTARG = mpq
-    , RIGHTARG = mpq
-    , PROCEDURE = mpq_ne
-    , COMMUTATOR = <>
-    , NEGATOR = =
-    , RESTRICT = neqsel
-    , JOIN = neqjoinsel
-);
 
 
 --
