@@ -377,6 +377,12 @@ SELECT bit_xor(z) FROM mpzagg;
 SELECT bit_xor(z) FROM mpzagg WHERE z = 1 or z = 2;
 SELECT bit_xor(z) FROM mpzagg WHERE z = 1 or z = 2 or z = 3;
 
+-- check aggregates work in windows functions too
+CREATE TABLE test_mpz_win(z mpz);
+INSERT INTO test_mpz_win SELECT generate_series(1,500);
+SELECT DISTINCT z % 5, prod(z) OVER (PARTITION BY z % 5) FROM test_mpz_win ORDER BY 1;
+
+
 --
 -- mpz functions tests
 --

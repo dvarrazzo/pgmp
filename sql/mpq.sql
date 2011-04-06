@@ -303,3 +303,7 @@ CREATE INDEX mpqagg_idx ON mpqagg(q);
 SELECT min(q) FROM mpqagg;
 SELECT max(q) FROM mpqagg;
 
+-- check aggregates work in windows functions too
+CREATE TABLE test_mpq_win(q mpq);
+INSERT INTO test_mpq_win SELECT mpq(1::mpz, i::mpz) from generate_series(1,500) i;
+SELECT DISTINCT den(q) % 5, prod(q) OVER (PARTITION BY den(q) % 5) FROM test_mpq_win ORDER BY 1;
