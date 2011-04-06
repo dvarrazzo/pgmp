@@ -1,25 +1,32 @@
 PostgreSQL Multiple Precision Arithmetic extension
 ==================================================
 
-This extension adds support in PostgreSQL for the data types and functions
-available in the GMP library for arbitrary precision arithmetic.
+pgmp is a PostgreSQL extension module to add support for the arbitrary
+precision data types offered by the GMP library into the database.
 
 The extension adds the types `mpz` (arbitrary size integers) and `mpq`
-(arbitrary precision rationals) to PostgreSQL and exposes all the functions
-available in the GMP library for these data types to the database allowing:
+(arbitrary precision rationals) to PostgreSQL and exposes to the
+database all the functions available in the GMP library for these types,
+providing:
 
-- higher performance arithmetic on integer respect to the ``decimal`` data type
+- higher performance arithmetic on integers respect to the ``decimal``
+  data type, using numbers only limited by the 1GB varlena maximum size;
 
-- a rational data type for absolute precision storage and arithmetic
+- a rational data type for absolute precision storage and arithmetic;
 
-- using specialized functions to deal with prime numbers, random numbers,
-  factorization directly into the database.
+- the use of specialized functions to deal with prime numbers, random
+  numbers, factorization directly into the database.
 
 The GMP data types can be stored into the database, used in mixed
-arithmetic with other PostgreSQL types and indexed using the btree method.
+arithmetic with other PostgreSQL numeric types and indexed using the
+btree or hash methods.
 
-Please refer to the documentation for installation and usage, either online
-or in the ``docs/`` directory.
+The extension is compatible with PostgreSQL versions from 8.4 and
+packaged as a SQL extension in 9.1. The package includes comprehensive
+documentation and regression tests.
+
+Please refer to the documentation for installation and usage, either
+online or in the ``docs/`` directory.
 
 - Homepage: http://pgmp.projects.postgresql.org/
 - Source repository: https://github.com/dvarrazzo/pgmp/
