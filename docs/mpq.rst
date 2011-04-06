@@ -65,20 +65,6 @@ operators. Indexes on `!mpq` columns can be created using the *btree* method.
     denominator, so for instance ``0xEF/100`` is 239/100, whereas
     ``0xEF/0x100`` is 239/256.
 
-.. function:: mpq(num, den)
-
-    Return an `!mpq` from its numerator and denominator.
-
-    .. note::
-        The function signature accepts `!mpz` values. PostgreSQL integers are
-        implicitly converted to `!mpz` so invoking the function as
-        ``mpq(30,17)`` will work as expected. However if the numbers become
-        too big for an `int8` they will be interpreted by PostgreSQL as
-        `!numeric` and, because the cast from `!numeric` to `!mpz` is not
-        implicit, the call will fail. Forcing a cast to `!mpz` (*e.g.*
-        ``mpq(30::mpz,17::mpz)``) will work for numbers of every size.
-
-
 .. function:: text(q)
               text(q, base)
 
@@ -93,6 +79,29 @@ operators. Indexes on `!mpq` columns can be created using the *btree* method.
     upper-case letters are used; for 37..62, digits, upper-case letters, and
     lower-case letters (in that significance order) are used. If *base* is not
     specified, 10 is assumed.
+
+
+`!mpq` conversions
+------------------
+
+.. function:: mpq(num, den)
+
+    Return an `!mpq` from its numerator and denominator.
+
+    .. note::
+        The function signature accepts `!mpz` values. PostgreSQL integers are
+        implicitly converted to `!mpz` so invoking the function as
+        ``mpq(30,17)`` will work as expected. However if the numbers become
+        too big for an `int8` they will be interpreted by PostgreSQL as
+        `!numeric` and, because the cast from `!numeric` to `!mpz` is not
+        implicit, the call will fail. Forcing a cast to `!mpz` (*e.g.*
+        ``mpq(30::mpz,17::mpz)``) will work for numbers of every size.
+
+
+.. function:: num(q)
+              den(q)
+
+    Return the numerator or the denominator of *q* as `!mpz`.
 
 
 Arithmetic Operators and Functions
