@@ -254,11 +254,19 @@ CREATE OPERATOR ^ (
 
 !! PYON
 
-def bop(sym, fname, comm=None, neg=None,
+def bop(sym, fname, larg=None, rarg=None, comm=None, neg=None,
         selectivity=None, hashes=False, merges=False):
     """Create an operator on `base_type` returning a bool"""
-    func('%s_%s' % (base_type, fname), 
-        base_type + " " + base_type, argout='boolean')
+    _fname, fname = fname, None
+    if larg is None and rarg is None:
+        fname = '%s_%s' % (base_type, _fname)
+
+    if larg is None: larg = base_type
+    if rarg is None: rarg = base_type
+    if fname is None:
+        fname = '%s_%s_%s' % (larg, rarg, _fname)
+
+    func(fname, larg + " " + rarg, argout='boolean')
 
     comm_map = {'=': '=', '<>': '<>', '>': '<', '>=': '<=', '<': '>', '<=': '>='}
     if not comm: comm = comm_map.get(sym)
@@ -276,7 +284,7 @@ def bop(sym, fname, comm=None, neg=None,
     print "CREATE OPERATOR %s (" % sym
     print "    LEFTARG =", base_type
     print "    , RIGHTARG =", base_type
-    print "    , PROCEDURE = %s_%s" % (base_type, fname)
+    print "    , PROCEDURE = %s" % fname
     if comm:
         print "    , COMMUTATOR = %s" % comm
     if neg:

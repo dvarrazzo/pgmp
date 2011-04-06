@@ -145,11 +145,11 @@ PGMP_PG_FUNCTION(pmpq_ ## op) \
     PGMP_GETARG_MPQ(q1, 0); \
     PGMP_GETARG_MPQ(q2, 1); \
  \
-    PG_RETURN_BOOL(mpq_equal(q1, q2) rel 0); \
+    PG_RETURN_BOOL(!(mpq_equal(q1, q2) rel 0)); \
 }
 
-PMPQ_CMP_EQ(eq, !=)     /* note that the operators are reversed */
-PMPQ_CMP_EQ(ne, ==)
+PMPQ_CMP_EQ(eq, ==)
+PMPQ_CMP_EQ(ne, !=)
 
 
 #define PMPQ_CMP(op, rel) \
@@ -169,6 +169,44 @@ PMPQ_CMP(gt, >)
 PMPQ_CMP(ge, >=)
 PMPQ_CMP(lt, <)
 PMPQ_CMP(le, <=)
+
+
+/* mpq-mpz cross-comparison */
+
+    /*
+PGMP_PG_FUNCTION(pmpq_qz_cmp)
+{
+    const mpq_t     q1;
+    const mpq_t     q2;
+
+    PGMP_GETARG_MPQ(q1, 0);
+    PGMP_GETARG_MPZ(mpq_numref(q2), 1);
+    mpz_init_set_si(mpq_denref(q2), 1L);
+
+    PG_RETURN_INT32(mpq_cmp(q1, q2));
+}
+*/
+
+#define PMPQ_CMP_QZ(op, rel) \
+ \
+PGMP_PG_FUNCTION(pmpq_qz_ ## op) \
+{ \
+    const mpq_t     q1; \
+    const mpq_t     q2; \
+ \
+    PGMP_GETARG_MPQ(q1, 0); \
+    PGMP_GETARG_MPZ(mpq_numref(q2), 1); \
+    mpz_init_set_si(mpq_denref(q2), 1L); \
+ \
+    PG_RETURN_BOOL(mpq_cmp(q1, q2) rel 0); \
+}
+
+// PMPQ_CMP_QZ(eq, ==)        /* TODO: implement eq/ne w/ mpq_equal */
+// PMPQ_CMP_QZ(ne, !=)
+// PMPQ_CMP_QZ(gt, >)
+// PMPQ_CMP_QZ(ge, >=)
+// PMPQ_CMP_QZ(lt, <)
+// PMPQ_CMP_QZ(le, <=)
 
 
 PGMP_PG_FUNCTION(pmpq_hash)
