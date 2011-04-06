@@ -11,7 +11,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os, re
+import sys, os, re, shutil
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -143,6 +143,15 @@ html_style = 'pgmp.css'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+# the pgxs Makefile flattens all the files into the doc dir.
+# Put them back in their place.
+if not os.path.isdir(html_static_path[0]):
+    os.makedirs(html_static_path[0])
+
+for fn in [html_style]:
+    if not os.path.exists(os.path.join(html_static_path[0], fn)):
+        shutil.copy(fn, html_static_path[0])
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
