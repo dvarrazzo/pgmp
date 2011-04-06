@@ -38,6 +38,15 @@ OBJS = src/pgmp.o src/pgmp_utils.o \
 	src/pmpz_roots.o src/pmpz_theor.o src/pmpz_bits.o src/pmpz_rand.o \
 	src/pmpq.o src/pmpq_io.o src/pmpq_arith.o src/pmpq_agg.o
 
+SRCFILES = $(wildcard src/*.[ch])
+TESTFILES = $(wildcard sql/*.sql) $(wildcard expected/*.out)
+DOCS = $(wildcard docs/*.rst) docs/conf.py docs/Makefile docs/_static/pgmp.css
+
+PKGFILES = AUTHORS COPYING README Makefile \
+	pgmp.control pgmp.pysql uninstall_pgmp.sql \
+	$(SRCFILES) $(DOCS) $(TESTFILES) \
+	$(wildcard tools/*.py)
+
 ifeq ($(PG91),91)
 INSTALLSCRIPT=pgmp--$(PGMP_VERSION).sql
 UPGRADESCRIPT=pgmp--unpackaged--$(PGMP_VERSION).sql
@@ -49,7 +58,9 @@ endif
 
 REGRESS = setup-$(PG91) mpz mpq
 EXTRA_CLEAN = $(INSTALLSCRIPT) $(UPGRADESCRIPT)
-DOCS=$(wildcard docs/*.rst) docs/conf.py docs/Makefile docs/_static/pgmp.css
+
+PKGNAME = pgmp-$(PGMP_VERSION)
+SRCPKG = dist/$(PKGNAME).tar.gz
 
 USE_PGXS=1
 PGXS := $(shell $(PG_CONFIG) --pgxs)
@@ -67,3 +78,11 @@ $(UPGRADESCRIPT): $(INSTALLSCRIPT)
 docs:
 	$(MAKE) -C docs
 
+sdist: $(SRCPKG)
+
+$(SRCPKG): $(PKGFILES)
+	ln -sf . $(PKGNAME)
+	mkdir -p dist
+	rm -rf $@
+	tar czvf $@ $(addprefix $(PKGNAME)/,$^)
+	rm $(PKGNAME)

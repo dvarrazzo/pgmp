@@ -11,3 +11,4 @@ docs/html
 docs/_static/jsMath/
 sandbox/hello/hello
 sandbox/bench/*.png
+dist/*
