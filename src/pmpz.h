@@ -104,10 +104,12 @@ do { \
 #define PMPZ_NEGATIVE(mz) (((mz)->mdata) & PMPZ_SIGN_MASK)
 
 
-/* Definition useful for internal use in mpz-related modules */
+/* Definitions useful for internal use in mpz-related modules */
 
 pmpz * pmpz_from_mpz(mpz_srcptr z);
 void mpz_from_pmpz(mpz_srcptr z, const pmpz *pz);
+int pmpz_get_int64(mpz_srcptr z, int64 *out);
+Datum pmpz_get_hash(mpz_srcptr z);
 
 #define MPZ_IS_ZERO(z) (SIZ(z) == 0)
 

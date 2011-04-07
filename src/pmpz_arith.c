@@ -241,11 +241,25 @@ PMPZ_CMP(lt, <)
 PMPZ_CMP(le, <=)
 
 
+/* The hash of an mpz fitting into a int64 is the same of the PG builtin.
+ * This allows cross-type hash joins int2/int4/int8.
+ */
 PGMP_PG_FUNCTION(pmpz_hash)
 {
     const mpz_t     z;
 
     PGMP_GETARG_MPZ(z, 0);
+    return pmpz_get_hash(z);
+}
+
+Datum
+pmpz_get_hash(mpz_srcptr z)
+{
+    int64           z64;
+
+    if (0 == pmpz_get_int64(z, &z64)) {
+        return DirectFunctionCall1(hashint8, Int64GetDatumFast(z64));
+    }
 
     PG_RETURN_INT32(hash_any(
         (unsigned char *)LIMBS(z),

@@ -346,6 +346,15 @@ insert into test_mpz_idx select generate_series(1, 10000);
 create index test_mpz_btree_idx on test_mpz_idx using btree (z);
 create index test_mpz_hash_idx on test_mpz_idx using hash (z);
 
+-- Hash is compatible with builtins
+select mpz_hash(0) = hashint4(0);
+select mpz_hash(32767::int2) = hashint2(32767::int2);
+select mpz_hash((-32768)::int2) = hashint2((-32768)::int2);
+select mpz_hash(2147483647) = hashint4(2147483647);
+select mpz_hash(-2147483648) = hashint4(-2147483648);
+select mpz_hash(9223372036854775807) = hashint8(9223372036854775807);
+select mpz_hash(-9223372036854775808) = hashint8(-9223372036854775808);
+
 
 --
 -- mpz aggregation

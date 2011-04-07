@@ -171,17 +171,24 @@ PMPQ_CMP(lt, <)
 PMPQ_CMP(le, <=)
 
 
+/* The hash of an integer mpq is the same of the same number as mpz.
+ * This allows cross-type hash joins with mpz and builtins.
+ */
 PGMP_PG_FUNCTION(pmpq_hash)
 {
     const mpq_t     q;
+    Datum           nhash;
 
     PGMP_GETARG_MPQ(q, 0);
 
+    nhash = pmpz_get_hash(mpq_numref(q));
+
+    if (mpz_cmp_si(mpq_denref(q), 1L) == 0) {
+        return nhash;
+    }
+
     PG_RETURN_INT32(
-        hash_any(
-            (unsigned char *)LIMBS(mpq_numref(q)),
-            NLIMBS(mpq_numref(q)) * sizeof(mp_limb_t))
-        ^ hash_any(
+        DatumGetInt32(nhash) ^ hash_any(
             (unsigned char *)LIMBS(mpq_denref(q)),
             NLIMBS(mpq_denref(q)) * sizeof(mp_limb_t)));
 }

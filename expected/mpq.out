@@ -484,6 +484,21 @@ create table test_mpq_idx (q mpq);
 insert into test_mpq_idx select generate_series(1, 10000);
 create index test_mpq_btree_idx on test_mpq_idx using btree (q);
 create index test_mpq_hash_idx on test_mpq_idx using hash (q);
+-- Hash is compatible with mpz
+select mpq_hash(0) = mpz_hash(0);
+t
+select mpq_hash(1000) = mpz_hash(1000);
+t
+select mpq_hash(-1000) = mpz_hash(-1000);
+t
+select mpq_hash('123456789012345678901234567890123456789012345678901234567890')
+     = mpz_hash('123456789012345678901234567890123456789012345678901234567890');
+t
+-- den is used in hash
+select mpq_hash(2) <> mpq_hash('2/3');
+t
+select mpq_hash('2/3') <> mpq_hash('2/5');
+t
 --
 -- mpq aggregation
 --

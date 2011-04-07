@@ -299,62 +299,72 @@ PGMP_PG_FUNCTION(pmpz_to_int4)
 PGMP_PG_FUNCTION(pmpz_to_int8)
 {
     const mpz_t     z;
-    int64           out;
+    int64           ret = 0;
 
     PGMP_GETARG_MPZ(z, 0);
 
+    if (0 != pmpz_get_int64(z, &ret)) {
+        ereport(ERROR, (
+            errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+            errmsg("numeric value too big to be converted to int8 data type")));
+    }
+
+    PG_RETURN_INT64(ret);
+}
+
+/* Convert an mpz into and int64.
+ *
+ * return 0 in case of success, else a nonzero value
+ */
+int
+pmpz_get_int64(mpz_srcptr z, int64 *out)
+{
+
 #if PGMP_LONG_64
 
-    if (!mpz_fits_slong_p(z)) {
-        goto error;
+    if (mpz_fits_slong_p(z)) {
+        *out = mpz_get_si(z);
+        return 0;
     }
-    out = mpz_get_si(z);
 
 #elif PGMP_LONG_32
 
     switch (SIZ(z)) {
         case 0:
-            out = 0LL;
+            *out = 0LL;
+            return 0;
             break;
         case 1:
-            out = (int64)(LIMBS(z)[0]);
+            *out = (int64)(LIMBS(z)[0]);
+            return 0;
             break;
         case -1:
-            out = -(int64)(LIMBS(z)[0]);
+            *out = -(int64)(LIMBS(z)[0]);
+            return 0;
             break;
         case 2:
             if (LIMBS(z)[1] < 0x80000000L) {
-                out = (int64)(LIMBS(z)[1]) << 32
+                *out = (int64)(LIMBS(z)[1]) << 32
                     | (int64)(LIMBS(z)[0]);
-            }
-            else {
-                goto error;
+                return 0;
             }
             break;
         case -2:
             if (LIMBS(z)[1] < 0x80000000L) {
-                out = -((int64)(LIMBS(z)[1]) << 32
+                *out = -((int64)(LIMBS(z)[1]) << 32
                     | (int64)(LIMBS(z)[0]));
+                return 0;
             }
             else if (LIMBS(z)[0] == 0 && LIMBS(z)[1] == 0x80000000L) {
-                out = -0x8000000000000000LL;
-            }
-            else {
-                goto error;
+                *out = -0x8000000000000000LL;
+                return 0;
             }
             break;
-        default:
-            goto error;
     }
 
 #endif
-    PG_RETURN_INT64(out);
 
-error:
-    ereport(ERROR, (
-        errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
-        errmsg("numeric value too big to be converted to int8 data type")));
-    PG_RETURN_NULL();
+    return -1;
 }
 
 
