@@ -321,7 +321,7 @@ RETURNS integer
 AS '$libdir/pgmp', 'pmpz_cmp'
 LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OPERATOR CLASS mpz_btree_ops
+CREATE OPERATOR CLASS mpz_ops
 DEFAULT FOR TYPE mpz USING btree AS
     OPERATOR    1   <   ,
     OPERATOR    2   <=  ,
@@ -336,7 +336,7 @@ RETURNS integer
 AS '$libdir/pgmp', 'pmpz_hash'
 LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OPERATOR CLASS mpz_btree_ops
+CREATE OPERATOR CLASS mpz_ops
 DEFAULT FOR TYPE mpz USING hash AS
     OPERATOR    1   =   ,
     FUNCTION    1   mpz_hash(mpz)
@@ -598,7 +598,7 @@ RETURNS integer
 AS '$libdir/pgmp', 'pmpq_cmp'
 LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OPERATOR CLASS mpq_btree_ops
+CREATE OPERATOR CLASS mpq_ops
 DEFAULT FOR TYPE mpq USING btree AS
     OPERATOR    1   <   ,
     OPERATOR    2   <=  ,
@@ -614,7 +614,7 @@ RETURNS integer
 AS '$libdir/pgmp', 'pmpq_hash'
 LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OPERATOR CLASS mpq_btree_ops
+CREATE OPERATOR CLASS mpq_ops
 DEFAULT FOR TYPE mpq USING hash AS
     OPERATOR    1   =   ,
     FUNCTION    1   mpq_hash(mpq)
