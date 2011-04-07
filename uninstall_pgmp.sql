@@ -28,10 +28,15 @@
 DROP TYPE mpz CASCADE;
 DROP TYPE mpq CASCADE;
 
--- Drop the remaining functions.
+-- Drop the remaining objects.
 DROP FUNCTION gmp_version();
 
 DROP FUNCTION randinit();
 DROP FUNCTION randinit_mt();
 DROP FUNCTION randinit_lc_2exp_size(int8);
+
+DROP OPERATOR FAMILY mpz_ops USING btree CASCADE;
+DROP OPERATOR FAMILY mpz_ops USING hash CASCADE;
+DROP OPERATOR FAMILY mpq_ops USING btree CASCADE;
+DROP OPERATOR FAMILY mpq_ops USING hash CASCADE;
 
