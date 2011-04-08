@@ -1,0 +1,30 @@
+{#
+  Sphinx sidebar template: download box
+#}
+
+{%- if pagename == 'index' %}
+
+<h3>Downloads</h3>
+
+<ul>
+  <li class="toctree-l1">
+    <a href="http://pgfoundry.org/frs/download.php/2990/pgmp-1.0b1.tar.gz">
+      Release 1.0b1</a>
+  </li>
+</ul>
+
+<div class="download-tail">
+  <a href="http://pgfoundry.org/frs/?group_id=1000561">All downloads</a>
+</div>
+
+<style type="text/css">
+  div.download-tail {
+    margin-top: -0.4em;
+    text-align: right;
+  }
+  div.download-tail a {
+    font-size: small;
+  }
+</style>
+
+{%- endif %}

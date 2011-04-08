@@ -1,0 +1,19 @@
+# HG changeset patch
+# Parent faeabdf48f927a682e88beb6dd3859564131e774
+
+diff --git a/sphinx/themes/agogo/layout.html b/sphinx/themes/agogo/layout.html
+--- a/sphinx/themes/agogo/layout.html
++++ b/sphinx/themes/agogo/layout.html
+@@ -41,8 +41,11 @@
+           {%- endblock %}
+         </div>
+         <div class="sidebar">
++          {%- block download %}
++          {%- include "download.html" %}
++          {%- endblock %}
+           {%- block sidebartoc %}
+-          <h3>{{ _('Table Of Contents') }}</h3>
++          <h3 style="margin-top: 1.5em;">{{ _('Table Of Contents') }}</h3>
+           {{ toctree() }}
+           {%- endblock %}
+           {%- block sidebarsearch %}
