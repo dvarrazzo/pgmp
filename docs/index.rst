@@ -25,6 +25,9 @@ extension.
 See the :ref:`Performance` page for comparison tests between GMP data types
 and PostgreSQL builtins.
 
+The library is released under
+`LGPL License <http://www.opensource.org/licenses/lgpl-3.0>`__.
+
 
 References
 ----------
