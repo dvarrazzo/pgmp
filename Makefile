@@ -42,7 +42,8 @@ TESTFILES = $(wildcard test/sql/*.sql) $(wildcard test/expected/*.out)
 DOCS = $(wildcard docs/*.rst) docs/conf.py docs/Makefile docs/_static/pgmp.css
 
 PKGFILES = AUTHORS COPYING README Makefile \
-	pgmp.control sql/pgmp.pysql sql/uninstall_pgmp.sql \
+	pgmp.control META.json \
+	sql/pgmp.pysql sql/uninstall_pgmp.sql \
 	$(SRCFILES) $(DOCS) $(TESTFILES) \
 	$(wildcard tools/*.py)
 
