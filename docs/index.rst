@@ -19,11 +19,15 @@ the functions available in the GMP library for these data types, allowing:
 - using specialized functions to deal with prime numbers, random numbers,
   factorization directly into the database.
 
-Here you can find a more detailed :ref:`list of goals <goals>` for this
+Here you can find a more detailed `list of goals <goals.html>`__ for this
 extension.
 
-See the :ref:`Performance` page for comparison tests between GMP data types
-and PostgreSQL builtins.
+See the `performance <performance.html>`__ page for comparison tests between
+GMP data types and PostgreSQL builtins.
+
+`[Ab]using PostgreSQL to calculate pi <pi.html>`__, a pgmp demo showing how to
+generate millions of digits of :math:`\pi` using PL/pgSQL and Python to run
+concurrent backends.
 
 The library is released under
 `LGPL License <http://www.opensource.org/licenses/lgpl-3.0>`__.
