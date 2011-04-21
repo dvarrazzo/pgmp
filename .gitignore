@@ -11,4 +11,5 @@ docs/html
 docs/_static/jsMath/
 sandbox/hello/hello
 sandbox/bench/*.png
+sandbox/pi/*.txt
 dist/*
