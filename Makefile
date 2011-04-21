@@ -39,7 +39,7 @@ OBJS = src/pgmp.o src/pgmp_utils.o \
 	src/pmpq.o src/pmpq_io.o src/pmpq_arith.o src/pmpq_agg.o
 
 SRCFILES = $(wildcard src/*.[ch])
-TESTFILES = $(wildcard sql/*.sql) $(wildcard expected/*.out)
+TESTFILES = $(wildcard test/sql/*.sql) $(wildcard test/expected/*.out)
 DOCS = $(wildcard docs/*.rst) docs/conf.py docs/Makefile docs/_static/pgmp.css
 
 PKGFILES = AUTHORS COPYING README Makefile \
@@ -56,7 +56,8 @@ INSTALLSCRIPT=pgmp.sql
 DATA = $(INSTALLSCRIPT) uninstall_pgmp.sql
 endif
 
-REGRESS = setup-$(PG91) mpz mpq
+# the += doesn't work if the user specified his own REGRESS_OPTS
+REGRESS = --inputdir=test setup-$(PG91) mpz mpq
 EXTRA_CLEAN = $(INSTALLSCRIPT) $(UPGRADESCRIPT)
 
 PKGNAME = pgmp-$(PGMP_VERSION)
