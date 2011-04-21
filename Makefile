@@ -42,17 +42,17 @@ TESTFILES = $(wildcard test/sql/*.sql) $(wildcard test/expected/*.out)
 DOCS = $(wildcard docs/*.rst) docs/conf.py docs/Makefile docs/_static/pgmp.css
 
 PKGFILES = AUTHORS COPYING README Makefile \
-	pgmp.control pgmp.pysql uninstall_pgmp.sql \
+	pgmp.control sql/pgmp.pysql sql/uninstall_pgmp.sql \
 	$(SRCFILES) $(DOCS) $(TESTFILES) \
 	$(wildcard tools/*.py)
 
 ifeq ($(PG91),91)
-INSTALLSCRIPT=pgmp--$(PGMP_VERSION).sql
-UPGRADESCRIPT=pgmp--unpackaged--$(PGMP_VERSION).sql
+INSTALLSCRIPT=sql/pgmp--$(PGMP_VERSION).sql
+UPGRADESCRIPT=sql/pgmp--unpackaged--$(PGMP_VERSION).sql
 DATA = $(INSTALLSCRIPT) $(UPGRADESCRIPT)
 else
-INSTALLSCRIPT=pgmp.sql
-DATA = $(INSTALLSCRIPT) uninstall_pgmp.sql
+INSTALLSCRIPT=sql/pgmp.sql
+DATA = $(INSTALLSCRIPT) sql/uninstall_pgmp.sql
 endif
 
 # the += doesn't work if the user specified his own REGRESS_OPTS
@@ -69,7 +69,7 @@ include $(PGXS)
 # added to the targets defined in pgxs
 all: $(INSTALLSCRIPT) $(UPGRADESCRIPT)
 
-$(INSTALLSCRIPT): pgmp.pysql
+$(INSTALLSCRIPT): sql/pgmp.pysql
 	tools/unmix.py < $< > $@
 
 $(UPGRADESCRIPT): $(INSTALLSCRIPT)

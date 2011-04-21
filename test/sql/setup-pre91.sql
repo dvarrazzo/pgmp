@@ -5,7 +5,7 @@ SET client_min_messages = warning;
 
 -- Setup the extension on PostgreSQL before 9.1
 
-\i pgmp.sql
+\i sql/pgmp.sql
 
 \set ECHO all
 RESET client_min_messages;
