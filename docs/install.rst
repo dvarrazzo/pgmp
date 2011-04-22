@@ -28,7 +28,8 @@ regular UNIX development tools, such as :program:`make`. The
 :program:`pg_config` program should be available in the :envvar:`PATH`. If
 more than one PostgreSQL version is available on the system, the library will
 be built against the version of the first :program:`pg_config` found in the
-path.
+path. You may also override the selection specifying the :envvar:`PG_CONFIG`
+variable.
 
 To build and install the library:
 
