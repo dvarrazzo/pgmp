@@ -33,30 +33,31 @@ PG91 = $(shell $(PG_CONFIG) --version | grep -qE " 8\.| 9\.0" && echo pre91 || e
 EXTENSION=pgmp
 MODULEDIR=pgmp
 MODULE_big = pgmp
-OBJS = src/pgmp.o src/pgmp_utils.o \
-	src/pmpz.o src/pmpz_io.o src/pmpz_arith.o src/pmpz_agg.o \
-	src/pmpz_roots.o src/pmpz_theor.o src/pmpz_bits.o src/pmpz_rand.o \
-	src/pmpq.o src/pmpq_io.o src/pmpq_arith.o src/pmpq_agg.o
 
-SRCFILES = $(wildcard src/*.[ch])
-TESTFILES = $(wildcard sql/*.sql) $(wildcard expected/*.out)
+SRC_C = $(wildcard src/*.c)
+SRC_H = $(wildcard src/*.h)
+SRCFILES = $(SRC_C) $(SRC_H)
+OBJS = $(patsubst %.c,%.o,$(SRC_C))
+TESTFILES = $(wildcard test/sql/*.sql) $(wildcard test/expected/*.out)
 DOCS = $(wildcard docs/*.rst) docs/conf.py docs/Makefile docs/_static/pgmp.css
 
-PKGFILES = AUTHORS COPYING README Makefile \
-	pgmp.control pgmp.pysql uninstall_pgmp.sql \
+PKGFILES = AUTHORS COPYING README.rst Makefile \
+	pgmp.control META.json \
+	sql/pgmp.pysql sql/uninstall_pgmp.sql \
 	$(SRCFILES) $(DOCS) $(TESTFILES) \
 	$(wildcard tools/*.py)
 
 ifeq ($(PG91),91)
-INSTALLSCRIPT=pgmp--$(PGMP_VERSION).sql
-UPGRADESCRIPT=pgmp--unpackaged--$(PGMP_VERSION).sql
+INSTALLSCRIPT=sql/pgmp--$(PGMP_VERSION).sql
+UPGRADESCRIPT=sql/pgmp--unpackaged--$(PGMP_VERSION).sql
 DATA = $(INSTALLSCRIPT) $(UPGRADESCRIPT)
 else
-INSTALLSCRIPT=pgmp.sql
-DATA = $(INSTALLSCRIPT) uninstall_pgmp.sql
+INSTALLSCRIPT=sql/pgmp.sql
+DATA = $(INSTALLSCRIPT) sql/uninstall_pgmp.sql
 endif
 
-REGRESS = setup-$(PG91) mpz mpq
+# the += doesn't work if the user specified his own REGRESS_OPTS
+REGRESS = --inputdir=test setup-$(PG91) mpz mpq
 EXTRA_CLEAN = $(INSTALLSCRIPT) $(UPGRADESCRIPT)
 
 PKGNAME = pgmp-$(PGMP_VERSION)
@@ -69,7 +70,7 @@ include $(PGXS)
 # added to the targets defined in pgxs
 all: $(INSTALLSCRIPT) $(UPGRADESCRIPT)
 
-$(INSTALLSCRIPT): pgmp.pysql
+$(INSTALLSCRIPT): sql/pgmp.pysql
 	tools/unmix.py < $< > $@
 
 $(UPGRADESCRIPT): $(INSTALLSCRIPT)
