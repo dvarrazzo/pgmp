@@ -62,12 +62,12 @@ PGMP_PG_FUNCTION(pmpz_in_base)
 
     base = PG_GETARG_INT32(1);
 
-    if (!(base == 0 || (2 <= base && base <= 62)))
+    if (!(base == 0 || (2 <= base && base <= PGMP_MAXBASE_IO)))
     {
         ereport(ERROR, (
             errcode(ERRCODE_INVALID_PARAMETER_VALUE),
             errmsg("invalid base for mpz input: %d", base),
-            errhint("base should be between 2 and 62")));
+            errhint("base should be between 2 and %d", PGMP_MAXBASE_IO)));
     }
 
     str = TextDatumGetCString(PG_GETARG_POINTER(0));
@@ -112,12 +112,14 @@ PGMP_PG_FUNCTION(pmpz_out_base)
     PGMP_GETARG_MPZ(z, 0);
     base = PG_GETARG_INT32(1);
 
-    if (!((-36 <= base && base <= -2) || (2 <= base && base <= 62)))
+    if (!((-36 <= base && base <= -2) ||
+        (2 <= base && base <= PGMP_MAXBASE_IO)))
     {
         ereport(ERROR, (
             errcode(ERRCODE_INVALID_PARAMETER_VALUE),
             errmsg("invalid base for mpz output: %d", base),
-            errhint("base should be between -36 and -2 or between 2 and 62")));
+            errhint("base should be between -36 and -2 or between 2 and %d",
+                PGMP_MAXBASE_IO)));
     }
 
     /* Allocate the output buffer manually - see mpmz_out to know why */

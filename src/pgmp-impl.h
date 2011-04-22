@@ -153,6 +153,13 @@ do { \
     __GNU_MP_VERSION_PATCHLEVEL)
 #endif
 
+/* The text parsing functions have different range across versions */
+#if __GMP_MP_RELEASE >= 40200
+#define PGMP_MAXBASE_IO 62
+#else
+#define PGMP_MAXBASE_IO 36
+#endif
+
 
 #endif  /* __PGMP_IMPL_H__ */
 
