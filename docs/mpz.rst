@@ -9,7 +9,7 @@ to `!mpz`. Not integer types (`!float4`, `!float8`, `!numeric`) are truncated.
 Cast from integer types are automatic, whereas non integer require explicit
 cast (but are implicitly converted in assignment).
 
-.. code-block:: sql
+.. code-block:: postgres
 
     SELECT mpz(10000);      -- Cast using mpz as a function
     SELECT 10000::mpz;      -- PostgreSQL-style cast
@@ -43,10 +43,10 @@ operators. Indexes on `!mpz` columns can be created using the *btree* or the
     have the same value.  For bases 37 to 62, upper-case letter represent the
     usual 10..35 while lower-case letter represent 36..61.
 
-    .. code-block:: sql
+    .. code-block:: psql
 
-        =# SELECT '0x10'::mpz AS hex, '10'::mpz AS dec,
-        -#        '010'::mpz AS oct, '0b10'::mpz AS bin;
+        =# SELECT '0x10'::mpz AS "hex", '10'::mpz AS "dec",
+        -#        '010'::mpz AS "oct", '0b10'::mpz AS "bin";
          hex | dec | oct | bin
         -----+-----+-----+-----
          16  | 10  | 8   | 2
@@ -306,7 +306,7 @@ Root Extraction Functions
     Return a tuple of 2 elements with the truncated integer part of the *n*\th
     root of *op* and the remainder (*i.e.* *op* - *root* ^ *n*).
 
-    .. code-block:: sql
+    .. code-block:: psql
 
         =# select * from rootrem(28, 3);
          root | rem
@@ -324,7 +324,7 @@ Root Extraction Functions
     Return a tuple of 2 elements with the truncated integer part of the square
     root of *op* and the remainder (*i.e.* *op* - *root* \* *root*).
 
-    .. code-block:: sql
+    .. code-block:: psql
 
         =# select * from sqrtrem(83);
          root | rem
@@ -400,7 +400,7 @@ Number Theoretic Functions
         The \hspace{} are there to avoid the vim rest syntax highlighter to
         get crazy.
 
-    .. code-block:: sql
+    .. code-block:: psql
 
         =# select * from  gcdext(6, 15);
          g | s  | t

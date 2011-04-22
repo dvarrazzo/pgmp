@@ -65,7 +65,7 @@ also provided in the same directory to remove the installed objects.
 With PostgreSQL 9.1 the library is packaged as an extension: once built and
 installed in the cluster, use the command:
 
-.. code-block:: sql
+.. code-block:: psql
 
     =# CREATE EXTENSION pgmp;
 
@@ -73,7 +73,7 @@ to install it in a database. If your database was migrated from a previous
 PostgreSQL version, you can convert the `!pgmp` objects into a packaged
 extension using the command:
 
-.. code-block:: sql
+.. code-block:: psql
 
     =# CREATE EXTENSION pgmp FROM unpackaged;
 

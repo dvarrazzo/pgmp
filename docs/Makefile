@@ -34,7 +34,8 @@ env: easy_install
 	mkdir -p $(ENV_LIB)
 	$(EASY_INSTALL) docutils
 	$(EASY_INSTALL) Jinja2
-	$(EASY_INSTALL) Pygments
+	hg clone https://bitbucket.org/dvarrazzo/pygments-postgres env/pygments-postgres
+	ln -s `pwd`/env/pygments-postgres/pygments $(ENV_LIB)
 	hg clone https://bitbucket.org/birkenfeld/sphinx env/sphinx-tip
 	ln -s `pwd`/env/sphinx-tip/sphinx $(ENV_LIB)
 	ln -s `pwd`/env/sphinx-tip/sphinx-build.py $(ENV_BIN)/sphinx-build

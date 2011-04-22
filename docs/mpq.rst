@@ -14,11 +14,11 @@ Floating point types (`!float4`, `!float8`) are converted without loss as
 well... but with some surprise, as many fractions with finite decimal
 expansion have no finite expansion in binary.
 
-.. code-block:: sql
+.. code-block:: psql
 
-    =# select 10.1::numeric::mpq as numeric,
-    -#        10.1::float4::mpq as single,
-    -#        10.1::float8::mpq as double;
+    =# select 10.1::numeric::mpq as "numeric",
+    -#        10.1::float4::mpq as "single",
+    -#        10.1::float8::mpq as "double";
      numeric |     single     |              double
     ---------+----------------+----------------------------------
      101/10  | 5295309/524288 | 5685794529555251/562949953421312
@@ -30,11 +30,11 @@ will round the values to the precision allowed by the types (in case of
 overflow the value will be *Infinity*). Conversion to `!numeric` will perform
 a rounding to the precision set for the target type.
 
-.. code-block:: sql
+.. code-block:: psql
 
-    =# select mpq('4/3')::integer as integer,
-    -#        mpq('4/3')::float4 as single,
-    -#        mpq('4/3')::decimal(10,3) as decimal;
+    =# select mpq('4/3')::integer as "integer",
+    -#        mpq('4/3')::float4 as "single",
+    -#        mpq('4/3')::decimal(10,3) as "decimal";
      integer | single  | decimal
     ---------+---------+---------
            1 | 1.33333 |   1.333
@@ -148,20 +148,20 @@ canonical form.
     The function is useful for finding rational approximations to a given
     floating-point number:
 
-    .. code-block:: sql
+    .. code-block:: psql
 
         =# select limit_den(pi(), 10);
         22/7
 
     or for recovering a rational number that's represented as a float:
 
-    .. code-block:: sql
+    .. code-block:: psql
 
         =# select mpq(cos(pi()/3));
         4503599627370497/9007199254740992
         =# select limit_den(cos(pi()/3));
         1/2
-        =# select limit_den(10.1::float);
+        =# select limit_den(10.1::float4);
         101/10
 
     This function is not part of the GMP library: it is ported instead `from
