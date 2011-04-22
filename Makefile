@@ -85,8 +85,10 @@ docs:
 sdist: $(SRCPKG)
 
 $(SRCPKG): $(PKGFILES)
+	$(MAKE) -C docs html
 	ln -sf . $(PKGNAME)
 	mkdir -p dist
 	rm -rf $@
-	tar czvf $@ $(addprefix $(PKGNAME)/,$^)
+	tar czvf $@ $(addprefix $(PKGNAME)/,$^) \
+		$(PKGNAME)/docs/html --exclude "$(PKGNAME)/docs/html/.*"
 	rm $(PKGNAME)
