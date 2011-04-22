@@ -27,7 +27,7 @@ PG_CONFIG=pg_config
 
 SHLIB_LINK=-lgmp -lm
 
-PGMP_VERSION=$(shell grep default_version pgmp.control | sed -e "s/default_version = '\(.*\)'/\1/")
+PGMP_VERSION = $(shell grep '"version":' META.json | head -1 | sed -e 's/\s*"version":\s*"\(.*\)",/\1/')
 PG91 = $(shell $(PG_CONFIG) --version | grep -qE " 8\.| 9\.0" && echo pre91 || echo 91)
 
 EXTENSION=pgmp
@@ -42,7 +42,7 @@ TESTFILES = $(wildcard test/sql/*.sql) $(wildcard test/expected/*.out)
 DOCS = $(wildcard docs/*.rst) docs/conf.py docs/Makefile docs/_static/pgmp.css
 
 PKGFILES = AUTHORS COPYING README.rst Makefile \
-	pgmp.control META.json \
+	META.json pgmp.control.in \
 	sql/pgmp.pysql sql/uninstall_pgmp.sql \
 	$(SRCFILES) $(DOCS) $(TESTFILES) \
 	$(wildcard tools/*.py)
@@ -58,7 +58,7 @@ endif
 
 # the += doesn't work if the user specified his own REGRESS_OPTS
 REGRESS = --inputdir=test setup-$(PG91) mpz mpq
-EXTRA_CLEAN = $(INSTALLSCRIPT) $(UPGRADESCRIPT)
+EXTRA_CLEAN = $(INSTALLSCRIPT) $(UPGRADESCRIPT) pgmp.control
 
 PKGNAME = pgmp-$(PGMP_VERSION)
 SRCPKG = dist/$(PKGNAME).tar.gz
@@ -69,6 +69,9 @@ include $(PGXS)
 
 # added to the targets defined in pgxs
 all: $(INSTALLSCRIPT) $(UPGRADESCRIPT)
+
+pgmp.control: pgmp.control.in META.json
+	  sed 's/VERSION/$(PGMP_VERSION)/g' < $< > $@
 
 $(INSTALLSCRIPT): sql/pgmp.pysql
 	tools/unmix.py < $< > $@

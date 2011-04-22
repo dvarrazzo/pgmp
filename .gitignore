@@ -2,6 +2,7 @@ data
 tags
 pgmp.so
 pgmp.sql
+pgmp.control
 pgmp--*.sql
 results/*.out
 regression.diffs
