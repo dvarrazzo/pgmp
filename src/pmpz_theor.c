@@ -39,6 +39,29 @@ PGMP_PG_FUNCTION(pmpz_probab_prime_p)
     PG_RETURN_INT32(mpz_probab_prime_p(z1, reps));
 }
 
+PGMP_PG_FUNCTION(pmpz_nextprime)
+{
+    const mpz_t     z1;
+    mpz_t           zf;
+
+    PGMP_GETARG_MPZ(z1, 0);
+
+    mpz_init(zf);
+
+#if __GMP_MP_RELEASE < 40300
+    if (UNLIKELY(mpz_sgn(z1) < 0)) {
+        mpz_set_ui(zf, 2);
+    }
+    else
+#endif
+    {
+        mpz_nextprime(zf, z1);
+    }
+
+    PGMP_RETURN_MPZ(zf);
+}
+
+
 PGMP_PG_FUNCTION(pmpz_gcdext)
 {
     const mpz_t     z1;

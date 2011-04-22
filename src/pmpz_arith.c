@@ -66,7 +66,6 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
 PMPZ_UN(neg,    PMPZ_NO_CHECK)
 PMPZ_UN(abs,    PMPZ_NO_CHECK)
 PMPZ_UN(sqrt,   PMPZ_CHECK_NONEG)
-PMPZ_UN(nextprime,  PMPZ_NO_CHECK)
 PMPZ_UN(com,    PMPZ_NO_CHECK)
 
 
