@@ -41,7 +41,7 @@ OBJS = $(patsubst %.c,%.o,$(SRC_C))
 TESTFILES = $(wildcard test/sql/*.sql) $(wildcard test/expected/*.out)
 DOCS = $(wildcard docs/*.rst) docs/conf.py docs/Makefile docs/_static/pgmp.css
 
-PKGFILES = AUTHORS COPYING README Makefile \
+PKGFILES = AUTHORS COPYING README.rst Makefile \
 	pgmp.control META.json \
 	sql/pgmp.pysql sql/uninstall_pgmp.sql \
 	$(SRCFILES) $(DOCS) $(TESTFILES) \
