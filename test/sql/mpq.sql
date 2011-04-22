@@ -69,7 +69,8 @@ SELECT mpq('10/30', 10);
 SELECT mpq('EF/100', 16);
 SELECT mpq('0xEF/100', 0);
 
-SELECT mpq('z', 36), mpq('z', 62), mpq('Z', 36), mpq('Z', 62);
+SELECT mpq('z', 36), mpq('Z', 36);
+SELECT mpq('z', 62), mpq('Z', 62);
 SELECT mpq('1', 1);
 SELECT mpq('1', -10);
 SELECT mpq('1', 63);

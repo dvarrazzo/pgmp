@@ -66,7 +66,6 @@ PGMP_PG_FUNCTION(pmpz_ ## op) \
 PMPZ_UN(neg,    PMPZ_NO_CHECK)
 PMPZ_UN(abs,    PMPZ_NO_CHECK)
 PMPZ_UN(sqrt,   PMPZ_CHECK_NONEG)
-PMPZ_UN(nextprime,  PMPZ_NO_CHECK)
 PMPZ_UN(com,    PMPZ_NO_CHECK)
 
 
@@ -288,6 +287,13 @@ PGMP_PG_FUNCTION(pmpz_divisible)
     PGMP_GETARG_MPZ(n, 0);
     PGMP_GETARG_MPZ(d, 1);
 
+    /* GMP 4.1 doesn't guard for zero */
+#if __GMP_MP_RELEASE < 40200
+    if (UNLIKELY(MPZ_IS_ZERO(d))) {
+        PG_RETURN_BOOL(MPZ_IS_ZERO(n));
+    }
+#endif
+
     PG_RETURN_BOOL(mpz_divisible_p(n, d));
 }
 
@@ -311,6 +317,14 @@ PGMP_PG_FUNCTION(pmpz_congruent)
     PGMP_GETARG_MPZ(n, 0);
     PGMP_GETARG_MPZ(c, 1);
     PGMP_GETARG_MPZ(d, 2);
+
+    /* GMP 4.1 doesn't guard for zero */
+#if __GMP_MP_RELEASE < 40200
+    if (UNLIKELY(MPZ_IS_ZERO(d))) {
+        PG_RETURN_BOOL(0 == mpz_cmp(n, c));
+    }
+#endif
+
 
     PG_RETURN_BOOL(mpz_congruent_p(n, c, d));
 }

@@ -52,6 +52,9 @@ operators. Indexes on `!mpz` columns can be created using the *btree* or the
          16  | 10  | 8   | 2
 
 
+    .. note:: The maximum base accepted by GMP 4.1 is 36, not 62.
+
+
 .. function:: text(z)
               text(z, base)
 
@@ -63,6 +66,8 @@ operators. Indexes on `!mpz` columns can be created using the *btree* or the
     upper-case letters are used; for 37..62, digits, upper-case letters, and
     lower-case letters (in that significance order) are used. If *base* is not
     specified, 10 is assumed.
+
+    .. note:: The maximum base accepted by GMP 4.1 is 36, not 62.
 
 
 Arithmetic Operators and Functions
@@ -307,6 +312,8 @@ Root Extraction Functions
          root | rem
         ------+-----
          3    | 1
+
+    .. note:: The function is not available on GMP version < 4.2.
 
 .. function:: sqrt(op)
 
@@ -562,6 +569,8 @@ number 0.
 
     Return *op* with bit *bit_index* complemented.
 
+    .. note:: The function is not available on GMP version < 4.2.
+
 .. function:: tstbit(op, bit_index)
 
     Test bit *bit_index* in *op* and return 0 or 1 accordingly.
@@ -589,6 +598,8 @@ and can be seeded with the `randseed()` function.
     This algorithm is fast and has good randomness properties.
 
     .. __: http://en.wikipedia.org/wiki/Mersenne_twister
+
+    .. note:: The function is not available on GMP version < 4.2.
 
 
 .. function:: randinit_lc_2exp(a, c, e)

@@ -52,8 +52,10 @@ SELECT '123456789012345678901234567890123456789012345678901234567890123456789012
 -- other bases
 SELECT '0x10'::mpz, '010'::mpz, '0b10'::mpz;
 16|8|2
-SELECT mpz('10'), mpz('10', 16), mpz('10', 2), mpz('10', 62);
-10|16|2|62
+SELECT mpz('10'), mpz('10', 16), mpz('10', 2);
+10|16|2
+SELECT mpz('10', 62);
+62
 SELECT mpz('10', 1);
 ERROR:  invalid base for mpz input: 1
 HINT:  base should be between 2 and 62

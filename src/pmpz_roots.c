@@ -26,7 +26,9 @@
 #include "funcapi.h"
 
 
-/* Function with a more generic signature are defined in pmpz.arith.c */
+/* Functions with a more generic signature are defined in pmpz.arith.c */
+
+#if __GMP_MP_RELEASE >= 40200
 
 PGMP_PG_FUNCTION(pmpz_rootrem)
 {
@@ -47,6 +49,8 @@ PGMP_PG_FUNCTION(pmpz_rootrem)
 
     PGMP_RETURN_MPZ_MPZ(zroot, zrem);
 }
+
+#endif
 
 PGMP_PG_FUNCTION(pmpz_sqrtrem)
 {

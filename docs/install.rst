@@ -7,7 +7,12 @@ Prerequisites
 `!pgmp` is currently compatible with:
 
 - PostgreSQL from version 8.4
-- GMP from version 4.3 (tested with versions 4.3.2 and 5.0.1)
+- GMP from version 4.1 (tested with versions 4.1.4, 4.2.4, 4.3.2 and 5.0.1)
+
+.. note::
+    GMP 4.1 doesn't implement a few functions (`rootrem()`, `combit()`,
+    `randinit_mt()`) and the maximum base accepted by the I/O functions is
+    36, not 62.
 
 
 Building the library
@@ -39,6 +44,13 @@ You can test the installation with:
     $ make installcheck
 
 (adjust the :envvar:`REGRESS_OPTS` variable to select a test database).
+
+.. note::
+    Because of the missing function in GMP 4.1 (see Prerequisites_), a few
+    tests are expected to fail with this library version. After running the
+    test suite you may check the ``regression.diff`` file to verify that the
+    only tests failed are the ones related to the missing functionalities and
+    the different default random numbers gerenator algorithm.
 
 
 Installing the extension

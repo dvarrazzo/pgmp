@@ -66,6 +66,9 @@ operators. Indexes on `!mpq` columns can be created using the *btree* or the
     denominator, so for instance ``0xEF/100`` is 239/100, whereas
     ``0xEF/0x100`` is 239/256.
 
+    .. note:: The maximum base accepted by GMP 4.1 is 36, not 62.
+
+
 .. function:: text(q)
               text(q, base)
 
@@ -80,6 +83,8 @@ operators. Indexes on `!mpq` columns can be created using the *btree* or the
     upper-case letters are used; for 37..62, digits, upper-case letters, and
     lower-case letters (in that significance order) are used. If *base* is not
     specified, 10 is assumed.
+
+    .. note:: The maximum base accepted by GMP 4.1 is 36, not 62.
 
 
 `!mpq` conversions
