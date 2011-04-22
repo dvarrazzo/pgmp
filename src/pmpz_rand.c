@@ -94,7 +94,10 @@ PGMP_PG_FUNCTION(pgmp_ ## f) \
 #define PGMP_RANDINIT_NOARG(f) gmp_ ## f (*state)
 
 PGMP_RANDINIT(randinit_default, PGMP_RANDINIT_NOARG)
+
+#if __GMP_MP_RELEASE >= 40200
 PGMP_RANDINIT(randinit_mt,      PGMP_RANDINIT_NOARG)
+#endif
 
 
 #define PGMP_RANDINIT_ACE(f) \

@@ -132,7 +132,10 @@ PGMP_PG_FUNCTION(pmpz_ ## f) \
 
 PMPZ_BIT(setbit)
 PMPZ_BIT(clrbit)
+
+#if __GMP_MP_RELEASE >= 40200
 PMPZ_BIT(combit)
+#endif
 
 
 PGMP_PG_FUNCTION(pmpz_tstbit)

@@ -145,6 +145,15 @@ do { \
 
 #endif
 
+/* Not available e.g. on GMP 4.1 */
+#ifndef __GMP_MP_RELEASE
+#define __GMP_MP_RELEASE ( \
+    __GNU_MP_VERSION * 10000 + \
+    __GNU_MP_VERSION_MINOR * 100 + \
+    __GNU_MP_VERSION_PATCHLEVEL)
+#endif
+
+
 #endif  /* __PGMP_IMPL_H__ */
 
 
