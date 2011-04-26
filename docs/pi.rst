@@ -20,7 +20,7 @@ known as one of the most efficient ways to compute a large number of digits of
 details and references in the above link).
 
 Calculation is performed using the `mpz` data type, thus using integers:
-to calculate an approximation of :math:`\tan^{-1}\frac{1}{n}` to :math:`n`
+to calculate an approximation of :math:`\tan^{-1}\frac{1}{x}` to :math:`n`
 digits, we use a Taylor series scaled to :math:`10^n`. Full details are
 provided in this nice `LiteratePrograms article`__.
 
