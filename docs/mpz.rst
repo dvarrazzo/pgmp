@@ -552,9 +552,9 @@ number 0.
     is returned.
 
     If there's no bit found, then the largest possible bit count is returned
-    (represented by `gmp_max_bitcnt()`). This will happen in `!mpz_scan0()`
-    past the end of a negative number, or `!mpz_scan1()` past the end of a
-    nonnegative number.
+    (represented by `gmp_max_bitcnt()`). This will happen in `!scan0()` past
+    the end of a negative number, or `!scan1()` past the end of a nonnegative
+    number.
 
 
 .. function:: setbit(op, bit_index)
