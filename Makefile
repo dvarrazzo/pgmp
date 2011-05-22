@@ -96,3 +96,6 @@ $(SRCPKG): $(PKGFILES)
 		$(PKGNAME)/docs/html -x "$(PKGNAME)/docs/html/.*"
 	rm $(PKGNAME)
 
+# Required for testing in pgxn client on PG < 9.1
+installcheck: $(INSTALLSCRIPT)
+
