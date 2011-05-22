@@ -51,9 +51,8 @@ copyright = u'2011, Daniele Varrazzo'
 
 # The full version, including alpha/beta/rc tags.
 try:
-    release = re.search(r"default_version\s*=\s*'([^']+)'",
-        open('../pgmp.control').read()).group(1)
-    # TODO: we may run pg_config to look for the control file
+    release = re.search(r'"version"\s*:\s*"([^"]+)"',
+        open('../META.json').read()).group(1)
 except:
     release = '1.0'  # fallback
 
