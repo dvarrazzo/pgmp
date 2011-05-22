@@ -62,7 +62,9 @@ REGRESS = --inputdir=test setup-$(PG91) mpz mpq
 EXTRA_CLEAN = $(INSTALLSCRIPT) $(UPGRADESCRIPT)
 
 PKGNAME = pgmp-$(EXT_LONGVER)
-SRCPKG = dist/$(PKGNAME).tar.gz
+SRCPKG = $(SRCPKG_TGZ) $(SRCPKG_ZIP)
+SRCPKG_TGZ = dist/$(PKGNAME).tar.gz
+SRCPKG_ZIP = dist/$(PKGNAME).zip
 
 USE_PGXS=1
 PGXS := $(shell $(PG_CONFIG) --pgxs)
@@ -86,7 +88,11 @@ $(SRCPKG): $(PKGFILES)
 	$(MAKE) -C docs html
 	ln -sf . $(PKGNAME)
 	mkdir -p dist
-	rm -rf $@
-	tar czvf $@ $(addprefix $(PKGNAME)/,$^) \
+	rm -f $(SRCPKG_TGZ)
+	tar czvf $(SRCPKG_TGZ) $(addprefix $(PKGNAME)/,$^) \
 		$(PKGNAME)/docs/html --exclude "$(PKGNAME)/docs/html/.*"
+	rm -f $(SRCPKG_ZIP)
+	zip -r $(SRCPKG_ZIP) $(addprefix $(PKGNAME)/,$^) \
+		$(PKGNAME)/docs/html -x "$(PKGNAME)/docs/html/.*"
 	rm $(PKGNAME)
+
