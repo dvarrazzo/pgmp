@@ -2,7 +2,7 @@
    "name": "pgmp",
    "abstract": "PostgreSQL Multiple Precision Arithmetic extension",
    "description": "The pgmp extension adds PostgreSQL data types wrapping the high performance integer and rational data types offered by the GMP library.",
-   "version": "1.0.0",
+   "version": "1.0.1dev0",
    "maintainer": "Daniele Varrazzo <daniele.varrazzo@gmail.com>",
    "tags": [ "arithmetic", "gmp", "rational", "integer", "data types" ],
    "release_status": "testing",
@@ -10,7 +10,7 @@
    "provides": {
       "pgmp": {
          "file": "sql/pgmp.sql",
-         "version": "1.0.0",
+         "version": "1.0.1dev0",
          "abstract": "PostgreSQL Multiple Precision Arithmetic extension"
       }
    },
