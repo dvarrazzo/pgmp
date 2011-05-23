@@ -5,7 +5,7 @@
    "version": "1.0.1dev0",
    "maintainer": "Daniele Varrazzo <daniele.varrazzo@gmail.com>",
    "tags": [ "arithmetic", "gmp", "rational", "integer", "data types" ],
-   "release_status": "testing",
+   "release_status": "stable",
    "license": "lgpl_3_0",
    "provides": {
       "pgmp": {
