@@ -30,3 +30,9 @@ html div.document ul {
 div.highlight {
     line-height: 1em;
 }
+
+/* The title justified is awful */
+div.body h1 {
+    text-align: left;
+    line-height: 100%;
+}
