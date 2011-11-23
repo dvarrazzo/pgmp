@@ -668,7 +668,7 @@ and can be seeded with the `randseed()` function.
     functions before invoking this function.
 
 
-.. function:: urandomb(n)
+.. function:: rrandomb(n)
 
     Generate a random integer with long strings of zeros and ones in the
     binary representation. Useful for testing functions and algorithms, since
