@@ -32,13 +32,10 @@ html:
 env: easy_install
 	mkdir -p $(ENV_BIN)
 	mkdir -p $(ENV_LIB)
-	$(EASY_INSTALL) docutils
-	$(EASY_INSTALL) Jinja2
-	hg clone https://bitbucket.org/dvarrazzo/pygments-postgres env/pygments-postgres
-	ln -s `pwd`/env/pygments-postgres/pygments $(ENV_LIB)
-	hg clone https://bitbucket.org/birkenfeld/sphinx env/sphinx-tip
-	ln -s `pwd`/env/sphinx-tip/sphinx $(ENV_LIB)
-	ln -s `pwd`/env/sphinx-tip/sphinx-build.py $(ENV_BIN)/sphinx-build
+	# should be Pygments >= 1.5, when released
+	hg clone https://bitbucket.org/birkenfeld/pygments-main env/pygments
+	ln -s `pwd`/env/pygments/pygments $(ENV_LIB)
+	$(EASY_INSTALL) -U "sphinx>=1.1"
 
 easy_install: ez_setup
 	PYTHONPATH=$(ENV_LIB) $(PYTHON) $(EZ_SETUP) -d $(ENV_LIB) -s $(ENV_BIN) setuptools
