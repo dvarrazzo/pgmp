@@ -6,8 +6,9 @@
 
 PYTHON := python$(PYTHON_VERSION)
 PYTHON_VERSION ?= $(shell $(PYTHON) -c 'import sys; print ("%d.%d" % sys.version_info[:2])')
-BUILD_DIR = $(shell pwd)/build/lib.$(PYTHON_VERSION)
-ENV_DIR = $(shell pwd)/env/py-$(PYTHON_VERSION)
+ROOT_DIR = $(shell pwd)
+BUILD_DIR = $(ROOT_DIR)/build/lib.$(PYTHON_VERSION)
+ENV_DIR = $(ROOT_DIR)/env/py-$(PYTHON_VERSION)
 ENV_BIN = $(ENV_DIR)/bin
 ENV_LIB = $(ENV_DIR)/lib
 EASY_INSTALL = PYTHONPATH=$(ENV_LIB) $(ENV_BIN)/easy_install-$(PYTHON_VERSION) -d $(ENV_LIB) -s $(ENV_BIN)
@@ -25,10 +26,16 @@ PLOTS = $(patsubst %.txt,%.png,$(wildcard ../sandbox/bench/*.txt))
 default: html
 
 html: $(PLOTS)
-	(cd env/sphinx-tip && hg qpush --all)
+	(cd $(ENV_DIR) && \
+	for p in `ls $(ROOT_DIR)/patches/*.patch`; do \
+		patch --verbose -p1 < $$p; \
+	done)
 	PYTHONPATH=$(ENV_LIB) $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) \
 		. $(BUILDDIR)/html
-	(cd env/sphinx-tip && hg qpop --all)
+	(cd $(ENV_DIR) && \
+	for p in `ls $(ROOT_DIR)/patches/*.patch`; do \
+		patch --verbose -p1 -R < $$p; \
+	done)
 
 upload:
 	tar cjf - -C html . \
@@ -46,6 +53,7 @@ env: easy_install
 	mkdir -p $(ENV_LIB)
 	$(EASY_INSTALL) -U "Pygments>=1.5"
 	$(EASY_INSTALL) -U "sphinx>=1.1"
+	(cd $(ENV_DIR) && ln -s lib/Sphinx-*.egg/sphinx/ sphinx)
 
 easy_install: ez_setup
 	PYTHONPATH=$(ENV_LIB) $(PYTHON) $(EZ_SETUP) -d $(ENV_LIB) -s $(ENV_BIN) setuptools
