@@ -32,9 +32,7 @@ html:
 env: easy_install
 	mkdir -p $(ENV_BIN)
 	mkdir -p $(ENV_LIB)
-	# should be Pygments >= 1.5, when released
-	hg clone https://bitbucket.org/birkenfeld/pygments-main env/pygments
-	ln -s `pwd`/env/pygments/pygments $(ENV_LIB)
+	$(EASY_INSTALL) -U "Pygments>=1.5"
 	$(EASY_INSTALL) -U "sphinx>=1.1"
 
 easy_install: ez_setup
