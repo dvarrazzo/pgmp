@@ -17,6 +17,10 @@ table.docutils td, table.docutils th {
     border-bottom: 1px solid #aaa;
 }
 
+table.docutils td {
+     text-align: left;
+}
+
 table.docutils th {
      background-color; #eeeeec;
 }
