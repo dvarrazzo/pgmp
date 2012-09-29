@@ -85,15 +85,12 @@ docs:
 sdist: $(SRCPKG)
 
 $(SRCPKG): $(PKGFILES)
-	$(MAKE) -C docs html
 	ln -sf . $(PKGNAME)
 	mkdir -p dist
 	rm -f $(SRCPKG_TGZ)
-	tar czvf $(SRCPKG_TGZ) $(addprefix $(PKGNAME)/,$^) \
-		$(PKGNAME)/docs/html --exclude "$(PKGNAME)/docs/html/.*"
+	tar czvf $(SRCPKG_TGZ) $(addprefix $(PKGNAME)/,$^)
 	rm -f $(SRCPKG_ZIP)
-	zip -r $(SRCPKG_ZIP) $(addprefix $(PKGNAME)/,$^) \
-		$(PKGNAME)/docs/html -x "$(PKGNAME)/docs/html/.*"
+	zip -r $(SRCPKG_ZIP) $(addprefix $(PKGNAME)/,$^)
 	rm $(PKGNAME)
 
 # Required for testing in pgxn client on PG < 9.1
