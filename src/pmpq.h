@@ -34,7 +34,7 @@ typedef struct
 } pmpq;
 
 /* Postgres only allows 2^30 bytes in varlena. Because each limb is at least 4
- * bytes we need at most 2^28 bits to store the size. So we can use the
+ * bytes we need at most 28 bits to store the size. So we can use the
  * higher 4 bits for other stuff: we use 2 bits for the version, 1 for the
  * sign and 1 for the order in which denom and numer limbs are stored. */
 
