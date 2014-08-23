@@ -78,8 +78,8 @@ operators. Indexes on `!mpq` columns can be created using the *btree* or the
     The string will be of the form :samp:`{num}/{den}`, or if the denominator
     is 1 then just :samp:`{num}`.
 
-    *base* may vary from 2 to 62 or from −2 to −36.  For base in the range
-    2..36, digits and lower-case letters are used; for −2..−36, digits and
+    *base* may vary from 2 to 62 or from -2 to -36.  For base in the range
+    2..36, digits and lower-case letters are used; for -2..-36, digits and
     upper-case letters are used; for 37..62, digits, upper-case letters, and
     lower-case letters (in that significance order) are used. If *base* is not
     specified, 10 is assumed.

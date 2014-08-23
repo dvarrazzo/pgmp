@@ -61,8 +61,8 @@ operators. Indexes on `!mpz` columns can be created using the *btree* or the
     Convert the `!mpz` *z* into a string. The form :samp:`{z}::text` is
     equivalent to :samp:`text({z})`.
 
-    *base* may vary from 2 to 62 or from −2 to −36.  For base in the range
-    2..36, digits and lower-case letters are used; for −2..−36, digits and
+    *base* may vary from 2 to 62 or from -2 to -36.  For base in the range
+    2..36, digits and lower-case letters are used; for -2..-36, digits and
     upper-case letters are used; for 37..62, digits, upper-case letters, and
     lower-case letters (in that significance order) are used. If *base* is not
     specified, 10 is assumed.
@@ -653,7 +653,7 @@ and can be seeded with the `randseed()` function.
 .. function:: urandomb(n)
 
     Generate a uniformly distributed random integer in the range :math:`0` to
-    :math:`2^n−1`, inclusive.
+    :math:`2^n-1`, inclusive.
 
     The session state must be initialized by calling one of the `!randinit()`
     functions before invoking this function.
@@ -662,7 +662,7 @@ and can be seeded with the `randseed()` function.
 .. function:: urandomm(n)
 
     Generate a uniformly distributed random integer in the range 0 to
-    *n*\−1, inclusive.
+    *n*\-1, inclusive.
 
     The session state must be initialized by calling one of the `!randinit()`
     functions before invoking this function.
@@ -674,7 +674,7 @@ and can be seeded with the `randseed()` function.
     binary representation. Useful for testing functions and algorithms, since
     this kind of random numbers have proven to be more likely to trigger
     corner-case bugs. The random number will be in the range :math:`0` to
-    :math:`2^n−1`, inclusive.
+    :math:`2^n-1`, inclusive.
 
     The session state must be initialized by calling one of the `!randinit()`
     functions before invoking this function.
