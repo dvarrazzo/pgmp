@@ -10,7 +10,7 @@
    "provides": {
       "pgmp": {
          "file": "sql/pgmp.sql",
-         "version": "1.0.1",
+         "version": "1.0.2",
          "abstract": "PostgreSQL Multiple Precision Arithmetic extension"
       }
    },
