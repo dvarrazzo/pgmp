@@ -14,14 +14,6 @@ Prerequisites
     `randinit_mt()`) and the maximum base accepted by the I/O functions is
     36, not 62.
 
-
-Building the library
---------------------
-
-The library must be built and installed to be used with a database cluster:
-once it is built, SQL installation scripts can be used to install the data
-types and functions in one or more databases.
-
 In order to build the library your system must have the server development
 files (on Debian systems usually packaged as ``postgresql-server-dev``) and
 regular UNIX development tools, such as :program:`make`. The
@@ -30,6 +22,29 @@ more than one PostgreSQL version is available on the system, the library will
 be built against the version of the first :program:`pg_config` found in the
 path. You may also override the selection specifying the :envvar:`PG_CONFIG`
 variable.
+
+
+Using the PGXN client
+---------------------
+
+If the prerequsites are met you can use the `PGXN Client`__ to download,
+build, and install `!pgmp`, e.g.::
+
+    $ pgxn install pgmp
+    $ pgxn load -d somedb pgmp
+
+.. __: https://dvarrazzo.github.io/pgxnclient/
+
+The further instructions are to build, test, and install the library without
+using the PGXN Client.
+
+
+Building the library
+--------------------
+
+The library must be built and installed to be used with a database cluster:
+once it is built, SQL installation scripts can be used to install the data
+types and functions in one or more databases.
 
 To build and install the library:
 
@@ -47,7 +62,7 @@ You can test the installation with:
 (adjust the :envvar:`REGRESS_OPTS` variable to select a test database).
 
 .. note::
-    Because of the missing function in GMP 4.1 (see Prerequisites_), a few
+    Because of the missing functions in GMP 4.1 (see Prerequisites_), a few
     tests are expected to fail with this library version. After running the
     test suite you may check the ``regression.diff`` file to verify that the
     only tests failed are the ones related to the missing functionalities and
@@ -82,6 +97,3 @@ command. Please refer to `the documentation`__ for further informations about
 PostgreSQL extensions management.
 
 .. __: http://developer.postgresql.org/pgdocs/postgres/extend-extensions.html
-
-
-

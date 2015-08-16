@@ -39,6 +39,7 @@ References
 
 - Homepage: https://dvarrazzo.github.io/pgmp/
 - Project page: https://github.com/dvarrazzo/pgmp/
+- Download: http://pgxn.org/dist/pgmp/
 
 
 Documentation
