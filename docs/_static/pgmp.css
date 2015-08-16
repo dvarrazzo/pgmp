@@ -40,3 +40,8 @@ div.body h1 {
     text-align: left;
     line-height: 100%;
 }
+
+/* definitions in bold */
+dl.goals dt {
+    font-weight: bold;
+}

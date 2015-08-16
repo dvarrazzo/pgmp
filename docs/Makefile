@@ -13,13 +13,19 @@ SPHINXBUILD   = $(ENV_BIN)/sphinx-build
 PAPER         =
 BUILDDIR      = .
 
+PLOTS = $(patsubst ../sandbox/bench/%.txt,html/img/%.png,$(wildcard ../sandbox/bench/*.txt))
+
 .PHONY: env clean html
 
 default: html
 
-html:
+html: $(PLOTS)
 	PYTHONPATH=$(ENV_LIB) $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) \
 		. $(BUILDDIR)/html
+
+html/img/%.png: ../sandbox/bench/%.txt
+	mkdir -p html/img
+	$(ENV_BIN)/python ../sandbox/bench/plot_result.py $< -o $@
 
 # The environment is currently required to build the documentation.
 # It is not clean by 'make clean'
