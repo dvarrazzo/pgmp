@@ -1,0 +1,4 @@
+.buildinfo
+.doctrees/
+_static/jquery-*.js
+_static/underscore-*.js

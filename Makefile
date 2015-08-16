@@ -40,7 +40,7 @@ SRC_H = $(wildcard src/*.h)
 SRCFILES = $(SRC_C) $(SRC_H)
 OBJS = $(patsubst %.c,%.o,$(SRC_C))
 TESTFILES = $(wildcard test/sql/*.sql) $(wildcard test/expected/*.out)
-DOCS = $(wildcard docs/*.rst) docs/conf.py docs/Makefile docs/_static/pgmp.css
+DOCS = $(wildcard docs/*.rst) docs/conf.py docs/Makefile docs/_static/pgmp.css docs/html-gitignore docs/requirements.txt
 
 PKGFILES = AUTHORS COPYING README.rst Makefile \
 	META.json pgmp.control \
