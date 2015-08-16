@@ -43,7 +43,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'PostgreSQL Multiple Precision Arithmetic'
-copyright = u'2011, Daniele Varrazzo'
+copyright = u'2011-2015, Daniele Varrazzo'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
