@@ -96,7 +96,7 @@ pygments_style = 'sphinx'
 
 # Plugins configuration
 todo_include_todos = True
-mathjax_path = 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=Accessible'
+mathjax_path = 'https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=Accessible'
 jsmath_path = 'jsMath/easy/load.js'
 
 

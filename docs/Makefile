@@ -35,5 +35,6 @@ env:
 	$(ENV_BIN)/pip install -r requirements.txt
 
 clean:
-	$(RM) -r html
+	# Do not delete .gitignore and .git directories
+	$(RM) -r html/*
 

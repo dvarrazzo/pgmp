@@ -22,7 +22,7 @@
       }
    },
    "resources": {
-      "homepage": "http://pgmp.projects.postgresql.org/",
+      "homepage": "https://dvarrazzo.github.io/pgmp/",
       "bugtracker": {
          "web": "https://github.com/dvarrazzo/pgmp/issues"
       },

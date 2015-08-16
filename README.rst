@@ -28,6 +28,5 @@ documentation and regression tests.
 Please refer to the documentation for installation and usage, either
 online or in the ``docs/`` directory.
 
-- Homepage: http://pgmp.projects.postgresql.org/
-- Source repository: https://github.com/dvarrazzo/pgmp/
-
+- Homepage: https://dvarrazzo.github.io/pgmp/
+- Project page: https://github.com/dvarrazzo/pgmp/
