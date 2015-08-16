@@ -1,9 +1,10 @@
 PostgreSQL Multiple Precision Arithmetic
 ========================================
 
-`!pgmp` is a PostgreSQL_ extension to add the GMP_ data types and functions
+pgmp_ is a PostgreSQL_ extension to add the GMP_ data types and functions
 directly into the database.
 
+.. _pgmp: https://dvarrazzo.github.io/pgmp/
 .. _PostgreSQL: http://www.postgresql.org
 .. _GMP: http://www.gmplib.org
 
@@ -36,11 +37,8 @@ The library is released under
 References
 ----------
 
-- Homepage: http://pgmp.projects.postgresql.org/
-- Discussion group: http://groups.google.com/group/postgresql-gmp
-- Source repository: https://github.com/dvarrazzo/pgmp/
-- Bug tracking: https://github.com/dvarrazzo/pgmp/issues
-- PgFoundry project: http://pgfoundry.org/projects/pgmp/
+- Homepage: https://dvarrazzo.github.io/pgmp/
+- Project page: https://github.com/dvarrazzo/pgmp/
 
 
 Documentation
