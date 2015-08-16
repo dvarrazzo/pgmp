@@ -22,9 +22,9 @@ builtin PostgreSQL data types.  A few observations:
   platform.
 
 - All the results are obtained using the scripts available in the
-  `sandbox/bench`__ directory of the pmpz source code.
+  `bench`__ directory of the pmpz source code.
 
-  .. __: https://github.com/dvarrazzo/pgmp/tree/master/sandbox/bench
+  .. __: https://github.com/dvarrazzo/pgmp/tree/master/bench
 
 
 .. _performance-sum:

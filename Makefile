@@ -40,13 +40,15 @@ SRC_H = $(wildcard src/*.h)
 SRCFILES = $(SRC_C) $(SRC_H)
 OBJS = $(patsubst %.c,%.o,$(SRC_C))
 TESTFILES = $(wildcard test/sql/*.sql) $(wildcard test/expected/*.out)
-DOCS = $(wildcard docs/*.rst) docs/conf.py docs/Makefile docs/_static/pgmp.css docs/html-gitignore docs/requirements.txt
+BENCHFILES = $(wildcard bench/*.py) $(wildcard bench/*.txt)
+DOCFILES = $(wildcard docs/*.rst)
+TOOLSFILES = $(wildcard tools/*.py)
 
-PKGFILES = AUTHORS COPYING README.rst Makefile \
-	META.json pgmp.control \
+PKGFILES = $(SRCFILES) $(DOCFILES) $(TESTFILES) $(BENCHFILES) $(TOOLSFILES) \
+	AUTHORS COPYING README.rst Makefile META.json pgmp.control \
 	sql/pgmp.pysql sql/uninstall_pgmp.sql \
-	$(SRCFILES) $(DOCS) $(TESTFILES) \
-	$(wildcard tools/*.py)
+	docs/conf.py docs/Makefile docs/_static/pgmp.css \
+	docs/html-gitignore docs/requirements.txt
 
 ifeq ($(PG91),91)
 INSTALLSCRIPT=sql/pgmp--$(EXT_SHORTVER).sql
