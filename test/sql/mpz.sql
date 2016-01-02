@@ -345,7 +345,9 @@ select mpz_cmp(1000::mpz, 1001::mpz);
 create table test_mpz_idx (z mpz);
 insert into test_mpz_idx select generate_series(1, 10000);
 create index test_mpz_btree_idx on test_mpz_idx using btree (z);
+set client_min_messages = error;
 create index test_mpz_hash_idx on test_mpz_idx using hash (z);
+reset client_min_messages;
 
 -- Hash is compatible with builtins
 select mpz_hash(0) = hashint4(0);
