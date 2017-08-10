@@ -330,7 +330,7 @@ PGMP_PG_FUNCTION(pmpq_to_numeric)
 {
     const mpq_t     q;
     int32           typmod;
-    unsigned long   scale;
+    long            scale;
     mpz_t           z;
     char            *buf;
     int             sbuf, snum;
