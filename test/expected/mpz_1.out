@@ -1,0 +1,1015 @@
+--
+--  Test mpz datatype
+--
+-- Compact output
+\t
+\a
+SELECT gmp_version() > 10000;
+t
+--
+-- mpz input and output functions
+--
+SELECT '0'::mpz;
+0
+SELECT '1'::mpz;
+1
+SELECT '-1'::mpz;
+-1
+SELECT '10'::mpz;
+10
+SELECT '-10'::mpz;
+-10
+SELECT '000001'::mpz;       -- padding zeros
+1
+SELECT '-000001'::mpz;
+-1
+SELECT '4294967295'::mpz;   -- limbs boundaries
+4294967295
+SELECT '4294967296'::mpz;
+4294967296
+SELECT '-4294967296'::mpz;
+-4294967296
+SELECT '-4294967297'::mpz;
+-4294967297
+SELECT '18446744073709551614'::mpz;
+18446744073709551614
+SELECT '18446744073709551615'::mpz;
+18446744073709551615
+SELECT '18446744073709551616'::mpz;
+18446744073709551616
+SELECT '18446744073709551617'::mpz;
+18446744073709551617
+SELECT '-18446744073709551615'::mpz;
+-18446744073709551615
+SELECT '-18446744073709551616'::mpz;
+-18446744073709551616
+SELECT '-18446744073709551617'::mpz;
+-18446744073709551617
+SELECT '-18446744073709551618'::mpz;
+-18446744073709551618
+SELECT '12345678901234567890123456789012345678901234567890123456789012345678901234567890'::mpz;
+12345678901234567890123456789012345678901234567890123456789012345678901234567890
+-- other bases
+SELECT '0x10'::mpz, '010'::mpz, '0b10'::mpz;
+16|8|2
+SELECT mpz('10'), mpz('10', 16), mpz('10', 2);
+10|16|2
+SELECT mpz('10', 62);
+62
+SELECT mpz('10', 1);
+ERROR:  invalid base for mpz input: 1
+HINT:  base should be between 2 and 62
+SELECT mpz('10', 63);
+ERROR:  invalid base for mpz input: 63
+HINT:  base should be between 2 and 62
+SELECT mpz('10', 0), mpz('0x10', 0), mpz('010', 0), mpz('0b10', 0);
+10|16|8|2
+SELECT text(10::mpz);
+10
+SELECT text(10::mpz, 2);
+1010
+SELECT text(10::mpz, -2);
+1010
+SELECT text(255::mpz, 16);
+ff
+SELECT text((36 * 36 - 1)::mpz, 36);
+zz
+SELECT text((62 * 62 - 1)::mpz, 62);
+zz
+SELECT text((36 * 36 - 1)::mpz, -36);
+ZZ
+SELECT text(10::mpz, -37);
+ERROR:  invalid base for mpz output: -37
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text(10::mpz, -1);
+ERROR:  invalid base for mpz output: -1
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text(10::mpz, 0);
+ERROR:  invalid base for mpz output: 0
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text(10::mpz, 1);
+ERROR:  invalid base for mpz output: 1
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text(10::mpz, 63);
+ERROR:  invalid base for mpz output: 63
+HINT:  base should be between -36 and -2 or between 2 and 62
+-- limited error
+SELECT ('xx' || repeat('1234567890', 10))::mpz;
+ERROR:  invalid input for mpz: "xx123456789012345678901234567890123456789012345678..."
+SELECT mpz('xx' || repeat('1234567890', 10), 42);
+ERROR:  invalid input for mpz base 42: "xx123456789012345678901234567890123456789012345678..."
+--
+-- mpz cast
+--
+SELECT 0::smallint::mpz, (-32768)::smallint::mpz, 32767::smallint::mpz;
+0|-32768|32767
+SELECT 0::integer::mpz, (-2147483648)::integer::mpz, 2147483647::integer::mpz;
+0|-2147483648|2147483647
+SELECT 0::bigint::mpz, (-9223372036854775808)::bigint::mpz, 9223372036854775807::bigint::mpz;
+0|-9223372036854775808|9223372036854775807
+SELECT 0::numeric::mpz, (-12345678901234567890)::numeric::mpz, 12345678901234567890::numeric::mpz;
+0|-12345678901234567890|12345678901234567890
+-- decimal are truncated
+SELECT 123.10::numeric::mpz, 123.90::numeric::mpz;
+123|123
+SELECT (-123.10::numeric)::mpz, (-123.90::numeric)::mpz;
+-123|-123
+SELECT 'NaN'::numeric::mpz;
+ERROR:  can't convert numeric value to mpz: "NaN"
+SELECT 0.0::float4::mpz, 123.15::float4::mpz, 123.95::float4::mpz;
+0|123|123
+SELECT (1e36::float4)::mpz BETWEEN pow(10::mpz,36) - pow(10::mpz,30) AND pow(10::mpz,36) + pow(10::mpz,30);
+t
+SELECT (-1e36::float4)::mpz BETWEEN -pow(10::mpz,36) - pow(10::mpz,30) AND -pow(10::mpz,36) + pow(10::mpz,30);
+t
+SELECT 'NaN'::float4::mpz;
+ERROR:  can't convert float value to mpz: "NaN"
+SELECT 'Infinity'::float4::mpz;
+ERROR:  can't convert float value to mpz: "Infinity"
+SELECT '-Infinity'::float4::mpz;
+ERROR:  can't convert float value to mpz: "-Infinity"
+SELECT 0.0::float8::mpz, 123.15::float8::mpz, 123.95::float8::mpz;
+0|123|123
+SELECT (1e307::float8)::mpz BETWEEN pow(10::mpz,307) - pow(10::mpz,307-15) AND pow(10::mpz,307) + pow(10::mpz,307-15);
+t
+SELECT (-1e307::float8)::mpz BETWEEN -pow(10::mpz,307) - pow(10::mpz,307-15) AND -pow(10::mpz,307) + pow(10::mpz,307-15);
+t
+SELECT 'NaN'::float8::mpz;
+ERROR:  can't convert float value to mpz: "NaN"
+SELECT 'Infinity'::float8::mpz;
+ERROR:  can't convert float value to mpz: "Infinity"
+SELECT '-Infinity'::float8::mpz;
+ERROR:  can't convert float value to mpz: "-Infinity"
+SELECT 0::mpz, 1::mpz, (-1)::mpz;       -- automatic casts
+0|1|-1
+SELECT 1000000::mpz, (-1000000)::mpz;
+1000000|-1000000
+SELECT 1000000000::mpz, (-1000000000)::mpz;
+1000000000|-1000000000
+SELECT 1000000000000000::mpz, (-1000000000000000)::mpz;
+1000000000000000|-1000000000000000
+SELECT 1000000000000000000000000000000::mpz, (-1000000000000000000000000000000)::mpz;
+1000000000000000000000000000000|-1000000000000000000000000000000
+SELECT -1::mpz;       -- these take the unary minus to work
+-1
+SELECT -1000000::mpz;
+-1000000
+SELECT -1000000000::mpz;
+-1000000000
+SELECT -1000000000000000::mpz;
+-1000000000000000
+SELECT -1000000000000000000000000000000::mpz;
+-1000000000000000000000000000000
+SELECT 32767::mpz::int2;
+32767
+SELECT 32768::mpz::int2;
+ERROR:  numeric value too big to be converted to int2 data type
+SELECT (-32768)::mpz::int2;
+-32768
+SELECT (-32769)::mpz::int2;
+ERROR:  numeric value too big to be converted to int2 data type
+SELECT 2147483647::mpz::int4;
+2147483647
+SELECT 2147483648::mpz::int4;
+ERROR:  numeric value too big to be converted to int4 data type
+SELECT (-2147483648)::mpz::int4;
+-2147483648
+SELECT (-2147483649)::mpz::int4;
+ERROR:  numeric value too big to be converted to int4 data type
+SELECT 9223372036854775807::mpz::int8;
+9223372036854775807
+SELECT 9223372036854775808::mpz::int8;
+ERROR:  numeric value too big to be converted to int8 data type
+SELECT (-9223372036854775808)::mpz::int8;
+-9223372036854775808
+SELECT (-9223372036854775809)::mpz::int8;
+ERROR:  numeric value too big to be converted to int8 data type
+SELECT (2147483648)::mpz::int8;
+2147483648
+SELECT (-2147483648)::mpz::int8;
+-2147483648
+SELECT (65536::mpz)::bigint;
+65536
+SELECT (65536::mpz*65536::mpz)::bigint;
+4294967296
+SELECT (65536::mpz*65536::mpz*65536::mpz)::bigint;
+281474976710656
+SELECT (65536::mpz*65536::mpz*65536::mpz*65536::mpz/2::mpz-1::mpz)::bigint;
+9223372036854775807
+SELECT (65536::mpz*65536::mpz*65536::mpz*65536::mpz/2::mpz)::bigint;
+ERROR:  numeric value too big to be converted to int8 data type
+SELECT (-65536::mpz)::bigint;
+-65536
+SELECT (-65536::mpz*65536::mpz)::bigint;
+-4294967296
+SELECT (-65536::mpz*65536::mpz*65536::mpz)::bigint;
+-281474976710656
+SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz/2::mpz+1::mpz)::bigint;
+-9223372036854775807
+SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz/2::mpz)::bigint;
+-9223372036854775808
+SELECT (65536::mpz)::numeric;
+65536
+SELECT (65536::mpz*65536::mpz)::numeric;
+4294967296
+SELECT (65536::mpz*65536::mpz*65536::mpz)::numeric;
+281474976710656
+SELECT (65536::mpz*65536::mpz*65536::mpz*65536::mpz)::numeric;
+18446744073709551616
+SELECT (65536::mpz*65536::mpz*65536::mpz*65536::mpz-1::mpz)::numeric;
+18446744073709551615
+SELECT (-65536::mpz)::numeric;
+-65536
+SELECT (-65536::mpz*65536::mpz)::numeric;
+-4294967296
+SELECT (-65536::mpz*65536::mpz*65536::mpz)::numeric;
+-281474976710656
+SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz)::numeric;
+-18446744073709551616
+SELECT (-65536::mpz*65536::mpz*65536::mpz*65536::mpz+1::mpz)::numeric;
+-18446744073709551615
+SELECT 0::mpz::float4, 123::mpz::float4, (-123::mpz)::float4;
+0|123|-123
+SELECT pow(10::mpz, 30)::float4, (-pow(10::mpz, 30))::float4;
+1e+30|-1e+30
+SELECT pow(10::mpz, 300)::float4, (-pow(10::mpz, 300))::float4;
+Infinity|-Infinity
+SELECT 0::mpz::float8, 123::mpz::float8, (-123::mpz)::float8;
+0|123|-123
+SELECT pow(10::mpz, 307)::float8, (-pow(10::mpz, 307))::float8;
+1e+307|-1e+307
+SELECT pow(10::mpz, 407)::float8, (-pow(10::mpz, 407))::float8;
+Infinity|-Infinity
+-- function-style casts
+SELECT mpz('0'::varchar);
+0
+SELECT mpz('0'::int2);
+0
+SELECT mpz('0'::int4);
+0
+SELECT mpz('0'::int8);
+0
+SELECT mpz('0'::float4);
+0
+SELECT mpz('0'::float8);
+0
+SELECT mpz('0'::numeric);
+0
+SELECT text(0::mpz);
+0
+SELECT int2(0::mpz);
+0
+SELECT int4(0::mpz);
+0
+SELECT int8(0::mpz);
+0
+SELECT float4(0::mpz);
+0
+SELECT float8(0::mpz);
+0
+--
+-- mpz arithmetic
+--
+SELECT -('0'::mpz), +('0'::mpz), -('1'::mpz), +('1'::mpz);
+0|0|-1|1
+SELECT -('12345678901234567890'::mpz), +('12345678901234567890'::mpz);
+-12345678901234567890|12345678901234567890
+SELECT abs('-1234567890'::mpz), abs('1234567890'::mpz);
+1234567890|1234567890
+SELECT sgn(0::mpz), sgn('-1234567890'::mpz), sgn('1234567890'::mpz);
+0|-1|1
+SELECT even(10::mpz), even(11::mpz);
+t|f
+SELECT odd(10::mpz), odd(11::mpz);
+f|t
+SELECT '1'::mpz + '2'::mpz;
+3
+SELECT '2'::mpz + '-4'::mpz;
+-2
+SELECT regexp_matches((
+        ('1' || repeat('0', 1000))::mpz +
+        ('2' || repeat('0', 1000))::mpz)::text,
+    '^3(0000000000){100}$') IS NOT NULL;
+t
+SELECT '3'::mpz - '2'::mpz;
+1
+SELECT '3'::mpz - '5'::mpz;
+-2
+SELECT regexp_matches((
+        ('5' || repeat('0', 1000))::mpz -
+        ('2' || repeat('0', 1000))::mpz)::text,
+    '^3(0000000000){100}$') IS NOT NULL;
+t
+SELECT '3'::mpz * '2'::mpz;
+6
+SELECT '3'::mpz * '-5'::mpz;
+-15
+SELECT regexp_matches((
+        ('2' || repeat('0', 1000))::mpz *
+        ('3' || repeat('0', 1000))::mpz)::text,
+    '^6(00000000000000000000){100}$') IS NOT NULL;
+t
+-- PostgreSQL should apply the conventional precedence to operators
+-- with the same name of the builtin operators.
+SELECT '2'::mpz + '6'::mpz * '7'::mpz;  -- cit.
+44
+SELECT  '7'::mpz /  '3'::mpz;
+2
+SELECT '-7'::mpz /  '3'::mpz;
+-2
+SELECT  '7'::mpz / '-3'::mpz;
+-2
+SELECT '-7'::mpz / '-3'::mpz;
+2
+SELECT  '7'::mpz %  '3'::mpz;
+1
+SELECT '-7'::mpz %  '3'::mpz;
+-1
+SELECT  '7'::mpz % '-3'::mpz;
+1
+SELECT '-7'::mpz % '-3'::mpz;
+-1
+SELECT  '7'::mpz +/  '3'::mpz;
+3
+SELECT '-7'::mpz +/  '3'::mpz;
+-2
+SELECT  '7'::mpz +/ '-3'::mpz;
+-2
+SELECT '-7'::mpz +/ '-3'::mpz;
+3
+SELECT  '7'::mpz +%  '3'::mpz;
+-2
+SELECT '-7'::mpz +%  '3'::mpz;
+-1
+SELECT  '7'::mpz +% '-3'::mpz;
+1
+SELECT '-7'::mpz +% '-3'::mpz;
+2
+SELECT  '7'::mpz -/  '3'::mpz;
+2
+SELECT '-7'::mpz -/  '3'::mpz;
+-3
+SELECT  '7'::mpz -/ '-3'::mpz;
+-3
+SELECT '-7'::mpz -/ '-3'::mpz;
+2
+SELECT  '7'::mpz -%  '3'::mpz;
+1
+SELECT '-7'::mpz -%  '3'::mpz;
+2
+SELECT  '7'::mpz -% '-3'::mpz;
+-2
+SELECT '-7'::mpz -% '-3'::mpz;
+-1
+SELECT  '7'::mpz /  '0'::mpz;
+ERROR:  division by zero
+SELECT  '7'::mpz %  '0'::mpz;
+ERROR:  division by zero
+SELECT  '7'::mpz +/  '0'::mpz;
+ERROR:  division by zero
+SELECT  '7'::mpz +%  '0'::mpz;
+ERROR:  division by zero
+SELECT  '7'::mpz -/  '0'::mpz;
+ERROR:  division by zero
+SELECT  '7'::mpz -%  '0'::mpz;
+ERROR:  division by zero
+SELECT  '21'::mpz /! '7'::mpz;
+3
+SELECT  '10000000000'::mpz << 10;
+10240000000000
+SELECT  '10000000000'::mpz << 0;
+10000000000
+SELECT  '10000000000'::mpz << -1;
+ERROR:  argument can't be negative
+SELECT  '1027'::mpz >>   3;
+128
+SELECT '-1027'::mpz >>   3;
+-128
+SELECT  '1027'::mpz >>  -3;
+ERROR:  argument can't be negative
+SELECT  '1027'::mpz %>   3;
+3
+SELECT '-1027'::mpz %>   3;
+-3
+SELECT  '1027'::mpz %>  -3;
+ERROR:  argument can't be negative
+SELECT  '1027'::mpz +>>   3;
+129
+SELECT '-1027'::mpz +>>   3;
+-128
+SELECT  '1027'::mpz +>>  -3;
+ERROR:  argument can't be negative
+SELECT  '1027'::mpz +%>   3;
+-5
+SELECT '-1027'::mpz +%>   3;
+-3
+SELECT  '1027'::mpz +%>  -3;
+ERROR:  argument can't be negative
+SELECT  '1027'::mpz ->>   3;
+128
+SELECT '-1027'::mpz ->>   3;
+-129
+SELECT  '1027'::mpz ->>  -3;
+ERROR:  argument can't be negative
+SELECT  '1027'::mpz -%>   3;
+3
+SELECT '-1027'::mpz -%>   3;
+5
+SELECT  '1027'::mpz -%>  -3;
+ERROR:  argument can't be negative
+SELECT q, r from tdiv_qr( 7::mpz,  3::mpz);
+2|1
+SELECT q, r from tdiv_qr(-7::mpz,  3::mpz);
+-2|-1
+SELECT q, r from tdiv_qr( 7::mpz, -3::mpz);
+-2|1
+SELECT q, r from tdiv_qr(-7::mpz, -3::mpz);
+2|-1
+SELECT q, r from tdiv_qr( 7::mpz,  0::mpz);
+ERROR:  division by zero
+SELECT q, r from cdiv_qr( 7::mpz,  3::mpz);
+3|-2
+SELECT q, r from cdiv_qr(-7::mpz,  3::mpz);
+-2|-1
+SELECT q, r from cdiv_qr( 7::mpz, -3::mpz);
+-2|1
+SELECT q, r from cdiv_qr(-7::mpz, -3::mpz);
+3|2
+SELECT q, r from cdiv_qr( 7::mpz,  0::mpz);
+ERROR:  division by zero
+SELECT q, r from fdiv_qr( 7::mpz,  3::mpz);
+2|1
+SELECT q, r from fdiv_qr(-7::mpz,  3::mpz);
+-3|2
+SELECT q, r from fdiv_qr( 7::mpz, -3::mpz);
+-3|-2
+SELECT q, r from fdiv_qr(-7::mpz, -3::mpz);
+2|-1
+SELECT q, r from fdiv_qr( 7::mpz,  0::mpz);
+ERROR:  division by zero
+SELECT divisible(10::mpz, 3::mpz);
+f
+SELECT divisible(12::mpz, 3::mpz);
+t
+SELECT divisible(10::mpz, 0::mpz);
+f
+SELECT divisible(0::mpz, 0::mpz);
+t
+SELECT divisible_2exp(63::mpz, 3);
+f
+SELECT divisible_2exp(64::mpz, 3);
+t
+SELECT 10::mpz /? 3::mpz;
+f
+SELECT 12::mpz /? 3::mpz;
+t
+SELECT 10::mpz /? 0::mpz;
+f
+SELECT 0::mpz /? 0::mpz;
+t
+SELECT 63::mpz >>? 3;
+f
+SELECT 64::mpz >>? 3;
+t
+SELECT congruent(12::mpz, 16::mpz, 5::mpz);
+f
+SELECT congruent(12::mpz, 17::mpz, 5::mpz);
+t
+SELECT congruent(12::mpz, 11::mpz, 0::mpz);
+f
+SELECT congruent(12::mpz, 12::mpz, 0::mpz);
+t
+SELECT congruent_2exp(18::mpz, 41::mpz, 3);
+f
+SELECT congruent_2exp(18::mpz, 42::mpz, 3);
+t
+-- power operator/functions
+SELECT 2::mpz ^ 10;
+1024
+SELECT 2::mpz ^ 0;
+1
+SELECT 2::mpz ^ -1;
+ERROR:  argument can't be negative
+SELECT pow(2::mpz, 10);
+1024
+SELECT pow(2::mpz, 0);
+1
+SELECT pow(2::mpz, -1);
+ERROR:  argument can't be negative
+SELECT powm(3::mpz, 2::mpz, 9::mpz);
+0
+SELECT powm(3::mpz, 2::mpz, 8::mpz);
+1
+SELECT powm(3::mpz, -1::mpz, 8::mpz);
+ERROR:  argument can't be negative
+SELECT powm(3::mpz, 2::mpz, 0::mpz);
+ERROR:  division by zero
+--
+-- mpz ordering operators
+--
+select 1000::mpz =   999::mpz;
+f
+select 1000::mpz =  1000::mpz;
+t
+select 1000::mpz =  1001::mpz;
+f
+select 1000::mpz <>  999::mpz;
+t
+select 1000::mpz <> 1000::mpz;
+f
+select 1000::mpz <> 1001::mpz;
+t
+select 1000::mpz !=  999::mpz;
+t
+select 1000::mpz != 1000::mpz;
+f
+select 1000::mpz != 1001::mpz;
+t
+select 1000::mpz <   999::mpz;
+f
+select 1000::mpz <  1000::mpz;
+f
+select 1000::mpz <  1001::mpz;
+t
+select 1000::mpz <=  999::mpz;
+f
+select 1000::mpz <= 1000::mpz;
+t
+select 1000::mpz <= 1001::mpz;
+t
+select 1000::mpz >   999::mpz;
+t
+select 1000::mpz >  1000::mpz;
+f
+select 1000::mpz >  1001::mpz;
+f
+select 1000::mpz >=  999::mpz;
+t
+select 1000::mpz >= 1000::mpz;
+t
+select 1000::mpz >= 1001::mpz;
+f
+select mpz_cmp(1000::mpz,  999::mpz);
+1
+select mpz_cmp(1000::mpz, 1000::mpz);
+0
+select mpz_cmp(1000::mpz, 1001::mpz);
+-1
+-- Can create btree and hash indexes
+create table test_mpz_idx (z mpz);
+insert into test_mpz_idx select generate_series(1, 10000);
+create index test_mpz_btree_idx on test_mpz_idx using btree (z);
+set client_min_messages = error;
+create index test_mpz_hash_idx on test_mpz_idx using hash (z);
+reset client_min_messages;
+-- Hash is compatible with builtins
+select mpz_hash(0) = hashint4(0);
+t
+select mpz_hash(32767::int2) = hashint2(32767::int2);
+t
+select mpz_hash((-32768)::int2) = hashint2((-32768)::int2);
+t
+select mpz_hash(2147483647) = hashint4(2147483647);
+t
+select mpz_hash(-2147483648) = hashint4(-2147483648);
+t
+select mpz_hash(9223372036854775807) = hashint8(9223372036854775807);
+t
+select mpz_hash(-9223372036854775808) = hashint8(-9223372036854775808);
+t
+--
+-- mpz aggregation
+--
+CREATE TABLE mpzagg(z mpz);
+SELECT sum(z) FROM mpzagg;      -- NULL sum
+
+INSERT INTO mpzagg SELECT generate_series(1, 100);
+INSERT INTO mpzagg VALUES (NULL);
+SELECT sum(z) FROM mpzagg;
+5050
+SELECT prod(z) FROM mpzagg;
+93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000
+SELECT min(z) FROM mpzagg;
+1
+SELECT max(z) FROM mpzagg;
+100
+-- check correct values when the sortop kicks in
+CREATE INDEX mpzagg_idx ON mpzagg(z);
+SELECT min(z) FROM mpzagg;
+1
+SELECT max(z) FROM mpzagg;
+100
+SELECT bit_and(z) FROM mpzagg;
+0
+SELECT bit_and(z) FROM mpzagg WHERE z % 2 = 1;
+1
+SELECT bit_or(z) FROM mpzagg;
+127
+SELECT bit_or(z) FROM mpzagg WHERE z % 2 = 0;
+126
+SELECT bit_or(z) FROM mpzagg WHERE z = 1 or z = 2;
+3
+SELECT bit_xor(z) FROM mpzagg;
+100
+SELECT bit_xor(z) FROM mpzagg WHERE z = 1 or z = 2;
+3
+SELECT bit_xor(z) FROM mpzagg WHERE z = 1 or z = 2 or z = 3;
+0
+-- check aggregates work in windows functions too
+CREATE TABLE test_mpz_win(z mpz);
+INSERT INTO test_mpz_win SELECT generate_series(1,500);
+SELECT DISTINCT z % 5, prod(z) OVER (PARTITION BY z % 5) FROM test_mpz_win ORDER BY 1;
+0|736214027959609564214534807933509860360590478604140717816562255320550732004257967720125762877551166630104095572009682655334472656250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+1|4024980661396945255594437948691099096750750303522148939207253140343256389690134608552507750666273153464851186606092569064940061274937877687035835465562596381725444297753023206467590336262178237450463859369896155905624559845376
+2|20916546636333781039819147945471434631041853197955027503272329909375076603172061212536955170894771081399258164490448681039306210750168807043358712676705447209588907620793116406518489750133917827418353041315415425444640641253376
+3|78258648528733027168387470491499343638520216905903130597214530733536396165915793335397652314194905058465162496835320770455185720537199021723403297752439421984679965716575544045339560632302893082461947076538277070518358298853376
+4|251546524835575501784021324366402680054179057461650771690723123931592596438400569072874480196699629786768776600250612669749873513568533129791068662565559263147495268772282292685896436853700130137800525196100073761792376099045376
+--
+-- mpz functions tests
+--
+SELECT sqrt(25::mpz);
+5
+SELECT sqrt(('1' || repeat('0',100))::mpz);
+100000000000000000000000000000000000000000000000000
+SELECT sqrt(0::mpz);
+0
+SELECT sqrt(-1::mpz);
+ERROR:  argument can't be negative
+SELECT root(27::mpz, 3);
+3
+SELECT root(('1' || repeat('0',100))::mpz, 3);
+2154434690031883721759293566519350
+SELECT root(0::mpz, 3);
+0
+SELECT root(27::mpz, 1);
+27
+SELECT root(27::mpz, 0);
+ERROR:  argument must be positive
+SELECT root(-27::mpz, 3);
+ERROR:  argument can't be negative
+SELECT root(27::mpz, -1);
+ERROR:  argument can't be negative
+select * from rootrem(1000::mpz,2) as rootrem;
+31|39
+select * from rootrem(1000::mpz,9) as rootrem;
+2|488
+select * from rootrem(('1' || repeat('0',100))::mpz,2);
+100000000000000000000000000000000000000000000000000|0
+select * from rootrem(('1' || repeat('0',100))::mpz,5);
+100000000000000000000|0
+select root from rootrem(1000::mpz, 2);
+31
+select rem from rootrem(1000::mpz, 2);
+39
+select * from sqrtrem(1000::mpz) as rootrem;
+31|39
+select * from sqrtrem(('1' || repeat('0',100))::mpz);
+100000000000000000000000000000000000000000000000000|0
+select root from sqrtrem(1000::mpz);
+31
+select rem from sqrtrem(1000::mpz);
+39
+select perfect_power(26::mpz);
+f
+select perfect_power(27::mpz);
+t
+select perfect_power(65535::mpz);
+f
+select perfect_power(65536::mpz);
+t
+select perfect_power(-65536::mpz);
+f
+select perfect_power(-65535::mpz);
+f
+select perfect_power(('1' || repeat('0',100))::mpz);
+t
+select perfect_power(('1' || repeat('0',10000))::mpz);
+t
+select perfect_power(('1' || repeat('0',10001))::mpz);
+t
+select perfect_power(('1' || repeat('0',10000))::mpz+1::mpz);
+f
+select perfect_square(0::mpz);
+t
+select perfect_square(1::mpz);
+t
+select perfect_square(-1::mpz);
+f
+select perfect_square(26::mpz);
+f
+select perfect_square(27::mpz);
+f
+select perfect_square(16777215::mpz);
+f
+select perfect_square(16777216::mpz);
+t
+select perfect_square(('1' || repeat('0',10000))::mpz);
+t
+select perfect_square(('1' || repeat('0',10000))::mpz+1::mpz);
+f
+--
+-- Number Theoretic Functions
+--
+SELECT probab_prime(5::mpz, 2);
+2
+SELECT probab_prime(10::mpz, 2);
+0
+SELECT probab_prime(17::mpz, 2);
+2
+SELECT nextprime(5::mpz);
+7
+SELECT nextprime(10::mpz);
+11
+SELECT nextprime(100::mpz);
+101
+SELECT nextprime(1000::mpz);
+1009
+SELECT nextprime(0::mpz);
+2
+SELECT nextprime(-8::mpz);
+2
+SELECT gcd(3::mpz, 15::mpz);
+3
+SELECT gcd(17::mpz, 15::mpz);
+1
+SELECT gcd(12345::mpz, 54321::mpz);
+3
+SELECT gcd(10000000::mpz, 10000::mpz);
+10000
+SELECT g, s, t FROM gcdext(6::mpz, 15::mpz);
+3|-2|1
+SELECT lcm(3::mpz, 15::mpz);
+15
+SELECT lcm(17::mpz, 15::mpz);
+255
+SELECT lcm(12345::mpz, 54321::mpz);
+223530915
+SELECT invert(1::mpz,2::mpz);
+1
+SELECT invert(1::mpz,3::mpz);
+1
+SELECT invert(2::mpz,3::mpz);
+2
+SELECT invert(20::mpz,3::mpz);
+2
+SELECT invert(30::mpz,3::mpz);
+
+select jacobi(2::mpz, 3::mpz);
+-1
+select jacobi(5::mpz, 3::mpz);
+-1
+select jacobi(5::mpz, 10::mpz);
+0
+select jacobi(5::mpz, 20::mpz);
+0
+select jacobi(5::mpz, 200::mpz);
+0
+select legendre(2::mpz, 3::mpz);
+-1
+select legendre(5::mpz, 3::mpz);
+-1
+select legendre(5::mpz, 10::mpz);
+0
+select legendre(5::mpz, 20::mpz);
+0
+select legendre(5::mpz, 200::mpz);
+0
+select kronecker(2::mpz, 3::mpz);
+-1
+select kronecker(5::mpz, 3::mpz);
+-1
+select kronecker(5::mpz, 10::mpz);
+0
+select kronecker(5::mpz, 20::mpz);
+0
+select kronecker(5::mpz, 200::mpz);
+0
+select remove(40::mpz, 5::mpz); 
+8
+select remove(43::mpz, 5::mpz); 
+43
+select remove(48::mpz, 6::mpz); 
+8
+select remove(48::mpz, 3::mpz); 
+16
+select fac(0);
+1
+select fac(1);
+1
+select fac(10);
+3628800
+select fac(100);
+93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000
+select fac(-1);
+ERROR:  argument can't be negative
+select bin(0::mpz, 0);
+1
+select bin(7::mpz, 2);
+21
+select bin(-2::mpz, 1);
+-2
+select bin(2::mpz, -1);
+ERROR:  argument can't be negative
+select fib(0);
+0
+select fib(1);
+1
+select fib(10);
+55
+select fib(-1);
+ERROR:  argument can't be negative
+select fn, fnsub1 from fib2(0);
+0|1
+select fn, fnsub1 from fib2(1);
+1|0
+select fn, fnsub1 from fib2(2);
+1|1
+select fn, fnsub1 from fib2(10);
+55|34
+select fn, fnsub1 from fib2(-1);
+ERROR:  argument can't be negative
+select lucnum(0);
+2
+select lucnum(1);
+1
+select lucnum(10);
+123
+select lucnum(-1);
+ERROR:  argument can't be negative
+select ln, lnsub1 from lucnum2(0);
+2|-1
+select ln, lnsub1 from lucnum2(1);
+1|2
+select ln, lnsub1 from lucnum2(2);
+3|1
+select ln, lnsub1 from lucnum2(10);
+123|76
+select ln, lnsub1 from lucnum2(-1);
+ERROR:  argument can't be negative
+--
+-- Logic and bit fiddling functions and operators
+--
+SELECT text('0b10001'::mpz & '0b01001'::mpz, 2);
+1
+SELECT text('0b10001'::mpz | '0b01001'::mpz, 2);
+11001
+SELECT text('0b10001'::mpz # '0b01001'::mpz, 2);
+11000
+SELECT com(10::mpz);
+-11
+SELECT popcount('0b101010'::mpz);
+3
+SELECT popcount(0::mpz);
+0
+SELECT popcount(-1::mpz) = gmp_max_bitcnt();
+t
+SELECT hamdist('0b101010'::mpz, '0b101100'::mpz);
+2
+SELECT hamdist(0::mpz, -1::mpz) = gmp_max_bitcnt();
+t
+SELECT scan0('0b110110'::mpz, 1);
+3
+SELECT scan0('0b110110'::mpz, 3);
+3
+SELECT scan0(-1::mpz, 2) = gmp_max_bitcnt();
+t
+SELECT scan0(0::mpz, -1);
+ERROR:  argument doesn't fit into a bitcount type
+SELECT scan0(0::mpz, (2^64)::numeric::mpz);
+ERROR:  argument doesn't fit into a bitcount type
+SELECT scan1('0b110110'::mpz, 1);
+1
+SELECT scan1('0b110110'::mpz, 3);
+4
+SELECT scan1(1::mpz, 2) = gmp_max_bitcnt();
+t
+SELECT scan1(0::mpz, -1);
+ERROR:  argument doesn't fit into a bitcount type
+SELECT scan1(0::mpz, (2^64)::numeric::mpz);
+ERROR:  argument doesn't fit into a bitcount type
+SELECT text(setbit('0b1010'::mpz, 0), 2);
+1011
+SELECT text(setbit('0b1010'::mpz, 1), 2);
+1010
+SELECT setbit(0::mpz, -1);
+ERROR:  argument doesn't fit into a bitcount type
+SELECT setbit(0::mpz, (2^64)::numeric::mpz);
+ERROR:  argument doesn't fit into a bitcount type
+SELECT text(clrbit('0b1010'::mpz, 0), 2);
+1010
+SELECT text(clrbit('0b1010'::mpz, 1), 2);
+1000
+SELECT clrbit(0::mpz, -1);
+ERROR:  argument doesn't fit into a bitcount type
+SELECT clrbit(0::mpz, (2^64)::numeric::mpz);
+ERROR:  argument doesn't fit into a bitcount type
+SELECT text(combit('0b1010'::mpz, 0), 2);
+1011
+SELECT text(combit('0b1010'::mpz, 1), 2);
+1000
+SELECT combit(0::mpz, -1);
+ERROR:  argument doesn't fit into a bitcount type
+SELECT combit(0::mpz, (2^64)::numeric::mpz);
+ERROR:  argument doesn't fit into a bitcount type
+SELECT tstbit('0b1010'::mpz, 0);
+0
+SELECT tstbit('0b1010'::mpz, 1);
+1
+SELECT tstbit(0::mpz, -1);
+ERROR:  argument doesn't fit into a bitcount type
+SELECT tstbit(0::mpz, (2^64)::numeric::mpz);
+ERROR:  argument doesn't fit into a bitcount type
+--
+-- Random numbers
+--
+-- Errors
+SELECT rrandomb(128);
+ERROR:  random state not initialized
+SELECT urandomb(128);
+ERROR:  random state not initialized
+SELECT randseed(123456::mpz);
+ERROR:  random state not initialized
+-- Correct sequence
+SELECT randinit();
+
+SELECT urandomb(128);
+157222500695008773376422121395749431412
+SELECT urandomb(128);
+134920890566235299823285762767211707848
+-- Re-initialization
+SELECT randinit();
+
+SELECT urandomb(128);
+157222500695008773376422121395749431412
+SELECT urandomb(128);
+134920890566235299823285762767211707848
+SELECT randinit_mt();
+
+SELECT urandomb(128);
+157222500695008773376422121395749431412
+SELECT urandomb(128);
+134920890566235299823285762767211707848
+SELECT randinit_lc_2exp(1103515245, 12345, 32);
+
+SELECT urandomb(128);
+208667253088805722654994525601019085254
+SELECT urandomb(128);
+261232200431476629202778117829285035860
+SELECT randinit_lc_2exp_size(64);
+
+SELECT urandomb(128);
+249447876620907321381460515833516635592
+SELECT urandomb(128);
+22936434003400892378378850487313686779
+-- A failed initialization leaves the state as it was before
+SELECT randinit();
+
+SELECT urandomb(128);
+157222500695008773376422121395749431412
+SELECT randinit_lc_2exp_size(8192);
+ERROR:  failed to initialized random state with size 8192
+SELECT urandomb(128);
+134920890566235299823285762767211707848
+-- Seeding
+SELECT randinit();
+
+SELECT randseed(123456::mpz);
+
+SELECT urandomb(128);
+138901051744608890087912541094105168008
+SELECT urandomb(128);
+95807093925713229772160210272764553732
+SELECT randseed(123456::mpz);
+
+SELECT urandomb(128);
+138901051744608890087912541094105168008
+SELECT urandomb(128);
+95807093925713229772160210272764553732
+SELECT randinit();
+
+SELECT randseed(123456::mpz);
+
+SELECT text(rrandomb(128), 2);
+11111111111111111111111111111100000011111111111111111111111000001111111111111111111111111111111110000000000000000000000000000000
+SELECT text(rrandomb(128), 2);
+11111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000011110000000000000000000000000
+SELECT randseed(123456::mpz);
+
+SELECT text(rrandomb(128), 2);
+11111111111111111111111111111100000011111111111111111111111000001111111111111111111111111111111110000000000000000000000000000000
+SELECT text(rrandomb(128), 2);
+11111111111111111111111111111111111111111000000000000000000000000000000000000000000000000000000000011110000000000000000000000000
+SELECT randinit();
+
+SELECT randseed(123456::mpz);
+
+SELECT urandomm(1000000::mpz);
+112776
+SELECT urandomm(1000000::mpz);
+928797
+SELECT randseed(123456::mpz);
+
+SELECT urandomm(1000000::mpz);
+112776
+SELECT urandomm(1000000::mpz);
+928797
