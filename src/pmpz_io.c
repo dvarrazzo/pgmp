@@ -390,3 +390,57 @@ PGMP_PG_FUNCTION(pmpz_to_float8)
     PG_RETURN_FLOAT8((float8)out);
 }
 
+PGMP_PG_FUNCTION(pmpz_from_bytea)
+{
+    bytea *data = PG_GETARG_BYTEA_PP(0);
+    int data_len = VARSIZE_ANY_EXHDR(data);
+    char *data_body = VARDATA_ANY(data);
+    mpz_t result_z;
+
+    mpz_init(result_z);
+
+    if(data_len == 0) {
+        PGMP_RETURN_MPZ(result_z);
+    }
+
+    if(!(data_len & 7)) {
+        mpz_import(result_z, data_len / 8, 1, 8, 1, 0, (uint64_t *)data_body);
+    } else if(!(data_len & 3)) {
+        mpz_import(result_z, data_len / 4, 1, 4, 1, 0, (uint32_t *)data_body);
+    } else if(!(data_len & 1)) {
+        mpz_import(result_z, data_len / 2, 1, 2, 1, 0, (uint16_t *)data_body);
+    } else {
+        mpz_import(result_z, data_len, 1, 1, 1, 0, data_body);
+    }
+
+    PGMP_RETURN_MPZ(result_z);
+}
+
+PGMP_PG_FUNCTION(pmpz_to_bytea)
+{
+    const mpz_t z;
+    bytea *result;
+    char *result_body_u8;
+    int body_len;
+
+    PGMP_GETARG_MPZ(z, 0);
+
+    body_len = (mpz_sizeinbase(z, 16) + 1) / 2;
+
+    result = malloc(VARHDRSZ + body_len);
+    result_body_u8 = VARDATA(result);
+
+    if(!(body_len & 7)) {
+        mpz_export((uint64_t *)result_body_u8, NULL, 1, 8, 1, 0, z);
+    } else if(!(body_len & 3)) {
+        mpz_export((uint32_t *)result_body_u8, NULL, 1, 4, 1, 0, z);
+    } else if(!(body_len & 1)) {
+        mpz_export((uint16_t *)result_body_u8, NULL, 1, 2, 1, 0, z);
+    } else {
+        mpz_export(result_body_u8, NULL, 1, 1, 1, 0, z);
+    }
+
+    SET_VARSIZE(result, VARHDRSZ + body_len);
+
+    PG_RETURN_BYTEA_P(result);
+}

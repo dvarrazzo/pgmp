@@ -118,6 +118,7 @@ castfrom('int8', implicit='I')
 castfrom('float4', implicit='A')
 castfrom('float8', implicit='A')
 castfrom('numeric', implicit='A')
+castfrom('bytea', implicit='A')
 
 def castto(typname, implicit=False):
     """Create a cast from `base_type` to a different type"""
@@ -134,6 +135,7 @@ castto('int4', implicit='A')
 castto('int2', implicit='A')
 castto('float4', implicit='A')
 castto('float8', implicit='A')
+castto('bytea', implicit='A')
 
 !! PYOFF
 
@@ -288,7 +290,7 @@ CREATE OPERATOR <> (
 
 def bop(sym, fname, comm, neg):
     """Create an operator on `base_type` returning a bool"""
-    func('%s_%s' % (base_type, fname), 
+    func('%s_%s' % (base_type, fname),
         base_type + " " + base_type, argout='boolean')
     fname1 = fname[0] + 't'
 
