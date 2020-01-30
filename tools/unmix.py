@@ -33,6 +33,7 @@ Write the input file to stdout. Python code included between blocks
 # POSSIBILITY OF SUCH DAMAGE.
 
 import sys
+import six
 
 def convert(f):
     mode = 'out'    # can be 'out' or 'py'
@@ -61,7 +62,8 @@ def convert(f):
             del script[:]
             mode = 'py'
         elif 'PYOFF' in line and mode == 'py':
-            exec ''.join(script) in env
+            script.insert(0, 'from __future__ import print_function\n')
+            six.exec_(''.join(script), env)
             mode = 'out'
         else:
             raise ValueError("bad line in mode %s: %s"
