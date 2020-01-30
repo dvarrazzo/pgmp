@@ -1,6 +1,6 @@
 /* pmpq_io -- mpq Input/Output functions
  *
- * Copyright (C) 2011 Daniele Varrazzo
+ * Copyright (C) 2011-2020 Daniele Varrazzo
  *
  * This file is part of the PostgreSQL GMP Module
  *

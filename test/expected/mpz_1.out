@@ -123,11 +123,11 @@ t
 SELECT (-1e36::float4)::mpz BETWEEN -pow(10::mpz,36) - pow(10::mpz,30) AND -pow(10::mpz,36) + pow(10::mpz,30);
 t
 SELECT 'NaN'::float4::mpz;
-ERROR:  can't convert float value to mpz: "nan"
+ERROR:  can't convert float value to mpz: "NaN"
 SELECT 'Infinity'::float4::mpz;
-ERROR:  can't convert float value to mpz: "inf"
+ERROR:  can't convert float value to mpz: "Infinity"
 SELECT '-Infinity'::float4::mpz;
-ERROR:  can't convert float value to mpz: "-inf"
+ERROR:  can't convert float value to mpz: "-Infinity"
 SELECT 0.0::float8::mpz, 123.15::float8::mpz, 123.95::float8::mpz;
 0|123|123
 SELECT (1e307::float8)::mpz BETWEEN pow(10::mpz,307) - pow(10::mpz,307-15) AND pow(10::mpz,307) + pow(10::mpz,307-15);
@@ -135,11 +135,11 @@ t
 SELECT (-1e307::float8)::mpz BETWEEN -pow(10::mpz,307) - pow(10::mpz,307-15) AND -pow(10::mpz,307) + pow(10::mpz,307-15);
 t
 SELECT 'NaN'::float8::mpz;
-ERROR:  can't convert float value to mpz: "nan"
+ERROR:  can't convert float value to mpz: "NaN"
 SELECT 'Infinity'::float8::mpz;
-ERROR:  can't convert float value to mpz: "inf"
+ERROR:  can't convert float value to mpz: "Infinity"
 SELECT '-Infinity'::float8::mpz;
-ERROR:  can't convert float value to mpz: "-inf"
+ERROR:  can't convert float value to mpz: "-Infinity"
 SELECT 0::mpz, 1::mpz, (-1)::mpz;       -- automatic casts
 0|1|-1
 SELECT 1000000::mpz, (-1000000)::mpz;

@@ -18,7 +18,7 @@
 # along with the PostgreSQL GMP Module.  If not, see
 # http://www.gnu.org/licenses/.
 
-default_version = '1.0'
+default_version = '1.1'
 comment = 'Multiple Precision Arithmetic extension'
 directory = 'pgmp'
 relocatable = true

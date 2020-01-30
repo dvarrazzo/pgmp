@@ -1,6 +1,6 @@
 /* pgmp -- Module installation SQL script
  *
- * Copyright (C) 2011 Daniele Varrazzo
+ * Copyright (C) 2011-2020 Daniele Varrazzo
  *
  * This file is part of the PostgreSQL GMP Module
  *
@@ -29,35 +29,35 @@ base_type = 'mpz'
 def func(sqlname, argin, argout=None, cname=None, volatile=False, strict=True):
     """Create a SQL function from a C function"""
     if not argout: argout = base_type
-    print "CREATE OR REPLACE FUNCTION %s(%s)" \
-        % (sqlname, ", ".join(argin.split()))
-    print "RETURNS", argout
+    print("CREATE OR REPLACE FUNCTION %s(%s)" \
+        % (sqlname, ", ".join(argin.split())))
+    print("RETURNS", argout)
     if not cname:
         pre = base_type + '_'
         cname = (sqlname.startswith(pre)
             and "p" + sqlname or 'p' + pre + sqlname)
     # not using MODULE_PATHNAME to make the resulting sql file
     # compatible with both PG pre-9.1 and 9.1
-    print "AS '$libdir/pgmp', '%s'" % cname
-    print "LANGUAGE C",
-    print volatile and "VOLATILE" or "IMMUTABLE",
-    print strict and "STRICT" or "",
-    print ";"
-    print
+    print("AS '$libdir/pgmp', '%s'" % cname)
+    print("LANGUAGE C", end=' ')
+    print(volatile and "VOLATILE" or "IMMUTABLE", end=' ')
+    print( strict and "STRICT" or "", end=' ')
+    print(";")
+    print()
 
 def func_tuple(sqlname, args, argout=None, cname=None):
     """Create a SQL function returning many arguments from a C function"""
     if not argout: argout = base_type
-    print "CREATE OR REPLACE FUNCTION %s(%s)" \
-        % (sqlname, args)
-    print "RETURNS RECORD"
+    print("CREATE OR REPLACE FUNCTION %s(%s)" \
+        % (sqlname, args))
+    print("RETURNS RECORD")
     if not cname:
         pre = base_type + '_'
         cname = (sqlname.startswith(pre)
             and "p" + sqlname or 'p' + pre + sqlname)
-    print "AS '$libdir/pgmp', '%s'" % cname
-    print "LANGUAGE C IMMUTABLE STRICT;"
-    print
+    print("AS '$libdir/pgmp', '%s'" % cname)
+    print("LANGUAGE C IMMUTABLE STRICT;")
+    print()
 
 
 func('gmp_version', '', 'int4', cname='pgmp_gmp_version')
@@ -106,11 +106,11 @@ def castfrom(typname, implicit=False):
     """Create a cast from a different type to `base_type`"""
     func(base_type, typname, cname="p%s_from_%s" % (base_type, typname))
 
-    print "CREATE CAST (%s AS %s)" % (typname, base_type)
-    print "WITH FUNCTION %s(%s)" % (base_type, typname)
-    print {'I': "AS IMPLICIT;", 'A': "AS ASSIGNMENT;", False: ';'}[implicit]
-    print
-    print
+    print("CREATE CAST (%s AS %s)" % (typname, base_type))
+    print("WITH FUNCTION %s(%s)" % (base_type, typname))
+    print({'I': "AS IMPLICIT;", 'A': "AS ASSIGNMENT;", False: ';'}[implicit])
+    print()
+    print()
 
 castfrom('int2', implicit='I')
 castfrom('int4', implicit='I')
@@ -123,11 +123,11 @@ def castto(typname, implicit=False):
     """Create a cast from `base_type` to a different type"""
     func(typname, base_type, typname, cname="p%s_to_%s" % (base_type, typname))
 
-    print "CREATE CAST (%s AS %s)" % (base_type, typname)
-    print "WITH FUNCTION %s(%s)" % (typname, base_type)
-    print {'I': "AS IMPLICIT;", 'A': "AS ASSIGNMENT;", False: ';'}[implicit]
-    print
-    print
+    print("CREATE CAST (%s AS %s)" % (base_type, typname))
+    print("WITH FUNCTION %s(%s)" % (typname, base_type))
+    print({'I': "AS IMPLICIT;", 'A': "AS ASSIGNMENT;", False: ';'}[implicit])
+    print()
+    print()
 
 castto('int8', implicit='A')
 castto('int4', implicit='A')
@@ -173,14 +173,14 @@ def op(sym, fname, rarg=None, comm=None):
     if rarg == None: rarg = base_type
     func('%s_%s' % (base_type, fname), base_type + " " + rarg)
 
-    print "CREATE OPERATOR %s (" % sym
-    print "    LEFTARG = %s," % base_type
-    print "    RIGHTARG = %s," % rarg
-    if comm: print "    COMMUTATOR = %s," % comm
-    print "    PROCEDURE = %s_%s" % (base_type, fname)
-    print ");"
-    print
-    print
+    print("CREATE OPERATOR %s (" % sym)
+    print("    LEFTARG = %s," % base_type)
+    print("    RIGHTARG = %s," % rarg)
+    if comm: print("    COMMUTATOR = %s," % comm)
+    print("    PROCEDURE = %s_%s" % (base_type, fname))
+    print(");")
+    print()
+    print()
 
 op('+', 'add', comm='+')
 op('-', 'sub')
@@ -292,17 +292,17 @@ def bop(sym, fname, comm, neg):
         base_type + " " + base_type, argout='boolean')
     fname1 = fname[0] + 't'
 
-    print "CREATE OPERATOR %s (" % sym
-    print "    LEFTARG =", base_type
-    print "    , RIGHTARG =", base_type
-    print "    , PROCEDURE = %s_%s" % (base_type, fname)
-    print "    , COMMUTATOR = %s" % comm
-    print "    , NEGATOR = %s" % neg
-    print "    , RESTRICT = scalar%ssel" % fname1
-    print "    , JOIN = scalar%sjoinsel" % fname1
-    print ");"
-    print
-    print
+    print("CREATE OPERATOR %s (" % sym)
+    print("    LEFTARG =", base_type)
+    print("    , RIGHTARG =", base_type)
+    print("    , PROCEDURE = %s_%s" % (base_type, fname))
+    print("    , COMMUTATOR = %s" % comm)
+    print("    , NEGATOR = %s" % neg)
+    print("    , RESTRICT = scalar%ssel" % fname1)
+    print("    , JOIN = scalar%sjoinsel" % fname1)
+    print(");")
+    print()
+    print()
 
 bop('>', 'gt', comm='<', neg='<=')
 bop('>=', 'ge', comm='<=', neg='<')
@@ -417,14 +417,14 @@ def agg(sqlname, argin, sfunc, argout=None, ffunc=None, sortop=None):
     cname = '_p' + sfunc[1:]
     func(sfunc, 'internal ' + argin, 'internal', cname=cname, strict=False)
     if not argout: argout = base_type
-    print "CREATE AGGREGATE %s(%s)\n(" \
-        % (sqlname, ", ".join(argin.split()))
-    print "      SFUNC =", sfunc
-    print "    , STYPE = internal"
-    print "    , FINALFUNC =", ffunc or "_%s_from_agg" % base_type
-    if sortop: print "    , SORTOP =", sortop
-    print ");"
-    print
+    print("CREATE AGGREGATE %s(%s)\n(" \
+        % (sqlname, ", ".join(argin.split())))
+    print("      SFUNC =", sfunc)
+    print("    , STYPE = internal")
+    print("    , FINALFUNC =", ffunc or "_%s_from_agg" % base_type)
+    if sortop: print("    , SORTOP =", sortop)
+    print(");")
+    print()
 
 func('_mpz_from_agg', 'internal', 'mpz', cname='_pmpz_from_agg')
 agg('sum', 'mpz', '_mpz_agg_add')

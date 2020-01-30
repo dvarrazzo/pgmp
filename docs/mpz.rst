@@ -360,7 +360,7 @@ Number Theoretic Functions
     This function does some trial divisions, then some `Miller-Rabin
     probabilistic primality tests`__. *reps* controls how many such tests are
     done, 5 to 10 is a reasonable number, more will reduce the chances of a
-    composite being returned as “probably prime”.
+    composite being returned as "probably prime".
 
     .. __: http://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
 

@@ -5,7 +5,7 @@ Write the input file to stdout. Python code included between blocks
 ``!! PYON`` and ``!! PYOFF`` is executed and the output emitted.
 """
 
-# Copyright (c) 2011, Daniele Varrazzo <daniele.varrazzo@gmail.com>
+# Copyright (c) 2011-2020, Daniele Varrazzo <daniele.varrazzo@gmail.com>
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,7 @@ Write the input file to stdout. Python code included between blocks
 # POSSIBILITY OF SUCH DAMAGE.
 
 import sys
+import six
 
 def convert(f):
     mode = 'out'    # can be 'out' or 'py'
@@ -61,7 +62,8 @@ def convert(f):
             del script[:]
             mode = 'py'
         elif 'PYOFF' in line and mode == 'py':
-            exec ''.join(script) in env
+            script.insert(0, 'from __future__ import print_function\n')
+            six.exec_(''.join(script), env)
             mode = 'out'
         else:
             raise ValueError("bad line in mode %s: %s"
