@@ -35,6 +35,8 @@ it doesn't know how to deal with.
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import print_function
+
 import re
 import sys
 
@@ -62,19 +64,16 @@ def process_aggregate(body, extname):
     # TODO: parse the "old syntax"
     name = _find_name(body)
     args = _find_args(body)
-    print "ALTER EXTENSION %s ADD AGGREGATE %s %s;" % (
-        extname, name, args)
+    print("ALTER EXTENSION %s ADD AGGREGATE %s %s;" % (extname, name, args))
 
 def process_cast(body, extname):
     args = _find_args(body)
-    print "ALTER EXTENSION %s ADD CAST %s;" % (
-        extname, args)
+    print("ALTER EXTENSION %s ADD CAST %s;" % (extname, args))
 
 def process_function(body, extname):
     name = _find_name(body)
     args = _find_args(body)
-    print "ALTER EXTENSION %s ADD FUNCTION %s %s;" % (
-        extname, name, args)
+    print("ALTER EXTENSION %s ADD FUNCTION %s %s;" % (extname, name, args))
 
 def process_operator(body, extname):
     if body.lstrip().lower().startswith('class'):
@@ -94,8 +93,8 @@ def process_operator(body, extname):
     if not (larg or rarg):
         raise ValueError("can't find operator arguments:\n%s" % body)
 
-    print "ALTER EXTENSION %s ADD OPERATOR %s (%s, %s);" % (
-        extname, op, larg or 'NONE', rarg or 'NONE')
+    print("ALTER EXTENSION %s ADD OPERATOR %s (%s, %s);" % (
+        extname, op, larg or 'NONE', rarg or 'NONE'))
 
 def process_operator_class(body, extname):
     m = re.match(r'^\s*CLASS\s*(\w+)\b.*?USING\s+(\w+)\b',
@@ -104,13 +103,13 @@ def process_operator_class(body, extname):
     if m is None:
         raise ValueError("can't parse operator class:\n%s" % body)
 
-    print "ALTER EXTENSION %s ADD OPERATOR CLASS %s USING %s;" % (
-        extname, m.group(1), m.group(2))
+    print("ALTER EXTENSION %s ADD OPERATOR CLASS %s USING %s;" % (
+        extname, m.group(1), m.group(2)))
 
 def process_type(body, extname):
     name = _find_name(body)
-    print "ALTER EXTENSION %s ADD TYPE %s;" % (
-        extname, name)
+    print("ALTER EXTENSION %s ADD TYPE %s;" % (
+        extname, name))
 
 re_name = re.compile(r'^\s*(\w+)\b')
 
@@ -167,10 +166,10 @@ def strip_strings(s):
 
 def main():
     opt = parse_options()
-    print "-- This file was automatically generated"
-    print "-- by the script '%s'" % __file__
-    print "-- from input files:", ", ".join(opt.filenames)
-    print
+    print("-- This file was automatically generated")
+    print("-- by the script '%s'" % __file__)
+    print("-- from input files:", ", ".join(opt.filenames))
+    print()
     for fn in opt.filenames:
         f = fn == '-' and sys.stdin or open(fn)
         process_file(f, opt)
