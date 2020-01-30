@@ -3,7 +3,7 @@
 -- Reference:
 -- http://en.literateprograms.org/Pi_with_Machin%27s_formula_%28Python%29
 --
--- Copyright (C) 2011 Daniele Varrazzo
+-- Copyright (C) 2011-2020 Daniele Varrazzo
 
 CREATE FUNCTION arccot(x mpz, unity mpz) RETURNS mpz
     LANGUAGE plpgsql IMMUTABLE STRICT

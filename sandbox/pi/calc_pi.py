@@ -2,7 +2,7 @@
 """
 A script to calculate pi using parallel PostgreSQL processes.
 
-Copyright (C) 2011 Daniele Varrazzo
+Copyright (C) 2011-2020 Daniele Varrazzo
 """
 
 import eventlet

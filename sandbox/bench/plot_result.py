@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Plot a result from benchmark.py
 
-Copyright (C) 2011 - Daniele Varrazzo
+Copyright (C) 2011-2020 - Daniele Varrazzo
 """
 import sys
 from collections import defaultdict
