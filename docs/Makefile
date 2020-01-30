@@ -1,6 +1,7 @@
 # pgmp -- documentation makefile
 #
-# Use 'make env' once, then 'make html' to build the HTML documentation
+# Use 'make env' once, then 'make html' to build the HTML documentation.
+# You can use PYTHON=python3.6 to use a different Python version to build.
 #
 # Copyright (C) 2011-2020 Daniele Varrazzo
 
@@ -13,6 +14,7 @@ SPHINXBUILD   = $(ENV_BIN)/sphinx-build
 PAPER         =
 BUILDDIR      = .
 
+PYTHON ?= python
 PLOTS = $(patsubst ../bench/%.txt,html/img/%.png,$(wildcard ../bench/*.txt))
 
 .PHONY: env html upload clean
@@ -31,7 +33,7 @@ html/img/%.png: ../bench/%.txt
 # It is not clean by 'make clean'
 
 env:
-	virtualenv $(ENV_DIR)
+	virtualenv -p $(PYTHON) $(ENV_DIR)
 	$(ENV_BIN)/pip install -r requirements.txt
 	# Clone the github pages repository to update
 	# Fail silently if this is not a git repos (upload won't work of course)
