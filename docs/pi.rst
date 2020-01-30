@@ -25,7 +25,7 @@ digits, we use a Taylor series scaled to :math:`10^n`. Full details are
 provided in this nice `LiteratePrograms article`__.
 
 .. __: http://en.wikipedia.org/wiki/Machin-like_formula
-.. __: http://en.literateprograms.org/Pi_with_Machin%27s_formula_%28Python%29
+.. __: http://web.archive.org/web/20111211140154/http://en.literateprograms.org/Pi_with_Machin's_formula_(Python)
 
 It is possible to implement the `!arccot()` function using a
 `common table expression`__ from PostgreSQL 8.4:
