@@ -15,7 +15,7 @@ PAPER         =
 BUILDDIR      = .
 
 PYTHON ?= python
-PLOTS = $(patsubst ../bench/%.txt,html/img/%.png,$(wildcard ../bench/*.txt))
+PLOTS = $(patsubst ../bench/%.txt,html/img/%.png,$(sort $(wildcard ../bench/*.txt)))
 
 .PHONY: env html upload clean
 

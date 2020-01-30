@@ -35,14 +35,14 @@ EXT_LONGVER = $(shell grep '"version":' META.json | head -1 | sed -e 's/\s*"vers
 EXT_SHORTVER = $(shell grep 'default_version' $(EXTENSION).control | head -1 | sed -e "s/default_version\s*=\s'\(.*\)'/\1/")
 PG91 = $(shell $(PG_CONFIG) --version | grep -qE " 8\.| 9\.0" && echo pre91 || echo 91)
 
-SRC_C = $(wildcard src/*.c)
-SRC_H = $(wildcard src/*.h)
+SRC_C = $(sort $(wildcard src/*.c))
+SRC_H = $(sort $(wildcard src/*.h))
 SRCFILES = $(SRC_C) $(SRC_H)
 OBJS = $(patsubst %.c,%.o,$(SRC_C))
-TESTFILES = $(wildcard test/sql/*.sql) $(wildcard test/expected/*.out)
-BENCHFILES = $(wildcard bench/*.py) $(wildcard bench/*.txt)
-DOCFILES = $(wildcard docs/*.rst)
-TOOLSFILES = $(wildcard tools/*.py)
+TESTFILES = $(sort $(wildcard test/sql/*.sql) $(wildcard test/expected/*.out))
+BENCHFILES = $(sort $(wildcard bench/*.py) $(wildcard bench/*.txt))
+DOCFILES = $(sort $(wildcard docs/*.rst))
+TOOLSFILES = $(sort $(wildcard tools/*.py))
 
 PKGFILES = $(SRCFILES) $(DOCFILES) $(TESTFILES) $(BENCHFILES) $(TOOLSFILES) \
 	AUTHORS COPYING README.rst Makefile META.json pgmp.control \
