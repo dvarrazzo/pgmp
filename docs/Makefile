@@ -33,11 +33,6 @@ html/img/%.png: ../bench/%.txt
 env:
 	virtualenv $(ENV_DIR)
 	$(ENV_BIN)/pip install -r requirements.txt
-	# Install the dependencies that take too long to build from system packages
-	for m in matplotlib numpy dateutil; do \
-		ln -s $$(python -c "import os.path, $$m as x; print os.path.dirname(x.__file__)") \
-			$$($(ENV_BIN)/python -c "import sys; print sys.path[-1]"); \
-	done
 	# Clone the github pages repository to update
 	# Fail silently if this is not a git repos (upload won't work of course)
 	git status 2>/dev/null \
