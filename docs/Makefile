@@ -1,48 +1,60 @@
 # pgmp -- documentation makefile
 #
-# Use 'make env', then 'make html' to build the HTML documentation
+# Use 'make env' once, then 'make html' to build the HTML documentation.
+# You can use PYTHON=python3.6 to use a different Python version to build.
 #
 # Copyright (C) 2011-2020 Daniele Varrazzo
 
-PYTHON := python$(PYTHON_VERSION)
-PYTHON_VERSION ?= $(shell $(PYTHON) -c 'import sys; print ("%d.%d" % sys.version_info[:2])')
-BUILD_DIR = $(shell pwd)/build/lib.$(PYTHON_VERSION)
-ENV_DIR = $(shell pwd)/env/py-$(PYTHON_VERSION)
+ENV_DIR = $(shell pwd)/env
 ENV_BIN = $(ENV_DIR)/bin
 ENV_LIB = $(ENV_DIR)/lib
-EASY_INSTALL = PYTHONPATH=$(ENV_LIB) $(ENV_BIN)/easy_install-$(PYTHON_VERSION) -d $(ENV_LIB) -s $(ENV_BIN)
-EZ_SETUP = $(ENV_BIN)/ez_setup.py
 
 SPHINXOPTS    =
 SPHINXBUILD   = $(ENV_BIN)/sphinx-build
 PAPER         =
 BUILDDIR      = .
 
-.PHONY: env clean html
+PYTHON ?= python
+PLOTS = $(patsubst ../bench/%.txt,html/img/%.png,$(wildcard ../bench/*.txt))
+
+.PHONY: env html upload clean
 
 default: html
 
-html:
+html: $(PLOTS) html/.gitignore html/.nojekill
 	PYTHONPATH=$(ENV_LIB) $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) \
 		. $(BUILDDIR)/html
+
+html/img/%.png: ../bench/%.txt
+	mkdir -p html/img
+	$(ENV_BIN)/python ../bench/plot_result.py $< -o $@
 
 # The environment is currently required to build the documentation.
 # It is not clean by 'make clean'
 
-env: easy_install
-	mkdir -p $(ENV_BIN)
-	mkdir -p $(ENV_LIB)
-	$(EASY_INSTALL) -U "Pygments>=1.5"
-	$(EASY_INSTALL) -U "sphinx>=1.1"
+env:
+	virtualenv -p $(PYTHON) $(ENV_DIR)
+	$(ENV_BIN)/pip install -r requirements.txt
+	# Clone the github pages repository to update
+	# Fail silently if this is not a git repos (upload won't work of course)
+	git status 2>/dev/null \
+		&& git clone -b gh-pages \
+			$$(git remote show -n origin | awk '/URL/ {print $$NF; exit}') \
+			html \
+		|| true
 
-easy_install: ez_setup
-	PYTHONPATH=$(ENV_LIB) $(PYTHON) $(EZ_SETUP) -d $(ENV_LIB) -s $(ENV_BIN) setuptools
+html/.gitignore: html-gitignore
+	cp $< $@
 
-ez_setup:
-	mkdir -p $(ENV_BIN)
-	mkdir -p $(ENV_LIB)
-	wget -O $(EZ_SETUP) http://peak.telecommunity.com/dist/ez_setup.py
+html/.nojekill:
+	touch $@
+
+upload:
+	cd html && test -d .git \
+		&& git add --all \
+		&& git commit -m "website update on $$(date)" \
+		&& git push
 
 clean:
-	$(RM) -r html
-
+	# Do not delete .gitignore and .git directories
+	$(RM) -r html/*
