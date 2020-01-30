@@ -1,8 +1,2 @@
 sphinx>=1.3,<1.4
-
-# This takes forever to install:
-#
-# matplotlib
-#
-# so, if you have the system package installed, just run:
-# for m in matplotlib numpy dateutil; do ln -s $(python -c "import os.path, $m as x; print os.path.dirname(x.__file__)") $(env/bin/python -c "import sys; print sys.path[-1]"); done
+matplotlib
