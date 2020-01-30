@@ -1,6 +1,12 @@
 PostgreSQL Multiple Precision Arithmetic extension
 ==================================================
 
+|travis|
+
+.. |travis| image:: https://travis-ci.org/dvarrazzo/pgmp.svg?branch=master
+    :target: https://travis-ci.org/dvarrazzo/pgmp
+    :alt: Build status
+
 pgmp is a PostgreSQL extension module to add support for the arbitrary
 precision data types offered by the GMP library into the database.
 
