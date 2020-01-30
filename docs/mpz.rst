@@ -133,7 +133,7 @@ For all the division-related operators :math:`n \oslash d`, :math:`q` and
     precedence respect to addition, subtraction and multiplication.
     See `the PostgreSQL precedence table`__ for further details.
 
-    .. __: http://www.postgresql.org/docs/9.0/static/sql-syntax-lexical.html#SQL-PRECEDENCE-TABLE
+    .. __: https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-PRECEDENCE-TABLE
 
 ..
     note: this table contains non-breaking spaces to align the - signs.
@@ -362,7 +362,7 @@ Number Theoretic Functions
     done, 5 to 10 is a reasonable number, more will reduce the chances of a
     composite being returned as "probably prime".
 
-    .. __: http://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
+    .. __: https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
 
     Miller-Rabin and similar tests can be more properly called compositeness
     tests. Numbers which fail are known to be composite but those which pass
@@ -370,7 +370,7 @@ Number Theoretic Functions
     those which pass are considered probably prime.
 
     .. seealso:: `Primality test
-        <http://en.wikipedia.org/wiki/Primality_test>`__
+        <https://en.wikipedia.org/wiki/Primality_test>`__
 
 
 .. function:: nextprime(op)
@@ -426,7 +426,7 @@ Number Theoretic Functions
     Negative values of *n* are supported, using the identity
     :math:`{-n \choose k} = (-1)^k {n+k-1 \choose k}`.
 
-    .. __: http://en.wikipedia.org/wiki/Binomial_coefficient
+    .. __: https://en.wikipedia.org/wiki/Binomial_coefficient
 
 
 .. function:: fib(n)
@@ -435,7 +435,7 @@ Number Theoretic Functions
     `!fib()` returns :math:`F_n`, the *n*\th `Fibonacci number`__.
     `!fib2()` returns :math:`F_n` and :math:`F_{n-1}`.
 
-    .. __: http://en.wikipedia.org/wiki/Fibonacci_number
+    .. __: https://en.wikipedia.org/wiki/Fibonacci_number
 
     These functions are designed for calculating isolated Fibonacci numbers.
     When a sequence of values is wanted it's best to start with `!fib2()`
@@ -448,7 +448,7 @@ Number Theoretic Functions
     `!lucnum()` returns :math:`L_n`, the *n*\th `Lucas number`__.
     `!lucnum2()` returns :math:`L_n` and :math:`L_{n-1}`.
 
-    .. __: http://en.wikipedia.org/wiki/Lucas_number
+    .. __: https://en.wikipedia.org/wiki/Lucas_number
 
     These functions are designed for calculating isolated Lucas numbers.
     When a sequence of values is wanted it's best to start with `!lucnum2()`
@@ -459,7 +459,7 @@ Number Theoretic Functions
     going from Fibonacci to Lucas can be found in `Lucas Numbers Algorithm`__,
     the reverse is straightforward too.
 
-    .. __: http://gmplib.org/manual/Lucas-Numbers-Algorithm.html
+    .. __: https://gmplib.org/manual/Lucas-Numbers-Algorithm.html
 
 
 .. function:: invert(a, b)
@@ -474,7 +474,7 @@ Number Theoretic Functions
     Calculate the `Jacobi symbol`__ :math:`(\frac{a}{b})`. This is defined
     only for *b* odd.
 
-    .. __: http://en.wikipedia.org/wiki/Jacobi_symbol
+    .. __: https://en.wikipedia.org/wiki/Jacobi_symbol
 
 
 .. function:: legendre(a, p)
@@ -483,7 +483,7 @@ Number Theoretic Functions
     only for *p* an odd positive prime, and for such *p* it's identical to the
     Jacobi symbol.
 
-    .. __: http://en.wikipedia.org/wiki/Legendre_symbol
+    .. __: https://en.wikipedia.org/wiki/Legendre_symbol
 
 
 .. function:: kronecker(a, b)
@@ -495,7 +495,7 @@ Number Theoretic Functions
     .. seealso::
         Section 1.4.2, Henri Cohen, "A Course in Computational Algebraic
         Number Theory", Graduate Texts in Mathematics number 138,
-        Springer-Verlag, 1993. http://www.math.u-bordeaux.fr/~cohen/
+        Springer-Verlag, 1993. https://www.math.u-bordeaux.fr/~cohen/
 
 
 Logical and Bit Manipulation Functions
@@ -538,7 +538,7 @@ number 0.
     then the number of bits different is infinite, and the return value is the
     largest possible, represented by `gmp_max_bitcnt()`.
 
-    .. __: http://en.wikipedia.org/wiki/Hamming_distance
+    .. __: https://en.wikipedia.org/wiki/Hamming_distance
 
 
 .. function:: scan0(op, starting_bit)
@@ -597,7 +597,7 @@ and can be seeded with the `randseed()` function.
     Initialize the session random state for a `Mersenne Twister`__ algorithm.
     This algorithm is fast and has good randomness properties.
 
-    .. __: http://en.wikipedia.org/wiki/Mersenne_twister
+    .. __: https://en.wikipedia.org/wiki/Mersenne_twister
 
     .. note:: The function is not available on GMP version < 4.2.
 
@@ -607,7 +607,7 @@ and can be seeded with the `randseed()` function.
     Initialize the session random state with a `linear congruential`__
     algorithm :math:`X = (a \cdot X + c) \mod 2^e`.
 
-    .. __: http://en.wikipedia.org/wiki/Linear_congruential_generator
+    .. __: https://en.wikipedia.org/wiki/Linear_congruential_generator
 
     The low bits of *X* in this algorithm are not very random. The least
     significant bit will have a period no more than 2, and the second bit no

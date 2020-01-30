@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with the PostgreSQL GMP Module.  If not, see
- * http://www.gnu.org/licenses/.
+ * https://www.gnu.org/licenses/.
  */
 
 #include "pmpq.h"
@@ -229,7 +229,7 @@ PGMP_PG_FUNCTION(pmpq_limit_den)
  * Set q_out to the closest fraction to q_in with denominator at most max_den
  *
  * Ported from Python library: see
- * http://hg.python.org/cpython/file/v2.7/Lib/fractions.py#l206
+ * https://hg.python.org/cpython/file/v2.7/Lib/fractions.py#l206
  * for implementation notes.
  */
 static void

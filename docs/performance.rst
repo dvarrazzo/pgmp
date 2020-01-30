@@ -62,7 +62,7 @@ about 40 ms.
 
 .. image:: img/Factorial.png
 
-.. __: http://www.postgresql.org/docs/9.0/static/sql-createaggregate.html
+.. __: https://www.postgresql.org/docs/current/sql-createaggregate.html
 
 
 .. _preformance-dec:
