@@ -33,7 +33,7 @@ build, and install `!pgmp`, e.g.::
     $ pgxn install pgmp
     $ pgxn load -d somedb pgmp
 
-.. __: https://dvarrazzo.github.io/pgxnclient/
+.. __: https://pgxn.github.io/pgxnclient/
 
 The further instructions are to build, test, and install the library without
 using the PGXN Client.
@@ -96,4 +96,4 @@ In order to uninstall the extension you can use the ``DROP EXTENSION``
 command. Please refer to `the documentation`__ for further informations about
 PostgreSQL extensions management.
 
-.. __: http://developer.postgresql.org/pgdocs/postgres/extend-extensions.html
+.. __: https://www.postgresql.org/docs/current/extend-extensions.html

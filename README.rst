@@ -30,4 +30,4 @@ online or in the ``docs/`` directory.
 
 - Homepage: https://dvarrazzo.github.io/pgmp/
 - Project page: https://github.com/dvarrazzo/pgmp/
-- Download: http://pgxn.org/dist/pgmp/
+- Download: https://pgxn.org/dist/pgmp/

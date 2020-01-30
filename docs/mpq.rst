@@ -167,7 +167,7 @@ canonical form.
     This function is not part of the GMP library: it is ported instead `from
     the Python library`__.
 
-    .. __: http://docs.python.org/library/fractions.html#fractions.Fraction.limit_denominator
+    .. __: https://docs.python.org/library/fractions.html#fractions.Fraction.limit_denominator
 
 Aggregation functions
 ---------------------

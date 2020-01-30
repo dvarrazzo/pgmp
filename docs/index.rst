@@ -5,8 +5,8 @@ pgmp_ is a PostgreSQL_ extension to add the GMP_ data types and functions
 directly into the database.
 
 .. _pgmp: https://dvarrazzo.github.io/pgmp/
-.. _PostgreSQL: http://www.postgresql.org
-.. _GMP: http://www.gmplib.org
+.. _PostgreSQL: https://www.postgresql.org
+.. _GMP: https://www.gmplib.org
 
 The extension adds the types `mpz` (arbitrary size integers) and `mpq`
 (arbitrary precision rationals) to PostgreSQL and exposes to the database all
@@ -31,7 +31,7 @@ generate millions of digits of :math:`\pi` using PL/pgSQL and Python to run
 concurrent backends.
 
 The library is released under
-`LGPL License <http://www.opensource.org/licenses/lgpl-3.0>`__.
+`LGPL License <https://www.opensource.org/licenses/lgpl-3.0>`__.
 
 
 References
@@ -39,7 +39,7 @@ References
 
 - Homepage: https://dvarrazzo.github.io/pgmp/
 - Project page: https://github.com/dvarrazzo/pgmp/
-- Download: http://pgxn.org/dist/pgmp/
+- Download: https://pgxn.org/dist/pgmp/
 
 
 Documentation

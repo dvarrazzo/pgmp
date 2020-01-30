@@ -5,8 +5,8 @@ Once the crime of binding the GMP_ multiple precision arithmetic library into
 PostgreSQL_ has been perpetrated, using it to calculate one million digits of
 :math:`\pi` is the least evil.
 
-.. _GMP: http://www.gmplib.org/
-.. _PostgreSQL: http://www.postgresql.org/
+.. _GMP: https://www.gmplib.org/
+.. _PostgreSQL: https://www.postgresql.org/
 
 Calculation is performed using a `Machin-like formula`__, a generalization of
 the Machin's formula:
@@ -24,14 +24,14 @@ to calculate an approximation of :math:`\tan^{-1}\frac{1}{x}` to :math:`n`
 digits, we use a Taylor series scaled to :math:`10^n`. Full details are
 provided in this nice `LiteratePrograms article`__.
 
-.. __: http://en.wikipedia.org/wiki/Machin-like_formula
-.. __: http://web.archive.org/web/20111211140154/http://en.literateprograms.org/Pi_with_Machin's_formula_(Python)
+.. __: https://en.wikipedia.org/wiki/Machin-like_formula
+.. __: https://web.archive.org/web/20111211140154/http://en.literateprograms.org/Pi_with_Machin's_formula_(Python)
 
 It is possible to implement the `!arccot()` function using a
 `common table expression`__ from PostgreSQL 8.4:
 
-.. __: http://www.postgresql.org/docs/9.0/static/queries-with.html
-.. _PL/pgSQL: http://www.postgresql.org/docs/9.0/static/plpgsql.html
+.. __: https://www.postgresql.org/docs/current/queries-with.html
+.. _PL/pgSQL: https://www.postgresql.org/docs/current/plpgsql.html
 
 .. code-block:: postgresql
 
