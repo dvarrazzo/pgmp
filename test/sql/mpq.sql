@@ -280,7 +280,9 @@ select mpq_cmp(1000::mpq, 1001::mpq);
 create table test_mpq_idx (q mpq);
 insert into test_mpq_idx select generate_series(1, 10000);
 create index test_mpq_btree_idx on test_mpq_idx using btree (q);
+set client_min_messages = error;
 create index test_mpq_hash_idx on test_mpq_idx using hash (q);
+reset client_min_messages;
 
 -- Hash is compatible with mpz
 select mpq_hash(0) = mpz_hash(0);
