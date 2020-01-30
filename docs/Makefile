@@ -2,7 +2,7 @@
 #
 # Use 'make env' once, then 'make html' to build the HTML documentation
 #
-# Copyright (C) 2011-2015 Daniele Varrazzo
+# Copyright (C) 2011-2020 Daniele Varrazzo
 
 ENV_DIR = $(shell pwd)/env
 ENV_BIN = $(ENV_DIR)/bin

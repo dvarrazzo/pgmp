@@ -1,6 +1,6 @@
 /* A test program to study the mpz_t structure.
  *
- * Copyright (C) 2011 Daniele Varrazzo
+ * Copyright (C) 2011-2020 Daniele Varrazzo
  */
 
 #include <stdio.h>

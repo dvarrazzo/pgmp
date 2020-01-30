@@ -5,7 +5,7 @@ Write the input file to stdout. Python code included between blocks
 ``!! PYON`` and ``!! PYOFF`` is executed and the output emitted.
 """
 
-# Copyright (c) 2011, Daniele Varrazzo <daniele.varrazzo@gmail.com>
+# Copyright (c) 2011-2020, Daniele Varrazzo <daniele.varrazzo@gmail.com>
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without

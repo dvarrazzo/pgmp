@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Script to perform comparisons between pmpz and other data types.
 
-Copyright (C) 2011 - Daniele Varrazzo
+Copyright (C) 2011-2020 - Daniele Varrazzo
 """
 import sys
 

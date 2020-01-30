@@ -1,6 +1,6 @@
 /* pmpz_rand -- mpz random numbers
  *
- * Copyright (C) 2011 Daniele Varrazzo
+ * Copyright (C) 2011-2020 Daniele Varrazzo
  *
  * This file is part of the PostgreSQL GMP Module
  *
