@@ -41,7 +41,7 @@ for line in f:
 fig = plt.figure()
 ax = fig.add_subplot(111)
 for label, data in sorted(tests.items()):
-    data = zip(*data)  # transpose
+    data = list(zip(*data))  # transpose
     p = ax.plot(data[0], data[1], 'o-', label=label)
 
 title = labels.get('title', '')

@@ -22,7 +22,7 @@ PLOTS = $(patsubst ../bench/%.txt,html/img/%.png,$(sort $(wildcard ../bench/*.tx
 default: html
 
 html: $(PLOTS) html/.gitignore html/.nojekill
-	PYTHONPATH=$(ENV_LIB) $(SPHINXBUILD) -b html $(ALLSPHINXOPTS) \
+	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) \
 		. $(BUILDDIR)/html
 
 html/img/%.png: ../bench/%.txt
