@@ -20,7 +20,6 @@
  */
 
 #include "pmpq.h"
-#include "pgmp_utils.h"             /* for AggCheckCallContext on PG < 9.0 */
 #include "pgmp-impl.h"
 
 #include "fmgr.h"
