@@ -25,9 +25,7 @@
 #include "fmgr.h"
 #include "funcapi.h"
 #include "access/hash.h"            /* for hash_any */
-#if PG_VERSION_NUM >= 90300
 #include <access/htup_details.h>    /* for heap_form_tuple */
-#endif
 #if PG_VERSION_NUM >= 100000
 #include <utils/fmgrprotos.h>       /* for hashint8 */
 #endif

@@ -25,6 +25,10 @@
 
 #include "pgmp-impl.h"
 
+#if PG_VERSION_NUM < 90400
+#error This pgmp version requires PostgreSQL 9.4 or above
+#endif
+
 PG_MODULE_MAGIC;
 
 void    _PG_init(void);
