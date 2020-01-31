@@ -33,7 +33,6 @@ MODULE_big = $(EXTENSION)
 
 EXT_LONGVER = $(shell grep '"version":' META.json | head -1 | sed -e 's/\s*"version":\s*"\(.*\)",/\1/')
 EXT_SHORTVER = $(shell grep 'default_version' $(EXTENSION).control | head -1 | sed -e "s/default_version\s*=\s'\(.*\)'/\1/")
-PG91 = $(shell $(PG_CONFIG) --version | grep -qE " 8\.| 9\.0" && echo pre91 || echo 91)
 
 SRC_C = $(sort $(wildcard src/*.c))
 SRC_H = $(sort $(wildcard src/*.h))
@@ -50,17 +49,12 @@ PKGFILES = $(SRCFILES) $(DOCFILES) $(TESTFILES) $(BENCHFILES) $(TOOLSFILES) \
 	docs/conf.py docs/Makefile docs/_static/pgmp.css \
 	docs/html-gitignore docs/requirements.txt
 
-ifeq ($(PG91),91)
 INSTALLSCRIPT=sql/pgmp--$(EXT_SHORTVER).sql
 UPGRADESCRIPT=sql/pgmp--unpackaged--$(EXT_SHORTVER).sql
 DATA = $(INSTALLSCRIPT) $(UPGRADESCRIPT)
-else
-INSTALLSCRIPT=sql/pgmp.sql
-DATA = $(INSTALLSCRIPT) sql/uninstall_pgmp.sql
-endif
 
 # the += doesn't work if the user specified his own REGRESS_OPTS
-REGRESS = --inputdir=test setup-$(PG91) mpz mpq
+REGRESS = --inputdir=test setup mpz mpq
 EXTRA_CLEAN = $(INSTALLSCRIPT) $(UPGRADESCRIPT)
 
 PKGNAME = pgmp-$(EXT_LONGVER)
@@ -94,7 +88,3 @@ $(SRCPKG): $(PKGFILES)
 	rm -f $(SRCPKG_ZIP)
 	zip -r $(SRCPKG_ZIP) $(addprefix $(PKGNAME)/,$^)
 	rm $(PKGNAME)
-
-# Required for testing in pgxn client on PG < 9.1
-installcheck: $(INSTALLSCRIPT)
-
