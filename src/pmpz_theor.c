@@ -24,9 +24,7 @@
 
 #include "fmgr.h"
 #include "funcapi.h"
-#if PG_VERSION_NUM >= 90300
 #include <access/htup_details.h>    /* for heap_form_tuple */
-#endif
 
 
 /* Function with a more generic signature are defined in pmpz.arith.c */
