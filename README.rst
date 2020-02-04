@@ -27,10 +27,6 @@ The GMP data types can be stored into the database, used in mixed
 arithmetic with other PostgreSQL numeric types and indexed using the
 btree or hash methods.
 
-The extension is compatible with PostgreSQL versions from 8.4 and
-packaged as a SQL extension in 9.1. The package includes comprehensive
-documentation and regression tests.
-
 Please refer to the documentation for installation and usage, either
 online or in the ``docs/`` directory.
 
