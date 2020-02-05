@@ -7,7 +7,8 @@ Prerequisites
 `!pgmp` is currently compatible with:
 
 - PostgreSQL from version 9.4
-- GMP from version 4.1 (tested with versions 4.1.4, 4.2.4, 4.3.2, 5.0.1, 6.1.2)
+- GMP from version 4.1 (tested with versions 4.1.4, 4.2.4, 4.3.2, 5.0.1, 6.1.2,
+  6.2.0).
 
 .. note::
     GMP 4.1 doesn't implement a few functions (`rootrem()`, `combit()`,
