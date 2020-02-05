@@ -122,7 +122,7 @@ PGMP_PG_FUNCTION(pmpz_out_base)
                 PGMP_MAXBASE_IO)));
     }
 
-    /* Allocate the output buffer manually - see mpmz_out to know why */
+    /* Allocate the output buffer manually - see pmpz_out to know why */
     buf = palloc(mpz_sizeinbase(z, ABS(base)) + 2);     /* add sign and null */
     PG_RETURN_CSTRING(mpz_get_str(buf, base, z));
 }
