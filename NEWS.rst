@@ -1,6 +1,14 @@
 Current release
 ---------------
 
+What's new in pgmp 1.0.4
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Not released yet.
+
+- Fixed compatibility with GMP 6.2 (:issue:`#18`)
+
+
 What's new in pgmp 1.0.3
 ^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -42,21 +42,19 @@ pmpq_from_mpq(mpq_ptr q)
 {
     pmpq        *res;
     mpz_ptr     num     = mpq_numref(q);
-    mpz_ptr     den     = mpq_denref(q);
-    int         nsize   = SIZ(num);
 
-    if (LIKELY(0 != nsize))
+    if (LIKELY(ALLOC(num)))
     {
         /* Make enough room after the numer to store the denom limbs */
+        int     nsize       = SIZ(num);
         int     nalloc      = ABS(nsize);
         int     dsize       = SIZ(mpq_denref(q));
+        mpz_ptr den         = mpq_denref(q);
 
         if (nalloc >= dsize)
         {
             LIMBS(num) = _mpz_realloc(num, nalloc + dsize);
             res = (pmpq *)((char *)LIMBS(num) - PMPQ_HDRSIZE);
-            SET_VARSIZE(res,
-                PMPQ_HDRSIZE + (nalloc + dsize) * sizeof(mp_limb_t));
 
             /* copy the denom after the numer */
             memcpy(res->data + nalloc, LIMBS(den), dsize * sizeof(mp_limb_t));
@@ -67,8 +65,6 @@ pmpq_from_mpq(mpq_ptr q)
         else {
             LIMBS(den) = _mpz_realloc(den, nalloc + dsize);
             res = (pmpq *)((char *)LIMBS(den) - PMPQ_HDRSIZE);
-            SET_VARSIZE(res,
-                PMPQ_HDRSIZE + (nalloc + dsize) * sizeof(mp_limb_t));
 
             /* copy the numer after the denom */
             memcpy(res->data + dsize, LIMBS(num), nalloc * sizeof(mp_limb_t));
@@ -77,12 +73,15 @@ pmpq_from_mpq(mpq_ptr q)
             res->mdata = PMPQ_SET_SIZE_FIRST(PMPQ_SET_DENOM_FIRST(0), dsize);
         }
 
+        SET_VARSIZE(res, PMPQ_HDRSIZE + (nalloc + dsize) * sizeof(mp_limb_t));
+
         /* Set the sign */
         if (nsize < 0) { res->mdata = PMPQ_SET_NEGATIVE(res->mdata); }
     }
     else
     {
-        res = (pmpq *)((char *)LIMBS(num) - PMPQ_HDRSIZE);
+        /* No allocation for the limbs: allocate something of ours */
+        res = palloc(PMPQ_HDRSIZE);
         SET_VARSIZE(res, PMPQ_HDRSIZE);
         res->mdata = 0;
     }
