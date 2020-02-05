@@ -10,7 +10,7 @@ PostgreSQL Multiple Precision Arithmetic extension
 pgmp is a PostgreSQL extension module to add support for the arbitrary
 precision data types offered by the GMP library into the database.
 
-The extension adds the types `mpz` (arbitrary size integers) and `mpq`
+The extension adds the types mpz_ (arbitrary size integers) and mpq_
 (arbitrary precision rationals) to PostgreSQL and exposes to the
 database all the functions available in the GMP library for these types,
 providing:
@@ -32,8 +32,12 @@ packaged as a SQL extension in 9.1. The package includes comprehensive
 documentation and regression tests.
 
 Please refer to the documentation for installation and usage, either
-online or in the ``docs/`` directory.
+online__ or in the ``docs/`` directory.
 
 - Homepage: https://dvarrazzo.github.io/pgmp/
 - Project page: https://github.com/dvarrazzo/pgmp/
 - Download: https://pgxn.org/dist/pgmp/
+
+.. _mpz: https://dvarrazzo.github.io/pgmp/mpz.html
+.. _mpq: https://dvarrazzo.github.io/pgmp/mpq.html
+.. __: https://dvarrazzo.github.io/pgmp/
