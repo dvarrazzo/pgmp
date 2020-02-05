@@ -52,6 +52,7 @@ Documentation
    mpz
    mpq
    misc
+   news
 
 
 Indices and tables
