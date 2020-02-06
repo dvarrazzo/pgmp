@@ -4,7 +4,7 @@ Current release
 What's new in pgmp 1.0.4
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Not released yet.
+Released on 2020-02-06.
 
 - Fixed compatibility with GMP 6.2 (:issue:`#16`)
 
