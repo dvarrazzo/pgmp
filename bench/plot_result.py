@@ -6,6 +6,10 @@ Copyright (C) 2011-2020 - Daniele Varrazzo
 import sys
 from collections import defaultdict
 
+import matplotlib
+
+matplotlib.use('AGG')  # noqa
+
 import matplotlib.pyplot as plt
 
 tests = defaultdict(list)
@@ -28,15 +32,16 @@ for line in f:
     tokens = line.split()
 
     # Parse the class of the test
-    if cls_name is None: cls_name = tokens[0]
+    if cls_name is None:
+        cls_name = tokens[0]
     assert cls_name == tokens[0], (cls_name, tokens)
 
     # Parse the number of samples
-    if nsamples is None: nsamples = tokens[2]
+    if nsamples is None:
+        nsamples = tokens[2]
     assert nsamples == tokens[2], (nsamples, tokens)
 
-    tests[tokens[1]].append(
-        (int(tokens[3]), float(tokens[4])))
+    tests[tokens[1]].append((int(tokens[3]), float(tokens[4])))
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
@@ -45,15 +50,17 @@ for label, data in sorted(tests.items()):
     p = ax.plot(data[0], data[1], 'o-', label=label)
 
 title = labels.get('title', '')
-if int(nsamples): title += " (n=%s)" % nsamples
+if int(nsamples):
+    title += " (n=%s)" % nsamples
 ax.set_title(title)
 
-if 'xlabel' in labels: ax.set_xlabel(labels['xlabel'])
-if 'ylabel' in labels: ax.set_ylabel(labels['ylabel'])
+if 'xlabel' in labels:
+    ax.set_xlabel(labels['xlabel'])
+if 'ylabel' in labels:
+    ax.set_ylabel(labels['ylabel'])
 ax.legend(loc=2)
 
 if '-o' in sys.argv:
     plt.savefig(sys.argv[sys.argv.index('-o') + 1], dpi=72)
 else:
     plt.show()
-
