@@ -30,10 +30,10 @@ btree or hash methods.
 Please refer to the documentation for installation and usage, either
 online__ or in the ``docs/`` directory.
 
-- Homepage: https://dvarrazzo.github.io/pgmp/
+- Homepage: https://www.varrazzo.com/pgmp/
 - Project page: https://github.com/dvarrazzo/pgmp/
 - Download: https://pgxn.org/dist/pgmp/
 
-.. _mpz: https://dvarrazzo.github.io/pgmp/mpz.html
-.. _mpq: https://dvarrazzo.github.io/pgmp/mpq.html
-.. __: https://dvarrazzo.github.io/pgmp/
+.. _mpz: https://www.varrazzo.com/pgmp/mpz.html
+.. _mpq: https://www.varrazzo.com/pgmp/mpq.html
+.. __: https://www.varrazzo.com/pgmp/

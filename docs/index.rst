@@ -4,7 +4,7 @@ PostgreSQL Multiple Precision Arithmetic
 pgmp_ is a PostgreSQL_ extension to add the GMP_ data types and functions
 directly into the database.
 
-.. _pgmp: https://dvarrazzo.github.io/pgmp/
+.. _pgmp: https://www.varrazzo.com/pgmp/
 .. _PostgreSQL: https://www.postgresql.org
 .. _GMP: https://www.gmplib.org
 
@@ -37,7 +37,7 @@ The library is released under
 References
 ----------
 
-- Homepage: https://dvarrazzo.github.io/pgmp/
+- Homepage: https://www.varrazzo.com/pgmp/
 - Project page: https://github.com/dvarrazzo/pgmp/
 - Download: https://pgxn.org/dist/pgmp/
 
