@@ -17,13 +17,12 @@ BUILDDIR      = .
 PYTHON ?= python
 PLOTS = $(patsubst ../bench/%.txt,html/img/%.png,$(sort $(wildcard ../bench/*.txt)))
 
-.PHONY: env html upload clean
+.PHONY: env html clean
 
 default: html
 
-html: $(PLOTS) html/.gitignore html/.nojekill
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) \
-		. $(BUILDDIR)/html
+html: $(PLOTS)
+	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) . $(BUILDDIR)/html
 
 html/img/%.png: ../bench/%.txt
 	mkdir -p html/img
@@ -35,25 +34,6 @@ html/img/%.png: ../bench/%.txt
 env:
 	virtualenv -p $(PYTHON) $(ENV_DIR)
 	$(ENV_BIN)/pip install -r requirements.txt
-	# Clone the github pages repository to update
-	# Fail silently if this is not a git repos (upload won't work of course)
-	git status 2>/dev/null \
-		&& git clone -b gh-pages \
-			$$(git remote show -n origin | awk '/URL/ {print $$NF; exit}') \
-			html \
-		|| true
-
-html/.gitignore: html-gitignore
-	cp $< $@
-
-html/.nojekill:
-	touch $@
-
-upload:
-	cd html && test -d .git \
-		&& git add --all \
-		&& git commit -m "website update on $$(date)" \
-		&& git push
 
 clean:
 	# Do not delete .gitignore and .git directories
