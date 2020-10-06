@@ -31,8 +31,8 @@ EXTENSION = pgmp
 MODULEDIR = $(EXTENSION)
 MODULE_big = $(EXTENSION)
 
-EXT_LONGVER = $(shell grep '"version":' META.json | head -1 | sed -e 's/\s*"version":\s*"\(.*\)",/\1/')
-EXT_SHORTVER = $(shell grep 'default_version' $(EXTENSION).control | head -1 | sed -e "s/default_version\s*=\s'\(.*\)'/\1/")
+EXT_LONGVER = $(shell grep '"version":' META.json | head -1 | sed -e 's/[[:space:]]*"version":[[:space:]]*"\(.*\)",/\1/')
+EXT_SHORTVER = $(shell grep 'default_version' $(EXTENSION).control | head -1 | sed -e "s/default_version[[:space:]]*=[[:space:]]'\(.*\)'/\1/")
 
 SRC_C = $(sort $(wildcard src/*.c))
 SRC_H = $(sort $(wildcard src/*.h))
