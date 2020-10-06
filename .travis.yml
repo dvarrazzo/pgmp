@@ -56,7 +56,7 @@ install:
   - sudo make install
 
 script:
-  - make installcheck
+  - if ! make installcheck; then cat regression.diffs && false; fi
 
 notifications:
   email: false
