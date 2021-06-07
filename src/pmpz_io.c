@@ -416,6 +416,76 @@ PGMP_PG_FUNCTION(pmpz_from_bytea)
     PGMP_RETURN_MPZ(result_z);
 }
 
+PGMP_PG_FUNCTION(pmpz_from_bytea_signed)
+{
+    bytea *data = PG_GETARG_BYTEA_PP(0);
+    int data_len = VARSIZE_ANY_EXHDR(data);
+    char *data_body = VARDATA_ANY(data);
+    char *data_buf;
+    bool is_neg;
+    mpz_t result_z;
+
+    mpz_init(result_z);
+
+    if(data_len == 0) {
+        PGMP_RETURN_MPZ(result_z);
+    }
+
+    is_neg = data_body[0] & 0x80;
+
+    if(is_neg) {
+        data_buf = palloc(data_len);
+
+        if(!(data_len & 7)) {
+            size_t limbs_count = data_len / 8;
+            uint64_t *limbs_in = (uint64_t *)data_body;
+            uint64_t *limbs_out = (uint64_t *)data_buf;
+            for(size_t i = 0; i < limbs_count; i++) {
+                limbs_out[i] = ~(limbs_in[i]);
+            }
+        } else if(!(data_len & 3)) {
+            size_t limbs_count = data_len / 4;
+            uint32_t *limbs_in = (uint32_t *)data_body;
+            uint32_t *limbs_out = (uint32_t *)data_buf;
+            for(size_t i = 0; i < limbs_count; i++) {
+                limbs_out[i] = ~(limbs_in[i]);
+            }
+        } else if(!(data_len & 1)) {
+            size_t limbs_count = data_len / 2;
+            uint16_t *limbs_in = (uint16_t *)data_body;
+            uint16_t *limbs_out = (uint16_t *)data_buf;
+            for(size_t i = 0; i < limbs_count; i++) {
+                limbs_out[i] = ~(limbs_in[i]);
+            }
+        } else {
+            for(size_t i = 0; i < data_len; i++) {
+                data_buf[i] = ~(data_body[i]);
+            }
+        }
+    } else {
+        data_buf = data_body;
+    }
+
+    if(!(data_len & 7)) {
+        mpz_import(result_z, data_len / 8, 1, 8, 1, 0, (uint64_t *)data_buf);
+    } else if(!(data_len & 3)) {
+        mpz_import(result_z, data_len / 4, 1, 4, 1, 0, (uint32_t *)data_buf);
+    } else if(!(data_len & 1)) {
+        mpz_import(result_z, data_len / 2, 1, 2, 1, 0, (uint16_t *)data_buf);
+    } else {
+        mpz_import(result_z, data_len, 1, 1, 1, 0, data_buf);
+    }
+
+    if (is_neg) {
+        pfree(data_buf);
+
+        mpz_add_ui(result_z, result_z, 1);
+        mpz_neg(result_z, result_z);
+    }
+
+    PGMP_RETURN_MPZ(result_z);
+}
+
 PGMP_PG_FUNCTION(pmpz_to_bytea)
 {
     const mpz_t z;

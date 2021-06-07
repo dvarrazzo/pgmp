@@ -91,6 +91,8 @@ CREATE TYPE mpz (
 func('mpz', 'text int4', 'mpz', cname='pmpz_in_base')
 func('text', 'mpz int4', 'cstring', cname='pmpz_out_base')
 
+func('mpz_2c', 'bytea', 'mpz', cname='pmpz_from_bytea_signed')
+
 !! PYOFF
 
 
