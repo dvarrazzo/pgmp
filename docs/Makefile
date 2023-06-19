@@ -32,7 +32,7 @@ html/img/%.png: ../bench/%.txt
 # It is not clean by 'make clean'
 
 env:
-	virtualenv -p $(PYTHON) $(ENV_DIR)
+	$(PYTHON) -m venv $(ENV_DIR)
 	$(ENV_BIN)/pip install -r requirements.txt
 
 clean:
