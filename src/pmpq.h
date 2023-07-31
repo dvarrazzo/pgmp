@@ -24,6 +24,9 @@
 
 #include <gmp.h>
 #include "postgres.h"
+#if PG_VERSION_NUM >= 160000
+#include <varatt.h>
+#endif
 
 typedef struct
 {
@@ -69,7 +72,7 @@ typedef struct
 /* Macros to convert mpz arguments and return values */
 
 #define PGMP_GETARG_PMPQ(x) \
-    ((pmpq*)DatumGetPointer(PG_DETOAST_DATUM(PG_GETARG_DATUM(x))))
+    ((pmpq*)(PG_DETOAST_DATUM(PG_GETARG_DATUM(x))))
 
 #define PGMP_GETARG_MPQ(q,n) \
     mpq_from_pmpq(q, PGMP_GETARG_PMPQ(n));
