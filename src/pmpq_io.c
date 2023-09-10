@@ -71,7 +71,7 @@ PGMP_PG_FUNCTION(pmpq_in_base)
             errhint("base should be between 2 and %d", PGMP_MAXBASE_IO)));
     }
 
-    str = TextDatumGetCString(PG_GETARG_POINTER(0));
+    str = TextDatumGetCString(PointerGetDatum(PG_GETARG_POINTER(0)));
 
     mpq_init(q);
     if (0 != mpq_set_str(q, str, base))
