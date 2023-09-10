@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Convert a file containing a mix of python code and content into content.
 
 Write the input file to stdout. Python code included between blocks
@@ -7,10 +7,10 @@ Write the input file to stdout. Python code included between blocks
 
 # Copyright (c) 2011-2020, Daniele Varrazzo <daniele.varrazzo@gmail.com>
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 # * Redistributions of source code must retain the above copyright notice,
 #   this list of conditions and the following disclaimer.
 # * Redistributions in binary form must reproduce the above copyright notice,
@@ -19,7 +19,7 @@ Write the input file to stdout. Python code included between blocks
 # * The name of Daniele Varrazzo may not be used to endorse or promote
 #   products derived from this software without specific prior written
 #   permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -33,15 +33,16 @@ Write the input file to stdout. Python code included between blocks
 # POSSIBILITY OF SUCH DAMAGE.
 
 import sys
-import six
+
 
 def convert(f):
-    mode = 'out'    # can be 'out' or 'py'
+    mode = "out"  # can be 'out' or 'py'
     script = []
     env = {}
     while 1:
-        line =  f.readline()
-        if not line: break
+        line = f.readline()
+        if not line:
+            break
 
         if line.startswith("!#"):
             # a comment
@@ -49,33 +50,29 @@ def convert(f):
 
         if not line.startswith("!!"):
             # a regular line
-            if mode == 'out':
+            if mode == "out":
                 sys.stdout.write(line)
-            elif mode == 'py':
+            elif mode == "py":
                 script.append(line)
             else:
                 raise ValueError("unexpected mode: %s" % mode)
             continue
 
         # state change
-        if 'PYON' in line and mode == 'out':
+        if "PYON" in line and mode == "out":
             del script[:]
-            mode = 'py'
-        elif 'PYOFF' in line and mode == 'py':
-            script.insert(0, 'from __future__ import print_function\n')
-            six.exec_(''.join(script), env)
-            mode = 'out'
+            mode = "py"
+        elif "PYOFF" in line and mode == "py":
+            exec("".join(script), env)
+            mode = "out"
         else:
-            raise ValueError("bad line in mode %s: %s"
-                % (mode, line.rstrip()))
+            raise ValueError("bad line in mode %s: %s" % (mode, line.rstrip()))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) > 2:
-        print >>sys.stderr, "usage: %s [FILE]" % sys.argv[1]
+        print("usage: %s [FILE]" % sys.argv[1], file=sys.stderr)
         sys.exit(2)
 
     f = len(sys.argv) == 2 and open(sys.argv[1]) or sys.stdin
     convert(f)
-    sys.exit(0)
-
