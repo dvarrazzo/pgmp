@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Generate "ALTER EXTENSION" statements to package a list of SQL definitions.
 
 The script doesn't try to be a robust parser: it relies on the input file
@@ -34,8 +34,6 @@ it doesn't know how to deal with.
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-
-from __future__ import print_function
 
 import re
 import sys
