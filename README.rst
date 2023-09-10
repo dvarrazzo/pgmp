@@ -1,10 +1,10 @@
 PostgreSQL Multiple Precision Arithmetic extension
 ==================================================
 
-|travis|
+|status|
 
-.. |travis| image:: https://travis-ci.org/dvarrazzo/pgmp.svg?branch=master
-    :target: https://travis-ci.org/dvarrazzo/pgmp
+.. |status| image:: https://github.com/dvarrazzo/pgmp/actions/workflows/tests.yml/badge.svg
+    :target: https://github.com/dvarrazzo/pgmp/actions/workflows/tests.yml
     :alt: Build status
 
 pgmp is a PostgreSQL extension module to add support for the arbitrary
