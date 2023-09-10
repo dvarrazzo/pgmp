@@ -15,12 +15,18 @@ concurrency:
 
 jobs:
   tests:
-    strategy:
-      matrix:
-        pg: [12, 11, 10, 9.6, 9.5, 9.4, 9.3, 9.2]
     runs-on: ubuntu-latest
     container: pgxn/pgxn-tools
+    strategy:
+      fail-fast: false
+      matrix:
+        pg: [16, 15, 14, 13, 12, 11, 10]
     steps:
-      - run: pg-start ${{ matrix.pg }}
-      - uses: actions/checkout@v3
-      - run: pg-build-test
+      - name: Start PostgreSQL ${{ matrix.pg }}
+        run: pg-start ${{ matrix.pg }}
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: install GMP dev library
+        run: apt-get update && apt-get install -y libgmp-dev
+      - name: Test on PostgreSQL ${{ matrix.pg }}
+        run: pg-build-test
