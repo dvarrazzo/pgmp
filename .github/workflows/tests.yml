@@ -23,10 +23,8 @@ jobs:
         pg: [16, 15, 14, 13, 12, 11, 10]
     steps:
       - name: Start PostgreSQL ${{ matrix.pg }}
-        run: pg-start ${{ matrix.pg }}
+        run: pg-start ${{ matrix.pg }} libgmp-dev
       - name: Check out the repo
         uses: actions/checkout@v3
-      - name: install GMP dev library
-        run: apt-get update && apt-get install -y libgmp-dev
       - name: Test on PostgreSQL ${{ matrix.pg }}
         run: pg-build-test
