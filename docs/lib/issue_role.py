@@ -5,7 +5,7 @@
 
     An interpreted text role to link docs to issues.
 
-    :copyright: Copyright 2013-2020 by Daniele Varrazzo.
+    :copyright: Copyright 2013 by Daniele Varrazzo.
 """
 
 import re
