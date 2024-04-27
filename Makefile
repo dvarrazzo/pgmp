@@ -31,17 +31,10 @@ EXTENSION = pgmp
 MODULEDIR = $(EXTENSION)
 MODULE_big = $(EXTENSION)
 
-ifeq ($(shell sed --version 2>/dev/null | grep -q GNU && echo gnu),gnu)
-	LONGVER_MATCHER = 's/\s*"version":\s*"\(.*\)",/\1/'
-	SHORTVER_MATCHER = "s/default_version\s*=\s'\(.*\)'/\1/"
-else
-  # Adapt syntax for POSIX (FreeBSD)
-	LONGVER_MATCHER = 's/[[:space:]]*"version":[[:space:]]*"\(.*\)",/\1/'
-	SHORTVER_MATCHER = "s/default_version[[:space:]]*=[[:space:]]'\(.*\)'/\1/"
-endif
-
-EXT_LONGVER = $(shell grep '"version":' META.json | head -1 | sed -e $(LONGVER_MATCHER))
-EXT_SHORTVER = $(shell grep 'default_version' $(EXTENSION).control | head -1 | sed -e $(SHORTVER_MATCHER))
+EXT_LONGVER = $(shell grep '"version":' META.json | head -1 \
+	| sed -e 's/[[:space:]]*"version":[[:space:]]*"\(.*\)",/\1/')
+EXT_SHORTVER = $(shell grep 'default_version' $(EXTENSION).control | head -1 \
+	| sed -e "s/default_version[[:space:]]*=[[:space:]]'\(.*\)'/\1/")
 
 SRC_C = $(sort $(wildcard src/*.c))
 SRC_H = $(sort $(wildcard src/*.h))
