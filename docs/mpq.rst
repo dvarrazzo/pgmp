@@ -161,7 +161,7 @@ canonical form.
         4503599627370497/9007199254740992
         =# select limit_den(cos(pi()/3));
         1/2
-        =# select limit_den(10.1::float4);
+        =# select limit_den(10.1::float8);
         101/10
 
     This function is not part of the GMP library: it is ported instead `from
