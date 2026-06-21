@@ -124,7 +124,7 @@ PMPZ_INT32(legendre)
 PMPZ_INT32(kronecker)
 
 
-#define PMPZ_ULONG(f) \
+#define PMPZ_ULONG(f, CHECK) \
  \
 PGMP_PG_FUNCTION(pmpz_ ## f) \
 { \
@@ -132,6 +132,7 @@ PGMP_PG_FUNCTION(pmpz_ ## f) \
     mpz_t           ret; \
  \
     PGMP_GETARG_ULONG(op, 0); \
+    CHECK(op);    \
  \
     mpz_init(ret); \
     mpz_ ## f (ret, op); \
@@ -139,9 +140,9 @@ PGMP_PG_FUNCTION(pmpz_ ## f) \
     PGMP_RETURN_MPZ(ret); \
 }
 
-PMPZ_ULONG(fac_ui)
-PMPZ_ULONG(fib_ui)
-PMPZ_ULONG(lucnum_ui)
+PMPZ_ULONG(fac_ui, PMPZ_NO_CHECK)
+PMPZ_ULONG(fib_ui, PMPZ_CHECK_ULONG_MAX)
+PMPZ_ULONG(lucnum_ui, PMPZ_CHECK_ULONG_MAX)
 
 
 #define PMPZ_ULONG_MPZ2(f) \

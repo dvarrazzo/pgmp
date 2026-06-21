@@ -159,5 +159,16 @@ do { \
     } \
 } while (0)
 
+#define PGMP_MAX_ULONG_ARG 100000000
+
+#define PMPZ_CHECK_ULONG_MAX(b) \
+do { \
+    if ((b) > PGMP_MAX_ULONG_ARG) { \
+        ereport(ERROR, ( \
+            errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE), \
+            errmsg("argument exceeds maximum safe threshold (%d)", PGMP_MAX_ULONG_ARG) )); \
+    } \
+} while (0)
+
 #endif  /* __PMPZ_H__ */
 
