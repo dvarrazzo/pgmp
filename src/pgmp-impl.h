@@ -54,6 +54,15 @@
  */
 #define PGMP_MAX_HDRSIZE 8
 
+/* A couple of constant limbs used to create constant mp? data
+ * from the content of varlena data.
+ *
+ * Defined in pgmp.c: declared here so that every translation unit
+ * (including the one defining them) sees a prior declaration, as
+ * required by -Wmissing-variable-declarations. */
+extern const mp_limb_t _pgmp_limb_0;
+extern const mp_limb_t _pgmp_limb_1;
+
 /*
  * Macros equivalent to the ones defimed in gmp-impl.h
  */

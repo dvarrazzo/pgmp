@@ -49,7 +49,7 @@ PGMP_PG_FUNCTION(_pmpz_from_agg)
 PGMP_PG_FUNCTION(_pmpz_agg_ ## op) \
 { \
     mpz_t           *a; \
-    const mpz_t     z; \
+    const mpz_t     z = {0}; \
     MemoryContext   oldctx; \
     MemoryContext   aggctx; \
  \

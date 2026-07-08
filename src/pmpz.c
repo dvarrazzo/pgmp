@@ -25,10 +25,6 @@
 #include "fmgr.h"
 
 
-/* To be referred to to represent the zero */
-extern const mp_limb_t _pgmp_limb_0;
-
-
 /*
  * Create a pmpz structure from the content of a mpz.
  *

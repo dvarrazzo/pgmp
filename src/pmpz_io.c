@@ -89,7 +89,7 @@ PGMP_PG_FUNCTION(pmpz_in_base)
 
 PGMP_PG_FUNCTION(pmpz_out)
 {
-    const mpz_t     z;
+    const mpz_t     z = {0};
     char            *buf;
 
     PGMP_GETARG_MPZ(z, 0);
@@ -105,7 +105,7 @@ PGMP_PG_FUNCTION(pmpz_out)
 
 PGMP_PG_FUNCTION(pmpz_out_base)
 {
-    const mpz_t     z;
+    const mpz_t     z = {0};
     int             base;
     char            *buf;
 
@@ -266,7 +266,7 @@ PGMP_PG_FUNCTION(pmpz_from_numeric)
 
 PGMP_PG_FUNCTION(pmpz_to_int2)
 {
-    const mpz_t     z;
+    const mpz_t     z = {0};
     int16           out;
 
     PGMP_GETARG_MPZ(z, 0);
@@ -283,7 +283,7 @@ PGMP_PG_FUNCTION(pmpz_to_int2)
 
 PGMP_PG_FUNCTION(pmpz_to_int4)
 {
-    const mpz_t     z;
+    const mpz_t     z = {0};
     int32           out;
 
     PGMP_GETARG_MPZ(z, 0);
@@ -300,7 +300,7 @@ PGMP_PG_FUNCTION(pmpz_to_int4)
 
 PGMP_PG_FUNCTION(pmpz_to_int8)
 {
-    const mpz_t     z;
+    const mpz_t     z = {0};
     int64           ret = 0;
 
     PGMP_GETARG_MPZ(z, 0);
@@ -372,7 +372,7 @@ pmpz_get_int64(mpz_srcptr z, int64 *out)
 
 PGMP_PG_FUNCTION(pmpz_to_float4)
 {
-    const mpz_t     z;
+    const mpz_t     z = {0};
     double          out;
 
     PGMP_GETARG_MPZ(z, 0);
@@ -382,7 +382,7 @@ PGMP_PG_FUNCTION(pmpz_to_float4)
 
 PGMP_PG_FUNCTION(pmpz_to_float8)
 {
-    const mpz_t     z;
+    const mpz_t     z = {0};
     double          out;
 
     PGMP_GETARG_MPZ(z, 0);

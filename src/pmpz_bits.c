@@ -72,7 +72,7 @@ PGMP_PG_FUNCTION(pgmp_max_bitcnt)
 
 PGMP_PG_FUNCTION(pmpz_popcount)
 {
-    const mpz_t     z;
+    const mpz_t     z = {0};
     mp_bitcnt_t     ret;
 
     PGMP_GETARG_MPZ(z, 0);
@@ -83,8 +83,8 @@ PGMP_PG_FUNCTION(pmpz_popcount)
 
 PGMP_PG_FUNCTION(pmpz_hamdist)
 {
-    const mpz_t     z1;
-    const mpz_t     z2;
+    const mpz_t     z1 = {0};
+    const mpz_t     z2 = {0};
     mp_bitcnt_t     ret;
 
     PGMP_GETARG_MPZ(z1, 0);
@@ -99,7 +99,7 @@ PGMP_PG_FUNCTION(pmpz_hamdist)
  \
 PGMP_PG_FUNCTION(pmpz_ ## f) \
 { \
-    const mpz_t     z; \
+    const mpz_t     z = {0}; \
     mp_bitcnt_t     start; \
  \
     PGMP_GETARG_MPZ(z, 0); \
@@ -118,7 +118,7 @@ PMPZ_SCAN(scan1)
  \
 PGMP_PG_FUNCTION(pmpz_ ## f) \
 { \
-    const mpz_t     z; \
+    const mpz_t     z = {0}; \
     mp_bitcnt_t     idx; \
     mpz_t           ret; \
  \
@@ -140,7 +140,7 @@ PMPZ_BIT(combit)
 
 PGMP_PG_FUNCTION(pmpz_tstbit)
 {
-    const mpz_t     z;
+    const mpz_t     z = {0};
     mp_bitcnt_t     idx;
     int32           ret;
 

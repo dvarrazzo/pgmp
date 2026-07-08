@@ -33,7 +33,7 @@
 
 PGMP_PG_FUNCTION(pmpz_probab_prime_p)
 {
-    const mpz_t     z1;
+    const mpz_t     z1 = {0};
     int             reps;
 
     PGMP_GETARG_MPZ(z1, 0);
@@ -44,7 +44,7 @@ PGMP_PG_FUNCTION(pmpz_probab_prime_p)
 
 PGMP_PG_FUNCTION(pmpz_nextprime)
 {
-    const mpz_t     z1;
+    const mpz_t     z1 = {0};
     mpz_t           zf;
 
     PGMP_GETARG_MPZ(z1, 0);
@@ -67,8 +67,8 @@ PGMP_PG_FUNCTION(pmpz_nextprime)
 
 PGMP_PG_FUNCTION(pmpz_gcdext)
 {
-    const mpz_t     z1;
-    const mpz_t     z2;
+    const mpz_t     z1 = {0};
+    const mpz_t     z2 = {0};
     mpz_t           zf;
     mpz_t           zs;
     mpz_t           zt;
@@ -86,8 +86,8 @@ PGMP_PG_FUNCTION(pmpz_gcdext)
 
 PGMP_PG_FUNCTION(pmpz_invert)
 {
-    const mpz_t     z1;
-    const mpz_t     z2;
+    const mpz_t     z1 = {0};
+    const mpz_t     z2 = {0};
     mpz_t           zf;
     int             ret;
 
@@ -110,8 +110,8 @@ PGMP_PG_FUNCTION(pmpz_invert)
  \
 PGMP_PG_FUNCTION(pmpz_ ## f) \
 { \
-    const mpz_t     z1; \
-    const mpz_t     z2; \
+    const mpz_t     z1 = {0}; \
+    const mpz_t     z2 = {0}; \
  \
     PGMP_GETARG_MPZ(z1, 0); \
     PGMP_GETARG_MPZ(z2, 1); \

@@ -57,7 +57,7 @@ PGMP_PG_FUNCTION(pmpz_uplus)
  \
 PGMP_PG_FUNCTION(pmpz_ ## op) \
 { \
-    const mpz_t     z1; \
+    const mpz_t     z1 = {0}; \
     mpz_t           zf; \
  \
     PGMP_GETARG_MPZ(z1, 0); \
@@ -88,8 +88,8 @@ PMPZ_UN(com,    PMPZ_NO_CHECK)
  \
 PGMP_PG_FUNCTION(pmpz_ ## op) \
 { \
-    const mpz_t     z1; \
-    const mpz_t     z2; \
+    const mpz_t     z1 = {0}; \
+    const mpz_t     z2 = {0}; \
     mpz_t           zf; \
  \
     PGMP_GETARG_MPZ(z1, 0); \
@@ -126,8 +126,8 @@ PMPZ_OP(remove,     PMPZ_NO_CHECK)      /* TODO: return value not returned */
  \
 PGMP_PG_FUNCTION(pmpz_ ## op) \
 { \
-    const mpz_t     z1; \
-    const mpz_t     z2; \
+    const mpz_t     z1 = {0}; \
+    const mpz_t     z2 = {0}; \
     mpz_t           zf1; \
     mpz_t           zf2; \
  \
@@ -153,7 +153,7 @@ PMPZ_OP2(fdiv_qr,    PMPZ_CHECK_DIV0)
  \
 PGMP_PG_FUNCTION(pmpz_ ## op) \
 { \
-    const mpz_t     z; \
+    const mpz_t     z = {0}; \
     unsigned long   b; \
     mpz_t           zf; \
  \
@@ -196,7 +196,7 @@ PMPZ_OP_BITCNT(fdiv_r_2exp,     PMPZ_NO_CHECK,  PMPZ_NO_CHECK)
  \
 PGMP_PG_FUNCTION(pmpz_ ## pred) \
 { \
-    const mpz_t     op; \
+    const mpz_t     op = {0}; \
  \
     PGMP_GETARG_MPZ(op, 0); \
  \
@@ -215,8 +215,8 @@ PMPZ_PRED(perfect_square)
 
 PGMP_PG_FUNCTION(pmpz_cmp)
 {
-    const mpz_t     z1;
-    const mpz_t     z2;
+    const mpz_t     z1 = {0};
+    const mpz_t     z2 = {0};
 
     PGMP_GETARG_MPZ(z1, 0);
     PGMP_GETARG_MPZ(z2, 1);
@@ -229,8 +229,8 @@ PGMP_PG_FUNCTION(pmpz_cmp)
  \
 PGMP_PG_FUNCTION(pmpz_ ## op) \
 { \
-    const mpz_t     z1; \
-    const mpz_t     z2; \
+    const mpz_t     z1 = {0}; \
+    const mpz_t     z2 = {0}; \
  \
     PGMP_GETARG_MPZ(z1, 0); \
     PGMP_GETARG_MPZ(z2, 1); \
@@ -251,7 +251,7 @@ PMPZ_CMP(le, <=)
  */
 PGMP_PG_FUNCTION(pmpz_hash)
 {
-    const mpz_t     z;
+    const mpz_t     z = {0};
 
     PGMP_GETARG_MPZ(z, 0);
     return pmpz_get_hash(z);
@@ -278,7 +278,7 @@ pmpz_get_hash(mpz_srcptr z)
 
 PGMP_PG_FUNCTION(pmpz_sgn)
 {
-    const mpz_t     n;
+    const mpz_t     n = {0};
 
     PGMP_GETARG_MPZ(n, 0);
 
@@ -287,8 +287,8 @@ PGMP_PG_FUNCTION(pmpz_sgn)
 
 PGMP_PG_FUNCTION(pmpz_divisible)
 {
-    const mpz_t     n;
-    const mpz_t     d;
+    const mpz_t     n = {0};
+    const mpz_t     d = {0};
 
     PGMP_GETARG_MPZ(n, 0);
     PGMP_GETARG_MPZ(d, 1);
@@ -305,7 +305,7 @@ PGMP_PG_FUNCTION(pmpz_divisible)
 
 PGMP_PG_FUNCTION(pmpz_divisible_2exp)
 {
-    const mpz_t     n;
+    const mpz_t     n = {0};
     mp_bitcnt_t     b;
 
     PGMP_GETARG_MPZ(n, 0);
@@ -316,9 +316,9 @@ PGMP_PG_FUNCTION(pmpz_divisible_2exp)
 
 PGMP_PG_FUNCTION(pmpz_congruent)
 {
-    const mpz_t     n;
-    const mpz_t     c;
-    const mpz_t     d;
+    const mpz_t     n = {0};
+    const mpz_t     c = {0};
+    const mpz_t     d = {0};
 
     PGMP_GETARG_MPZ(n, 0);
     PGMP_GETARG_MPZ(c, 1);
@@ -337,8 +337,8 @@ PGMP_PG_FUNCTION(pmpz_congruent)
 
 PGMP_PG_FUNCTION(pmpz_congruent_2exp)
 {
-    const mpz_t     n;
-    const mpz_t     c;
+    const mpz_t     n = {0};
+    const mpz_t     c = {0};
     mp_bitcnt_t     b;
 
     PGMP_GETARG_MPZ(n, 0);
@@ -351,9 +351,9 @@ PGMP_PG_FUNCTION(pmpz_congruent_2exp)
 
 PGMP_PG_FUNCTION(pmpz_powm)
 {
-    const mpz_t     base;
-    const mpz_t     exp;
-    const mpz_t     mod;
+    const mpz_t     base = {0};
+    const mpz_t     exp = {0};
+    const mpz_t     mod = {0};
     mpz_t           zf;
 
     PGMP_GETARG_MPZ(base, 0);

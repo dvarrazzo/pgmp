@@ -33,7 +33,7 @@
  * TODO: check if there is a way to explicitly allocate this structure per
  * session.
  */
-gmp_randstate_t     *pgmp_randstate;
+static gmp_randstate_t     *pgmp_randstate;
 
 
 /* Clear the random state if set
@@ -102,7 +102,7 @@ PGMP_RANDINIT(randinit_mt,      PGMP_RANDINIT_NOARG)
 
 #define PGMP_RANDINIT_ACE(f) \
 do { \
-    const mpz_t         a; \
+    const mpz_t         a = {0}; \
     unsigned long       c; \
     mp_bitcnt_t         e; \
  \
@@ -135,7 +135,7 @@ PGMP_RANDINIT(randinit_lc_2exp_size, PGMP_RANDINIT_SIZE)
 
 PGMP_PG_FUNCTION(pgmp_randseed)
 {
-    const mpz_t         seed;
+    const mpz_t         seed = {0};
     MemoryContext       oldctx;
 
     PGMP_CHECK_RANDSTATE;
@@ -179,7 +179,7 @@ PMPZ_RAND_BITCNT(rrandomb)
 
 PGMP_PG_FUNCTION(pmpz_urandomm)
 {
-    const mpz_t     n;
+    const mpz_t     n = {0};
     mpz_t           ret;
 
     PGMP_CHECK_RANDSTATE;
