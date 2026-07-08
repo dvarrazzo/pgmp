@@ -1,0 +1,537 @@
+--
+--  Test mpq datatype
+--
+-- Compact output
+\t
+\a
+--
+-- mpq input and output functions
+--
+SELECT '0'::mpq;
+0
+SELECT '1'::mpq;
+1
+SELECT '-1'::mpq;
+-1
+SELECT '10'::mpq;
+10
+SELECT '-10'::mpq;
+-10
+SELECT '4294967295'::mpq;   -- limbs boundaries
+4294967295
+SELECT '4294967296'::mpq;
+4294967296
+SELECT '-4294967296'::mpq;
+-4294967296
+SELECT '-4294967297'::mpq;
+-4294967297
+SELECT '18446744073709551614'::mpq;
+18446744073709551614
+SELECT '18446744073709551615'::mpq;
+18446744073709551615
+SELECT '18446744073709551616'::mpq;
+18446744073709551616
+SELECT '18446744073709551617'::mpq;
+18446744073709551617
+SELECT '-18446744073709551615'::mpq;
+-18446744073709551615
+SELECT '-18446744073709551616'::mpq;
+-18446744073709551616
+SELECT '-18446744073709551617'::mpq;
+-18446744073709551617
+SELECT '-18446744073709551618'::mpq;
+-18446744073709551618
+SELECT '12345678901234567890123456789012345678901234567890123456789012345678901234567890'::mpq;
+12345678901234567890123456789012345678901234567890123456789012345678901234567890
+SELECT '-12345678901234567890123456789012345678901234567890123456789012345678901234567890'::mpq;
+-12345678901234567890123456789012345678901234567890123456789012345678901234567890
+SELECT '1/4294967295'::mpq;   -- limbs boundaries on denom
+1/4294967295
+SELECT '1/4294967296'::mpq;
+1/4294967296
+SELECT '-1/4294967296'::mpq;
+-1/4294967296
+SELECT '-1/4294967297'::mpq;
+-1/4294967297
+SELECT '1/18446744073709551614'::mpq;
+1/18446744073709551614
+SELECT '1/18446744073709551615'::mpq;
+1/18446744073709551615
+SELECT '1/18446744073709551616'::mpq;
+1/18446744073709551616
+SELECT '1/18446744073709551617'::mpq;
+1/18446744073709551617
+SELECT '-1/18446744073709551615'::mpq;
+-1/18446744073709551615
+SELECT '-1/18446744073709551616'::mpq;
+-1/18446744073709551616
+SELECT '-1/18446744073709551617'::mpq;
+-1/18446744073709551617
+SELECT '-1/18446744073709551618'::mpq;
+-1/18446744073709551618
+SELECT '1/12345678901234567890123456789012345678901234567890123456789012345678901234567890'::mpq;
+1/12345678901234567890123456789012345678901234567890123456789012345678901234567890
+SELECT '-1/12345678901234567890123456789012345678901234567890123456789012345678901234567890'::mpq;
+-1/12345678901234567890123456789012345678901234567890123456789012345678901234567890
+SELECT '1/1'::mpq;
+1
+SELECT '2/3'::mpq;
+2/3
+SELECT '640/30'::mpq;
+64/3
+SELECT '-640/30'::mpq;
+-64/3
+SELECT '18446744073709551616/18446744073709551616'::mpq;
+1
+SELECT '12345678901234567890123456789012345678901234567890123456789012345678901234567890/'
+       '88888888888888888888888888888888888888888888888888888888888888888888888888888888'::mpq;
+617283945/4444444444
+SELECT '1/0'::mpq;
+ERROR:  denominator can't be zero
+LINE 1: SELECT '1/0'::mpq;
+               ^
+SELECT mpq('1/1');
+1
+SELECT mpq('2/3');
+2/3
+SELECT mpq('640/30');
+64/3
+SELECT mpq('-640/30');
+-64/3
+SELECT mpq('0xEF/100');
+239/100
+SELECT mpq('0xEF/0x100');
+239/256
+SELECT mpq('10/30', 10);
+1/3
+SELECT mpq('EF/100', 16);
+239/256
+SELECT mpq('0xEF/100', 0);
+239/100
+SELECT mpq('z', 36), mpq('Z', 36);
+35|35
+SELECT mpq('z', 62), mpq('Z', 62);
+61|35
+SELECT mpq('1', 1);
+ERROR:  invalid base for mpq input: 1
+HINT:  base should be between 2 and 62
+SELECT mpq('1', -10);
+ERROR:  invalid base for mpq input: -10
+HINT:  base should be between 2 and 62
+SELECT mpq('1', 63);
+ERROR:  invalid base for mpq input: 63
+HINT:  base should be between 2 and 62
+SELECT text('239'::mpq);
+239
+SELECT text('-239'::mpq);
+-239
+SELECT text('239/256'::mpq);
+239/256
+SELECT text('239'::mpq, 16);
+ef
+SELECT text('239/256'::mpq, 10);
+239/256
+SELECT text('239/256'::mpq, 16);
+ef/100
+SELECT text('239/256'::mpq, 0);
+ERROR:  invalid base for mpq output: 0
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text('239/256'::mpq, 1);
+ERROR:  invalid base for mpq output: 1
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text('239/256'::mpq, 2);
+11101111/100000000
+SELECT text('239/256'::mpq, 36);
+6n/74
+SELECT text('239/256'::mpq, 62);
+3r/48
+SELECT text('239/256'::mpq, 63);
+ERROR:  invalid base for mpq output: 63
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text('239/256'::mpq, -1);
+ERROR:  invalid base for mpq output: -1
+HINT:  base should be between -36 and -2 or between 2 and 62
+SELECT text('239/256'::mpq, -2);
+11101111/100000000
+SELECT text('239/256'::mpq, -36);
+6N/74
+SELECT text('239/256'::mpq, -37);
+ERROR:  invalid base for mpq output: -37
+HINT:  base should be between -36 and -2 or between 2 and 62
+--
+-- mpq cast
+--
+SELECT 0::smallint::mpq, (-32768)::smallint::mpq, 32767::smallint::mpq;
+0|-32768|32767
+SELECT 0::integer::mpq, (-2147483648)::integer::mpq, 2147483647::integer::mpq;
+0|-2147483648|2147483647
+SELECT 0::bigint::mpq, (-9223372036854775808)::bigint::mpq, 9223372036854775807::bigint::mpq;
+0|-9223372036854775808|9223372036854775807
+SELECT 0::numeric::mpq, (-12345678901234567890)::numeric::mpq, 12345678901234567890::numeric::mpq;
+0|-12345678901234567890|12345678901234567890
+SELECT 0::mpz::mpq, (-12345678901234567890)::mpz::mpq, 12345678901234567890::mpz::mpq;
+0|-12345678901234567890|12345678901234567890
+SELECT 0.0::float4::mpq, (-12345.25)::float4::mpq, 12345.25::float4::mpq;
+0|-49381/4|49381/4
+SELECT 0.0::float8::mpq, (-123456789012.25)::float8::mpq, 123456789012.25::float8::mpq;
+0|-493827156049/4|493827156049/4
+SELECT 0.1::float4::mpq;    -- don't know if it's portable
+13421773/134217728
+SELECT 0.1::float8::mpq;
+3602879701896397/36028797018963968
+SELECT 0.0::numeric::mpq, (-1234567890.12345)::numeric::mpq, 1234567890.12345::numeric::mpq;
+0|-24691357802469/20000|24691357802469/20000
+SELECT 0::mpq, 1::mpq, (-1)::mpq;       -- automatic casts
+0|1|-1
+SELECT 1000000::mpq, (-1000000)::mpq;
+1000000|-1000000
+SELECT 1000000000::mpq, (-1000000000)::mpq;
+1000000000|-1000000000
+SELECT 1000000000000000::mpq, (-1000000000000000)::mpq;
+1000000000000000|-1000000000000000
+SELECT 1000000000000000000000000000000::mpq, (-1000000000000000000000000000000)::mpq;
+1000000000000000000000000000000|-1000000000000000000000000000000
+SELECT 0.0::mpq, (-1234567890.12345)::mpq, 1234567890.12345::mpq;
+0|-24691357802469/20000|24691357802469/20000
+SELECT 'NaN'::decimal::mpq;
+ERROR:  can't convert numeric value to mpq: "NaN"
+SELECT -1::mpq;       -- these take the unary minus to work
+-1
+SELECT -1000000::mpq;
+-1000000
+SELECT -1000000000::mpq;
+-1000000000
+SELECT -1000000000000000::mpq;
+-1000000000000000
+SELECT -1000000000000000000000000000000::mpq;
+-1000000000000000000000000000000
+SELECT 123.10::mpq::mpz, (-123.10)::mpq::mpz;
+123|-123
+SELECT 123.90::mpq::mpz, (-123.90)::mpq::mpz;
+123|-123
+SELECT 123.10::mpq::int2, (-123.10)::mpq::int2;
+123|-123
+SELECT 123.10::mpq::int4, (-123.10)::mpq::int4;
+123|-123
+SELECT 123.10::mpq::int8, (-123.10)::mpq::int8;
+123|-123
+SELECT 32767::mpq::int2;
+32767
+SELECT 32768::mpq::int2;
+ERROR:  numeric value too big to be converted to int2 data type
+SELECT (-32768)::mpq::int2;
+-32768
+SELECT (-32769)::mpq::int2;
+ERROR:  numeric value too big to be converted to int2 data type
+SELECT 2147483647::mpq::int4;
+2147483647
+SELECT 2147483648::mpq::int4;
+ERROR:  numeric value too big to be converted to int4 data type
+SELECT (-2147483648)::mpq::int4;
+-2147483648
+SELECT (-2147483649)::mpq::int4;
+ERROR:  numeric value too big to be converted to int4 data type
+SELECT 9223372036854775807::mpq::int8;
+9223372036854775807
+SELECT 9223372036854775808::mpq::int8;
+ERROR:  numeric value too big to be converted to int8 data type
+SELECT (-9223372036854775808)::mpq::int8;
+-9223372036854775808
+SELECT (-9223372036854775809)::mpq::int8;
+ERROR:  numeric value too big to be converted to int8 data type
+SELECT 123.10::mpq::float4, (-123.10)::mpq::float4;
+123.1|-123.1
+SELECT 123.10::mpq::float8, (-123.10)::mpq::float8;
+123.1|-123.1
+SELECT pow(10::mpz,400)::mpq::float4;       -- +inf
+Infinity
+SELECT (-pow(10::mpz,400))::mpq::float4;    -- -inf
+-Infinity
+SELECT mpq(1,pow(10::mpz,400))::float4;     -- underflow
+0
+SELECT pow(10::mpz,400)::mpq::float8;
+Infinity
+SELECT (-pow(10::mpz,400))::mpq::float8;
+-Infinity
+SELECT mpq(1,pow(10::mpz,400))::float8;
+0
+SELECT 1::mpq::numeric;
+1
+SELECT 123.456::mpq::numeric;
+123.456
+SELECT 123.456::mpq::numeric(10);
+123
+SELECT 123.456::mpq::numeric(10,2);
+123.45
+SELECT mpq(4,3)::numeric;
+1.333333333333333
+SELECT mpq(4,3)::numeric(10);
+1
+SELECT mpq(4,3)::numeric(10,5);
+1.33333
+SELECT mpq(40000,3)::numeric(10,5);
+13333.33333
+SELECT mpq(-40000,3)::numeric(10,5);
+-13333.33333
+SELECT mpq(400000,3)::numeric(10,5);
+ERROR:  numeric field overflow
+DETAIL:  A field with precision 10, scale 5 must round to an absolute value less than 10^5.
+-- function-style casts
+SELECT mpq('0'::varchar);
+0
+SELECT mpq('0'::int2);
+0
+SELECT mpq('0'::int4);
+0
+SELECT mpq('0'::int8);
+0
+SELECT mpq('0'::float4);
+0
+SELECT mpq('0'::float8);
+0
+SELECT mpq('0'::numeric);
+0
+SELECT mpq('0'::mpz);
+0
+SELECT text(0::mpq);
+0
+SELECT int2(0::mpq);
+0
+SELECT int4(0::mpq);
+0
+SELECT int8(0::mpq);
+0
+SELECT float4(0::mpq);
+0
+SELECT float8(0::mpq);
+0
+SELECT mpz('0'::mpq);
+0
+-- tricky cases of cast to numeric
+select (x::mpz::mpq / 100)::decimal      from generate_series(-2, 2) x;
+-0.02
+-0.01
+0
+0.01
+0.02
+select (x::mpz::mpq / 100)::decimal(6,0) from generate_series(-2, 2) x;
+0
+0
+0
+0
+0
+select (x::mpz::mpq / 100)::decimal(6,1) from generate_series(-2, 2) x;
+0.0
+0.0
+0.0
+0.0
+0.0
+select (x::mpz::mpq / 100)::decimal(6,2) from generate_series(-2, 2) x;
+-0.02
+-0.01
+0.00
+0.01
+0.02
+SELECT mpq(10, 4), mpq(10, -4);
+5/2|-5/2
+SELECT mpq(10, 0);
+ERROR:  denominator can't be zero
+-- fails if mpq(int, int) or similar are availiable
+SELECT mpq(4000000000000000000,3);
+4000000000000000000/3
+-- TODO: this shoud work.
+-- currently not accepting it for ambiguous type promotion problems,
+-- but this could change in the future if we find how to fix the above problem
+SELECT mpq(47563485764385764395874365986384, 874539847539845639485769837553465);
+ERROR:  function mpq(numeric, numeric) does not exist
+LINE 1: SELECT mpq(47563485764385764395874365986384, 874539847539845...
+               ^
+DETAIL:  No function of that name accepts the given argument types.
+HINT:  You might need to add explicit type casts.
+-- Enable these checks if the above is solved.
+-- SELECT mpq(1230::numeric, 123::numeric);
+-- SELECT mpq(123.45::numeric, 1::numeric);
+-- SELECT mpq(1::numeric, 123.45::numeric);
+-- SELECT mpq(123::numeric, 0::numeric);
+SELECT mpq(47563485764385764395874365986384::mpz, 874539847539845639485769837553465::mpz);
+15854495254795254798624788662128/291513282513281879828589945851155
+SELECT mpq('10'::mpz, '0'::mpz);
+ERROR:  denominator can't be zero
+SELECT num('4/5'::mpq);
+4
+SELECT den('4/5'::mpq);
+5
+--
+-- mpq arithmetic
+--
+SELECT -('0'::mpq), +('0'::mpq), -('1'::mpq), +('1'::mpq), -('-1'::mpq), +('-1'::mpq);
+0|0|-1|1|1|-1
+SELECT -('1234567890123456/7890'::mpq), +('1234567890123456/7890'::mpq);
+-205761315020576/1315|205761315020576/1315
+SELECT '4/5'::mpq + '6/8'::mpq;
+31/20
+SELECT '4/5'::mpq - '6/8'::mpq;
+1/20
+SELECT '4/5'::mpq * '6/8'::mpq;
+3/5
+SELECT '4/5'::mpq / '6/8'::mpq;
+16/15
+SELECT '4/5'::mpq / '0'::mpq;
+ERROR:  division by zero
+SELECT '4/5'::mpq << 4;
+64/5
+SELECT '4/5'::mpq << -1;
+ERROR:  argument can't be negative
+SELECT '4/5'::mpq >> 4;
+1/20
+SELECT '4/5'::mpq >> -1;
+ERROR:  argument can't be negative
+--
+-- mpq unary function
+--
+SELECT abs(mpq(1,3));
+1/3
+SELECT abs(mpq(-1,3));
+1/3
+SELECT abs(mpq(1,-3));
+1/3
+SELECT abs(mpq(-1,-3));
+1/3
+SELECT inv(mpq(1,3));
+3
+SELECT inv(mpq(-1,3));
+-3
+SELECT inv(mpq(3,1));
+1/3
+SELECT inv(mpq(-3,1));
+-1/3
+SELECT inv(0::mpq);
+ERROR:  division by zero
+SELECT limit_den(3.141592653589793, 10);
+22/7
+SELECT limit_den(3.141592653589793, 100);
+311/99
+SELECT limit_den(3.141592653589793, 1000000);
+3126535/995207
+SELECT limit_den(3.141592653589793);
+3126535/995207
+SELECT limit_den('4321/8765', 10000);
+4321/8765
+SELECT limit_den(3.141592653589793, 10000);
+355/113
+SELECT limit_den(-3.141592653589793, 10000);
+-355/113
+SELECT limit_den(3.141592653589793, 113);
+355/113
+SELECT limit_den(3.141592653589793, 112);
+333/106
+SELECT limit_den('201/200', 100);
+1
+SELECT limit_den('201/200', 101);
+102/101
+SELECT limit_den(0, 10000);
+0
+--
+-- mpq ordering operators
+--
+select 1000::mpq =   999::mpq;
+f
+select 1000::mpq =  1000::mpq;
+t
+select 1000::mpq =  1001::mpq;
+f
+select 1000::mpq <>  999::mpq;
+t
+select 1000::mpq <> 1000::mpq;
+f
+select 1000::mpq <> 1001::mpq;
+t
+select 1000::mpq !=  999::mpq;
+t
+select 1000::mpq != 1000::mpq;
+f
+select 1000::mpq != 1001::mpq;
+t
+select 1000::mpq <   999::mpq;
+f
+select 1000::mpq <  1000::mpq;
+f
+select 1000::mpq <  1001::mpq;
+t
+select 1000::mpq <=  999::mpq;
+f
+select 1000::mpq <= 1000::mpq;
+t
+select 1000::mpq <= 1001::mpq;
+t
+select 1000::mpq >   999::mpq;
+t
+select 1000::mpq >  1000::mpq;
+f
+select 1000::mpq >  1001::mpq;
+f
+select 1000::mpq >=  999::mpq;
+t
+select 1000::mpq >= 1000::mpq;
+t
+select 1000::mpq >= 1001::mpq;
+f
+select mpq_cmp(1000::mpq,  999::mpq);
+1
+select mpq_cmp(1000::mpq, 1000::mpq);
+0
+select mpq_cmp(1000::mpq, 1001::mpq);
+-1
+-- Can create btree and hash indexes
+create table test_mpq_idx (q mpq);
+insert into test_mpq_idx select generate_series(1, 10000);
+create index test_mpq_btree_idx on test_mpq_idx using btree (q);
+set client_min_messages = error;
+create index test_mpq_hash_idx on test_mpq_idx using hash (q);
+reset client_min_messages;
+-- Hash is compatible with mpz
+select mpq_hash(0) = mpz_hash(0);
+t
+select mpq_hash(1000) = mpz_hash(1000);
+t
+select mpq_hash(-1000) = mpz_hash(-1000);
+t
+select mpq_hash('123456789012345678901234567890123456789012345678901234567890')
+     = mpz_hash('123456789012345678901234567890123456789012345678901234567890');
+t
+-- den is used in hash
+select mpq_hash(2) <> mpq_hash('2/3');
+t
+select mpq_hash('2/3') <> mpq_hash('2/5');
+t
+--
+-- mpq aggregation
+--
+CREATE TABLE mpqagg(q mpq);
+SELECT sum(q) FROM mpqagg;      -- NULL sum
+
+INSERT INTO mpqagg SELECT mpq(x+1, x) from generate_series(1, 100) x;
+INSERT INTO mpqagg VALUES (NULL);
+SELECT sum(q) FROM mpqagg;
+293348137198370259818356753784353345674911/2788815009188499086581352357412492142272
+SELECT prod(q) FROM mpqagg;
+101
+SELECT min(q) FROM mpqagg;
+101/100
+SELECT max(q) FROM mpqagg;
+2
+-- check correct values when the sortop kicks in
+CREATE INDEX mpqagg_idx ON mpqagg(q);
+SELECT min(q) FROM mpqagg;
+101/100
+SELECT max(q) FROM mpqagg;
+2
+-- check aggregates work in windows functions too
+CREATE TABLE test_mpq_win(q mpq);
+INSERT INTO test_mpq_win SELECT mpq(1::mpz, i::mpz) from generate_series(1,500) i;
+SELECT DISTINCT den(q) % 5, prod(q) OVER (PARTITION BY den(q) % 5) FROM test_mpq_win ORDER BY 1;
+0|1/736214027959609564214534807933509860360590478604140717816562255320550732004257967720125762877551166630104095572009682655334472656250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+1|1/4024980661396945255594437948691099096750750303522148939207253140343256389690134608552507750666273153464851186606092569064940061274937877687035835465562596381725444297753023206467590336262178237450463859369896155905624559845376
+2|1/20916546636333781039819147945471434631041853197955027503272329909375076603172061212536955170894771081399258164490448681039306210750168807043358712676705447209588907620793116406518489750133917827418353041315415425444640641253376
+3|1/78258648528733027168387470491499343638520216905903130597214530733536396165915793335397652314194905058465162496835320770455185720537199021723403297752439421984679965716575544045339560632302893082461947076538277070518358298853376
+4|1/251546524835575501784021324366402680054179057461650771690723123931592596438400569072874480196699629786768776600250612669749873513568533129791068662565559263147495268772282292685896436853700130137800525196100073761792376099045376
