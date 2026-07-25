@@ -48,7 +48,7 @@ PGMP_PG_FUNCTION(_pmpq_from_agg)
 PGMP_PG_FUNCTION(_pmpq_agg_ ## op) \
 { \
     mpq_t           *a; \
-    const mpq_t     q; \
+    const mpq_t     q = {0}; \
     MemoryContext   oldctx; \
     MemoryContext   aggctx; \
  \

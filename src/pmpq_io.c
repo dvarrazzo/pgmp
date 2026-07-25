@@ -94,7 +94,7 @@ PGMP_PG_FUNCTION(pmpq_in_base)
 
 PGMP_PG_FUNCTION(pmpq_out)
 {
-    const mpq_t     q;
+    const mpq_t     q = {0};
     char            *buf;
 
     PGMP_GETARG_MPQ(q, 0);
@@ -109,7 +109,7 @@ PGMP_PG_FUNCTION(pmpq_out)
 
 PGMP_PG_FUNCTION(pmpq_out_base)
 {
-    const mpq_t     q;
+    const mpq_t     q = {0};
     int             base;
     char            *buf;
 
@@ -276,7 +276,7 @@ PGMP_PG_FUNCTION(pmpq_from_mpz)
 
 PGMP_PG_FUNCTION(pmpq_to_mpz)
 {
-    const mpq_t     q;
+    const mpq_t     q = {0};
     mpz_t           z;
 
     PGMP_GETARG_MPQ(q, 0);
@@ -293,7 +293,7 @@ Datum pmpz_to_ ## type (PG_FUNCTION_ARGS); \
  \
 PGMP_PG_FUNCTION(pmpq_to_ ## type) \
 { \
-    const mpq_t     q; \
+    const mpq_t     q = {0}; \
     mpz_t           z; \
  \
     PGMP_GETARG_MPQ(q, 0); \
@@ -311,7 +311,7 @@ PMPQ_TO_INT(int8)
 
 PGMP_PG_FUNCTION(pmpq_to_float4)
 {
-    const mpq_t     q;
+    const mpq_t     q = {0};
     PGMP_GETARG_MPQ(q, 0);
 
     PG_RETURN_FLOAT4((float4)mpq_get_d(q));
@@ -319,7 +319,7 @@ PGMP_PG_FUNCTION(pmpq_to_float4)
 
 PGMP_PG_FUNCTION(pmpq_to_float8)
 {
-    const mpq_t     q;
+    const mpq_t     q = {0};
     PGMP_GETARG_MPQ(q, 0);
 
     PG_RETURN_FLOAT8((float8)mpq_get_d(q));
@@ -328,7 +328,7 @@ PGMP_PG_FUNCTION(pmpq_to_float8)
 
 PGMP_PG_FUNCTION(pmpq_to_numeric)
 {
-    const mpq_t     q;
+    const mpq_t     q = {0};
     int32           typmod;
     long            scale;
     mpz_t           z;
@@ -426,8 +426,8 @@ PGMP_PG_FUNCTION(pmpq_to_numeric)
 
 PGMP_PG_FUNCTION(pmpq_mpz_mpz)
 {
-    const mpz_t     num;
-    const mpz_t     den;
+    const mpz_t     num = {0};
+    const mpz_t     den = {0};
     mpq_t           q;
 
     /* We must take a copy of num and den because they may be modified by
@@ -491,7 +491,7 @@ PGMP_PG_FUNCTION(pmpq_numeric_numeric)
 
 PGMP_PG_FUNCTION(pmpq_num)
 {
-    const mpq_t     q;
+    const mpq_t     q = {0};
     mpz_t           z;
 
     PGMP_GETARG_MPQ(q, 0);
@@ -503,7 +503,7 @@ PGMP_PG_FUNCTION(pmpq_num)
 
 PGMP_PG_FUNCTION(pmpq_den)
 {
-    const mpq_t     q;
+    const mpq_t     q = {0};
     mpz_t           z;
 
     PGMP_GETARG_MPQ(q, 0);

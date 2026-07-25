@@ -48,7 +48,7 @@ PGMP_PG_FUNCTION(pmpq_uplus)
  \
 PGMP_PG_FUNCTION(pmpq_ ## op) \
 { \
-    const mpq_t     q; \
+    const mpq_t     q = {0}; \
     mpq_t           qf; \
  \
     PGMP_GETARG_MPQ(q, 0); \
@@ -75,8 +75,8 @@ PMPQ_UN(inv, PMPQ_CHECK_DIV0)
  \
 PGMP_PG_FUNCTION(pmpq_ ## op) \
 { \
-    const mpq_t     q1; \
-    const mpq_t     q2; \
+    const mpq_t     q1 = {0}; \
+    const mpq_t     q2 = {0}; \
     mpq_t           qf; \
  \
     PGMP_GETARG_MPQ(q1, 0); \
@@ -101,7 +101,7 @@ PMPQ_OP(div, PMPQ_CHECK_DIV0)
  \
 PGMP_PG_FUNCTION(pmpq_ ## op) \
 { \
-    const mpq_t     q; \
+    const mpq_t     q = {0}; \
     unsigned long   b; \
     mpq_t           qf; \
  \
@@ -125,8 +125,8 @@ PMPQ_BIT(div_2exp)
 
 PGMP_PG_FUNCTION(pmpq_cmp)
 {
-    const mpq_t     q1;
-    const mpq_t     q2;
+    const mpq_t     q1 = {0};
+    const mpq_t     q2 = {0};
 
     PGMP_GETARG_MPQ(q1, 0);
     PGMP_GETARG_MPQ(q2, 1);
@@ -139,8 +139,8 @@ PGMP_PG_FUNCTION(pmpq_cmp)
  \
 PGMP_PG_FUNCTION(pmpq_ ## op) \
 { \
-    const mpq_t     q1; \
-    const mpq_t     q2; \
+    const mpq_t     q1 = {0}; \
+    const mpq_t     q2 = {0}; \
  \
     PGMP_GETARG_MPQ(q1, 0); \
     PGMP_GETARG_MPQ(q2, 1); \
@@ -156,8 +156,8 @@ PMPQ_CMP_EQ(ne, ==)
  \
 PGMP_PG_FUNCTION(pmpq_ ## op) \
 { \
-    const mpq_t     q1; \
-    const mpq_t     q2; \
+    const mpq_t     q1 = {0}; \
+    const mpq_t     q2 = {0}; \
  \
     PGMP_GETARG_MPQ(q1, 0); \
     PGMP_GETARG_MPQ(q2, 1); \
@@ -176,7 +176,7 @@ PMPQ_CMP(le, <=)
  */
 PGMP_PG_FUNCTION(pmpq_hash)
 {
-    const mpq_t     q;
+    const mpq_t     q = {0};
     Datum           nhash;
 
     PGMP_GETARG_MPQ(q, 0);
@@ -200,8 +200,8 @@ static void limit_den(mpq_ptr q_out, mpq_srcptr q_in, mpz_srcptr max_den);
 
 PGMP_PG_FUNCTION(pmpq_limit_den)
 {
-    const mpq_t     q_in;
-    const mpz_t     max_den;
+    const mpq_t     q_in = {0};
+    const mpz_t     max_den = {0};
     mpq_t           q_out;
 
     PGMP_GETARG_MPQ(q_in, 0);

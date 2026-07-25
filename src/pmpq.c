@@ -25,11 +25,6 @@
 #include "fmgr.h"
 
 
-/* To be referred to to represent the zero */
-extern const mp_limb_t _pgmp_limb_0;
-extern const mp_limb_t _pgmp_limb_1;
-
-
 /*
  * Create a pmpq structure from the content of a mpq
  *

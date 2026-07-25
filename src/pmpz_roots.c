@@ -33,7 +33,7 @@
 
 PGMP_PG_FUNCTION(pmpz_rootrem)
 {
-    const mpz_t     z1;
+    const mpz_t     z1 = {0};
     mpz_t           zroot;
     mpz_t           zrem;
     unsigned long   n;
@@ -55,7 +55,7 @@ PGMP_PG_FUNCTION(pmpz_rootrem)
 
 PGMP_PG_FUNCTION(pmpz_sqrtrem)
 {
-    const mpz_t     z1;
+    const mpz_t     z1 = {0};
     mpz_t           zroot;
     mpz_t           zrem;
 
