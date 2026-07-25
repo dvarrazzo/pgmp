@@ -1,6 +1,15 @@
 Current release
 ---------------
 
+What's new in pgmp 1.0.6
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Released on 2026-07-23.
+
+- Fixed compatibility with PostgreSQL 19 (:issue:`#57`)
+- Added missing checks on unsigned long arguments (:issue:`#56`)
+
+
 What's new in pgmp 1.0.5
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
