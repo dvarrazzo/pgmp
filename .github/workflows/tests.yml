@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pg: [16, 15, 14, 13, 12, 11, 10]
+        pg: [19, 18, 17, 16, 15, 14]
     steps:
       - name: Start PostgreSQL ${{ matrix.pg }}
         run: pg-start ${{ matrix.pg }} libgmp-dev
